@@ -155,40 +155,33 @@ barplot(allchr.pc$eig[1:10])
 
 pca.data <- as.data.frame(allchr.pc$scores)
 
-# essayer les deux alternatives pour définir les populations (continent ou)
-pca.data$pop <- pop(allchr.snps)
+# essayer les deux alternatives pour définir les populations (continent ou population)
+pca.data$pop <- info.df$Population.name[match(row.names(pca.data), info.df$Sample.name)]
+pca.data$region <- info.df$Superpopulation.name[match(indNames(allchr.snps), info.df$Sample.name)]
 
-qplot(data = pca.data, x = PC1, y = PC2, color=pop, size = 1, alpha = 0.2)
+# visualisation des régions
+ggplot(pca.data, aes(x = PC1, y = PC2, fill=region, color=region)) + 
+  geom_point(size = 3, alpha = 0.5)
+
+ggsave("PCA_regions.pdf", width = 12, height = 10)
+
+# visualisation des régions, ajout de texte identifiant les populations
+ggplot(pca.data, aes(x = PC1, y = PC2, fill=region, color=region)) + 
+  geom_point(size = 3, alpha = 0.5) +
+  geom_text(aes(x = PC1, y = PC2, label = pop), size = 2)
+
+ggsave("PCA_regions_poptext.pdf", width = 12, height = 10)
 ```
 
 Q: Qu'est-ce que signifie le barplot?
 
-Q: En utilisant les "super-populations" (régions) comme facteur "pop", expliquez brièvement la structuration observée dans la PCA? Quelles sont les raisons probables du regroupement?
+Q: En visualisant les "super-populations" (régions), expliquez la structuration observée dans la PCA. En s'appuyant sur les voies de colonisations majeures, quelles sont les raisons probables du regroupement?
+
+Q: Un petit nombre d'individus non-africains se trouvent très proche du cluster africain. Explications probables?
 
 
+### Exercise de synthèse
 
-
-```
-```
-
-```
-```
-
-
-
-Exercises potentiels:
--	Visualiser les SNPs le long d’un chromosome, MAF, HET/HOM, X/Y
--	Visualizer %HOM sites per pop
--	Différences entre populations
--	PCA
--	Structure
-
-
-Prepare data:
-
-
-
-
-TP 5 : Analyses de sélection dans des populations humaines
+Q: Créer une PCA 
 
 
