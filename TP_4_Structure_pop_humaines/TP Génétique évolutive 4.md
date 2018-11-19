@@ -18,9 +18,7 @@
 
 ### Les données simplifiées pour ces TP
 
-- Sous-échantillonnage des SNPs 1/2000: `Human1000G.2000xSubsampled.noMAF.recode.vcf` (format VCF)
-
-- Filtrage pour une fréquence allélique mineur (MAF) >0.05: `Human1000G.2000xSubsampled.noMAF.recode.vcf` (format VCF)
+- Sous-échantillonnage des SNPs 1/2000: `Human1000G.2000xSubsampled.MAF0.05.recode.vcf` (format VCF). Avec filtrage pour une fréquence allélique mineur (MAF) >0.05.
 
 ### Introduction à l'analyse de fichiers VCF
 
@@ -37,15 +35,19 @@ setwd("~/Dropbox/Daniel/Documents/UNINE/Teaching/**2018_A/TP_GenetiqueEvol_2018/
 # installer les packages nécessaires
 install.packages(c("vcfR", "ggplot2", "adegenet"))
 library(vcfR)
-library("adegenet")
+library(adegenet)
 library(ggplot2)
 
 # lisez le fichier VCF & conversion en genlight
-vcf <- read.vcfR("Human1000G.2000xSubsampled.noMAF.recode.vcf")
+vcf <- read.vcfR("Human1000G.2000xSubsampled.MAF0.05.recode.vcf")
 allchr.snps <- vcfR2genlight(vcf)
 ```
 
-Assigner les individus aux populations et régions d'origine. Télécharger le fichier "Human1000G.info.txt"  
+Q: Combien d'individus et de variants (SNPs) sont compris dans ce fichier réduit?
+
+### Assigner les individus aux populations et régions d'origine
+
+Télécharger le fichier "Human1000G.info.txt"  
 
 ```
 # lire le fichier
@@ -58,6 +60,7 @@ table(info.df$Superpopulation.name)
 
 # assignez les individus aux populations
 pop(allchr.snps) <- info.df$Population.name[match(indNames(allchr.snps), info.df$Sample.name)]
+
 # alternativement: par continent
 pop(allchr.snps) <- info.df$Superpopulation.name[match(indNames(allchr.snps), info.df$Sample.name)]
 
@@ -68,62 +71,90 @@ pop(allchr.snps) <- info.df$Sex[match(indNames(allchr.snps), info.df$Sample.name
 ### Sélection de positions, chromosomes ou individus
 
 ```
-# sélectionner les premiers éléments de la matrice des génotypes
+# sélectionner les premiers éléments de la matrice des génotypes (un example)
 as.matrix(allchr.snps)[1:3,1:3]
 
-# accès à des informations supplémentaires
+# accès à l'intégralité des informations (positions, chromosomes, identifiants des loci)
 allchr.snps@position
 allchr.snps@chromosome
 allchr.snps@loc.names
 
 # en utilisant ces pièces d'information, crééer un dataframe
 allchr.df <- data.frame(position = allchr.snps@position, chromosome = allchr.snps@chromosome, SNPid = allchr.snps@loc.names)
+# générer l'ordre correct des chromosomes
+allchr.df$chromosome <- factor(allchr.df$chromosome, levels = c(1:22, "X")) 
 
-# visualiser la densité des SNP
-ggplot(allchr.df, aes(x = position/1000000)) + geom_density(n = 100) + 
-  labs(x = "Position sur le chromosome (en Mb)", y = "Densité SNP") +
-  facet_grid(. ~ chromosome, space = "free", scales = "free")
-
-ggsave("SNPdensity.pdf", width = 12, height = 4)
+# Nombre de SNP inclut par chromosome
+SNP.per.chr <- as.data.frame(table(allchr.df$chromosome))
+qplot(x = allchr.df$chromosome, geom = "bar")
 ```
 
-Q: Explications du pic principal? Dépressions régulière sur chaque chromosome?
+Q: Calculer le nombre de SNP par megabases de chromosomes (i.e. densité). L'information sur la taille des chromosomes humains est facilement accessible en ligne.
 
-=> dépressions: centromères contenant moins de SNPs identifiables (régions inaccessibles par le séquençage), pic principal: région MHC
+```
+# visualiser la densité des SNP
+ggplot(allchr.df, aes(x = position/1000000)) + geom_histogram(binwidth = 10) + 
+  labs(x = "Position sur le chromosome (en Mb)", y = "Densité SNP") +
+  scale_x_continuous(breaks = seq(0,1000,50)) +
+  theme(panel.background = element_blank()) +
+  facet_grid(. ~ chromosome, space = "free", scales = "free")
+
+ggsave("SNPdensity.pdf", width = 20, height = 4)
+```
+
+Q: Cherchez une explications du pic principal de densité SNPs. 
+
+A: => Pic principal: région MHC
 
 Q: Quel est le génotype de l'individu "HG02334" à la première position du chromosome 2?
 
 ["0" correspond à homozygote de l'allèle REF (même allèle comme dans le génome de référence, "2" homozygote pour l'allèle alternatif, "1" hétérozygote)]
 
-```
+A: ...
 head(allchr.df[allchr.df$chromosome == 2,],1)
 as.matrix(allchr.snps)["HG02334","rs300751"]
-```
+
 
 ### Fréquences alléliques
 
 ```
-# extraction des fréquences de l'allèle alternatif (voir ci-dessus)
-alt.allelle.freq <- glMean(allchr.snps)
+# extraction des fréquences de l'allèle alternatif (l'allèle ne figurant pas dans le génome de référence)
+alt.allele.freq <- glMean(allchr.snps)
 
 # pour une population seulement
-population <- "Yoruba"
+population <- "Yoruba"   #population <- "Finnish"
+alt.allele.freq.pop <- glMean(allchr.snps[pop(allchr.snps) == population,])
+
+qplot(alt.allele.freq.pop, binwidth = 0.05)
+```
+
+Q: Modifier le code pour visualiser les fréquences d'allèles mineurs (MAF)
+
+A:
+minor.allele.freq <- alt.allelle.freq
+minor.allele.freq[minor.allele.freq > 0.5] <- 1-minor.allele.freq[minor.allele.freq > 0.5]
+qplot(minor.allele.freq, binwidth = 0.05)
+
+NB: Ce jeux de données est filtré pour éliminer les SNP avec allèles très rare (MAF < 0.05) pour des raisons pratiques (données trop volumineuses)
+
+
+
+Q: Générer les plots pour deux populations que vous supposez de montrer un constraste au niveau des fréquences d'allèles mineurs (MAF). Comparer les distributions au niveau des populations avec la distribution au niveau global.
+
+A: (pour une population)
 population <- "Finnish"
-alt.allelle.freq <- glMean(allchr.snps[pop(allchr.snps) == population,])
-
-qplot(alt.allelle.freq, binwidth = 0.1)
-```
-
-Q: Générer les plots pour deux populations que vous supposez de montrer un constraste, comparer les patterns avec la population globale
-
-Q: Modifier le code pour visualiser les fréquences d'allèles mineurs
+alt.allele.freq <- glMean(allchr.snps[pop(allchr.snps) == population,])
+minor.allele.freq <- alt.allelle.freq
+minor.allele.freq[minor.allele.freq > 0.5] <- 1-minor.allele.freq[minor.allele.freq > 0.5]
+qplot(minor.allele.freq, binwidth = 0.05)
 
 
 
-### Genotype frequencies
+
+### Fréquences génotypiques
 
 ```
-# accès aux données génotypiques
+# accès aux données génotypiques se fait en transformant l'object allchr.snps
 allchr.df <- as.data.frame(allchr.snps)
 
 # identification des hétérozygotes (identifiés toujours par "1")
@@ -143,13 +174,23 @@ ggsave("Population_heterozygosity.pdf", width = 6, height = 4)
 
 Q: Identifiez les populations qui ne suivaient pas vos prédictions. Expliquez votre raisonnement.
 
+Q: En utilisant la procédure ci-dessus, calculez l'hétérozygotie pour la population "British" par chromosome.
 
+A: (beaucoup de variantes de ce code sont possible, allchr.df a été généré plus tôt)
+heterozygosity.perSNP.perPOP.t <- as.data.frame(t(heterozygosity.perSNP.perPOP[,-1]))
+names(heterozygosity.perSNP.perPOP.t) <- heterozygosity.perSNP.perPOP[,1]
+heterozygosity.perSNP.perPOP.t$SNPid <- row.names(heterozygosity.perSNP.perPOP.t)
+heterozygosity.perSNP.perPOP.fullinfo <-  merge(heterozygosity.perSNP.perPOP.t, allchr.df, by="SNPid")
+heterozygosity.perSNP.perPOP.fullinfo$chromosome <- factor(heterozygosity.perSNP.perPOP.fullinfo$chromosome, levels = c(1:22, "X")) 
+
+barplot(tapply(heterozygosity.perSNP.perPOP.fullinfo$British, INDEX = heterozygosity.perSNP.perPOP.fullinfo$chromosome, FUN = mean))
 
 
 
 ### Analyse en composantes principales
 
 ```
+# étape longue (plus. minutes!)
 allchr.pc <- glPca(allchr.snps, nf = 2)
 barplot(allchr.pc$eig[1:10])
 
@@ -183,5 +224,4 @@ Q: Un petit nombre d'individus non-africains se trouvent très proche du cluster
 ### Exercise de synthèse
 
 Q: Créer une PCA 
-
 
