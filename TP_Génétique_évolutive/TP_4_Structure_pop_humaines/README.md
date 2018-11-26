@@ -7,26 +7,41 @@
 
 ### Introduction des concepts (voir slides)
 
--	SNP, MAF, technique de séquençage
--	Répétitions FST, PCA, STRUCTURE
+-	SNP, MAF, techniques de séquençage
+-	Principal component analyses (PCA)
 -	Structure d’un fichier VCF
+
 
 ### Les données: "The 1000 Genomes Project"  
 - La publication principale est apparue dans Nature vol 526, pages 68–74, 2015: [https://www.nature.com/articles/nature15393](https://www.nature.com/articles/nature15393)
 - 2504 individus de 26 populations à travers le monde
 - 84.7 mio SNP identifiés
 
+Q1: Quels sont les résultats principaux de cette publication résumés en 3-4 phrases?
+
+![](./images/map.png)
+
 ### Les données simplifiées pour ces TP
 
-- Sous-échantillonnage des SNPs 1/2000: `Human1000G.2000xSubsampled.MAF0.05.recode.vcf` (format VCF). Avec filtrage pour une fréquence allélique mineur (MAF) >0.05.
+- Facultatif: Explorez les données SNP mises à disposition en utilisant un navigateur FTP. L'adresse suivant doit être utiliser: ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502 (le login doit être "anonymous" ou en tant que guest)  
+
+
+![](./images/vcf1.png)
+  
+![](./images/vcf2.png)  
+
+- Pour ces TPs, nous avons généré un sous-échantillonnage des SNPs 1 sur 2000 pour ne pas alourdir les analyses. Le fichier complet serait de ~1 TB. Le fichier à disposition pour les TPs s'appelle donc `Human1000G.2000xSubsampled.MAF0.05.recode.vcf` (format VCF). Ce fichier est aussi filtré pour une fréquence allélique mineur (MAF) >0.05. Donc, les allèles rare n'y figurent plus!
+
 
 ### Introduction à l'analyse de fichiers VCF
 
-- Ouvrez un des fichiers VCF à l'aide d'un éditeur de texte. Repéréz la partie supérieure reportant un grand nombre d'information sur le fichier. Puis, la partie inférieure identifiant chaque SNP (1 par ligne) avec sa position (`POS`) sur un chromosome spécifique (`CHROM`).
+- Ouvrez le fichier VCF à l'aide d'un éditeur de texte. Repéréz la partie supérieure reportant un grand nombre d'informations sur le contenu du fichier et les analyses faites ultérieurement. Puis, la partie inférieure identifiant chaque SNP (1 par ligne) avec sa position (`POS`) sur un chromosome spécifique (`CHROM`).
 
-- Principes de bases de charger le VCF en utilsant R. Il existe de nombreux packages permettant la manipulation de fichiers VCF, mais la fonctionalité offerte par les packages est rarement cohérente.
+- Il existe de nombreux packages en R permettant la manipulation de fichiers VCF, mais la fonctionalité offerte par ces packages est rarement cohérente. Il est donc important d'évaluer le potentiel du package avant d'entamer une analyse spécifique.
 
-Définissez votre espace de travail, téléchargez le fichier VCF Human1000G.2000xSubsampled.noMAF.recode.vcf dans le même dossier  
+![](./images/vcfR.png)  
+
+Le point de départ: Définissez votre espace de travail, téléchargez le fichier VCF Human1000G.2000xSubsampled.noMAF.recode.vcf dans le même dossier  
 
 ```
 # à ajuster
@@ -43,11 +58,11 @@ vcf <- read.vcfR("Human1000G.2000xSubsampled.MAF0.05.recode.vcf")
 allchr.snps <- vcfR2genlight(vcf)
 ```
 
-Q: Combien d'individus et de variants (SNPs) sont compris dans ce fichier réduit?
+Q1: Combien d'individus et de variants (SNPs) sont compris dans ce fichier réduit?
 
 ### Assigner les individus aux populations et régions d'origine
 
-Télécharger le fichier "Human1000G.info.txt"  
+Télécharger le fichier "Human1000G.info.txt". Ce fichier résume l'information sur chaque individu inclut dans les données.
 
 ```
 # lire le fichier
@@ -55,18 +70,20 @@ info.df <- read.table("Human1000G.info.txt", header=T, sep="\t")
 
 # voir les catégories
 head(info.df)
-table(info.df$Population.name)
-table(info.df$Superpopulation.name)
 
-# assignez les individus aux populations
+
+### ci-dessous vous avez trois options de catégoriser les individus
+# assignez les individus aux populations (Population)
 pop(allchr.snps) <- info.df$Population.name[match(indNames(allchr.snps), info.df$Sample.name)]
 
-# alternativement: par continent
+# alternativement: par continent/région (Superpopulation)
 pop(allchr.snps) <- info.df$Superpopulation.name[match(indNames(allchr.snps), info.df$Sample.name)]
 
 # alternativement: par sexe
 pop(allchr.snps) <- info.df$Sex[match(indNames(allchr.snps), info.df$Sample.name)]
 ```
+
+Q2: Faites un graphique simple résumant la taille de chaque population et super-population (régions).
 
 ### Sélection de positions, chromosomes ou individus
 
@@ -89,7 +106,8 @@ SNP.per.chr <- as.data.frame(table(allchr.df$chromosome))
 qplot(x = allchr.df$chromosome, geom = "bar")
 ```
 
-Q: Calculer le nombre de SNP par megabases de chromosomes (i.e. densité). L'information sur la taille des chromosomes humains est facilement accessible en ligne.
+Q3: Calculez le nombre de SNP par megabases de chromosomes (i.e. densité). Est-ce que les chromosomes diffèrent en densité?  
+[NB: l'information sur la taille des chromosomes humains est facilement accessible en ligne.]
 
 ```
 # visualiser la densité des SNP
@@ -102,20 +120,22 @@ ggplot(allchr.df, aes(x = position/1000000)) + geom_histogram(binwidth = 10) +
 ggsave("SNPdensity.pdf", width = 20, height = 4)
 ```
 
-Q: Cherchez une explications du pic principal de densité SNPs. 
+Q4: Cherchez une explications du pic principal de densité SNPs. 
 
-A: => Pic principal: région MHC
+A4: => Pic principal: région MHC
 
-Q: Quel est le génotype de l'individu "HG02334" à la première position du chromosome 2?
+Q5: Quel est le génotype de l'individu "HG02334" à la première position du chromosome 2?
 
 ["0" correspond à homozygote de l'allèle REF (même allèle comme dans le génome de référence, "2" homozygote pour l'allèle alternatif, "1" hétérozygote)]
 
-A: ...
+A5: ...
 head(allchr.df[allchr.df$chromosome == 2,],1)
 as.matrix(allchr.snps)["HG02334","rs300751"]
 
 
-### Fréquences alléliques
+## Fréquences alléliques et allèles mineurs
+
+Une propriété importante d'une population est la distribution des fréquences alléliques. On peut extraire l'information de la fréquence de l'allèle atlernative
 
 ```
 # extraction des fréquences de l'allèle alternatif (l'allèle ne figurant pas dans le génome de référence)
@@ -142,16 +162,18 @@ NB: Ce jeux de données est filtré pour éliminer les SNP avec allèles très r
 Q: Générer les plots pour deux populations que vous supposez de montrer un constraste au niveau des fréquences d'allèles mineurs (MAF). Comparer les distributions au niveau des populations avec la distribution au niveau global.
 
 A: (pour une population)
+
+```
 population <- "Finnish"
 alt.allele.freq <- glMean(allchr.snps[pop(allchr.snps) == population,])
 minor.allele.freq <- alt.allelle.freq
 minor.allele.freq[minor.allele.freq > 0.5] <- 1-minor.allele.freq[minor.allele.freq > 0.5]
 qplot(minor.allele.freq, binwidth = 0.05)
+```
 
+## Fréquences génotypiques
 
-
-
-### Fréquences génotypiques
+Les fréquences génotypiques permettent d'estimer entre autres les taux d'homozygotie.
 
 ```
 # accès aux données génotypiques se fait en transformant l'object allchr.snps
@@ -176,7 +198,9 @@ Q: Identifiez les populations qui ne suivaient pas vos prédictions. Expliquez v
 
 Q: En utilisant la procédure ci-dessus, calculez l'hétérozygotie pour la population "British" par chromosome.
 
-A: (beaucoup de variantes de ce code sont possible, allchr.df a été généré plus tôt)
+A: (beaucoup de variantes de ce code sont possible, allchr.df a été généré plus tôt déjà!)  
+
+```
 heterozygosity.perSNP.perPOP.t <- as.data.frame(t(heterozygosity.perSNP.perPOP[,-1]))
 names(heterozygosity.perSNP.perPOP.t) <- heterozygosity.perSNP.perPOP[,1]
 heterozygosity.perSNP.perPOP.t$SNPid <- row.names(heterozygosity.perSNP.perPOP.t)
@@ -184,10 +208,10 @@ heterozygosity.perSNP.perPOP.fullinfo <-  merge(heterozygosity.perSNP.perPOP.t, 
 heterozygosity.perSNP.perPOP.fullinfo$chromosome <- factor(heterozygosity.perSNP.perPOP.fullinfo$chromosome, levels = c(1:22, "X")) 
 
 barplot(tapply(heterozygosity.perSNP.perPOP.fullinfo$British, INDEX = heterozygosity.perSNP.perPOP.fullinfo$chromosome, FUN = mean))
+```
 
 
-
-### Analyse en composantes principales
+## Analyse en composantes principales
 
 ```
 # étape longue (plus. minutes!)
@@ -200,13 +224,13 @@ pca.data <- as.data.frame(allchr.pc$scores)
 pca.data$pop <- info.df$Population.name[match(row.names(pca.data), info.df$Sample.name)]
 pca.data$region <- info.df$Superpopulation.name[match(indNames(allchr.snps), info.df$Sample.name)]
 
-# visualisation des régions
+## visualisation des régions
 ggplot(pca.data, aes(x = PC1, y = PC2, fill=region, color=region)) + 
   geom_point(size = 3, alpha = 0.5)
 
 ggsave("PCA_regions.pdf", width = 12, height = 10)
 
-# visualisation des régions, ajout de texte identifiant les populations
+## visualisation des régions, ajout de texte identifiant les populations
 ggplot(pca.data, aes(x = PC1, y = PC2, fill=region, color=region)) + 
   geom_point(size = 3, alpha = 0.5) +
   geom_text(aes(x = PC1, y = PC2, label = pop), size = 2)
