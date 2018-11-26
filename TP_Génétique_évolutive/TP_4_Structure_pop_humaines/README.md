@@ -5,19 +5,27 @@
 
 # Analyses de polymorphisme et structuration des populations humaines
 
-### Introduction des concepts (voir slides)
 
--	SNP, MAF, techniques de séquençage
--	Principal component analyses (PCA)
--	Structure d’un fichier VCF
+### Buts de ces travaux pratiques
 
+- Comprendre la structure d'un jeu de données majeur pour la génétique des populations.
+- Savoir faire des manipulations de base d'un tel jeu de données.
+- Connaître les outils principaux de visualisations de la structuration des populations (PCA et F<sub>ST</sub>).
+
+### Concepts importants
+
+Référez-vous aux slides du cours "Génétique évolutive" si besoin.
+
+- SNP, MAF, techniques de séquençage
+- Principal component analyses (PCA)
+- Peuplement de la terre par l'homme. Pour les intéressés: [Nielsen et al. 2017](https://www.nature.com/articles/nature21347)
 
 ### Les données: "The 1000 Genomes Project"  
 - La publication principale est apparue dans Nature vol 526, pages 68–74, 2015: [https://www.nature.com/articles/nature15393](https://www.nature.com/articles/nature15393)
 - 2504 individus de 26 populations à travers le monde
-- 84.7 mio SNP identifiés
+- 84.7 millions SNP identifiés
 
-Q1: Quels sont les résultats principaux de cette publication résumés en 3-4 phrases?
+Q1: Quelle était la motivation principale d'étudier la diversité génétique globale de l'homme (selon les auteurs)?
 
 ![](./images/map.png)
 
@@ -30,37 +38,40 @@ Q1: Quels sont les résultats principaux de cette publication résumés en 3-4 p
   
 ![](./images/vcf2.png)  
 
-- Pour ces TPs, nous avons généré un sous-échantillonnage des SNPs 1 sur 2000 pour ne pas alourdir les analyses. Le fichier complet serait de ~1 TB. Le fichier à disposition pour les TPs s'appelle donc `Human1000G.2000xSubsampled.MAF0.05.recode.vcf` (format VCF). Ce fichier est aussi filtré pour une fréquence allélique mineur (MAF) >0.05. Donc, les allèles rare n'y figurent plus!
+- Pour ces TPs, nous avons généré un sous-échantillonnage des SNPs (1 sur 2000) pour ne pas alourdir trop les analyses. Le fichier complet serait d'environ 1 TB. Le fichier préparé pour les TPs s'appelle `Human1000G.2000xSubsampled.MAF0.05.recode.vcf` (format VCF). Ce fichier est aussi filtré pour une fréquence allélique mineure (MAF) >0.05. Donc, les allèles rares n'y figurent plus!
+
+- Les fichiers sont disponibles ci-dessus. Cliquez sur le fichier correspondant et puis sélectionnez "Raw" ou "Download". Enregistrez le fichier au bon endroit sur votre ordinateur.
 
 
-### Introduction à l'analyse de fichiers VCF
+## Introduction à l'analyse de fichiers VCF
 
-- Ouvrez le fichier VCF à l'aide d'un éditeur de texte. Repéréz la partie supérieure reportant un grand nombre d'informations sur le contenu du fichier et les analyses faites ultérieurement. Puis, la partie inférieure identifiant chaque SNP (1 par ligne) avec sa position (`POS`) sur un chromosome spécifique (`CHROM`).
+- Ouvrez le fichier VCF à l'aide d'un éditeur de texte. Repérez la partie supérieure (`# ...`) qui résume de l'informations sur le contenu du fichier et les analyses faites ultérieurement. Puis, la partie inférieure identifiant chaque SNP (1 par ligne) avec sa position (`POS`) sur un chromosome spécifique (`CHROM`). Notez que `0` et `1` décrivent les allèles (0 correspond à l'allèle "REF" qui est connu du génome de réference, 1 correspond à l'allèle altérnatif "ALT"). Un génotype d'un individu est donc représenté par exemple comme "0|0" (homozygote) ou "0|1" (hétérozygote).
 
-- Il existe de nombreux packages en R permettant la manipulation de fichiers VCF, mais la fonctionalité offerte par ces packages est rarement cohérente. Il est donc important d'évaluer le potentiel du package avant d'entamer une analyse spécifique.
+- Il existe de nombreux packages en R permettant la manipulation de fichiers VCF, mais la fonctionnalité offerte par ces packages est rarement cohérente. Il est donc important d'évaluer le potentiel du package avant d'entamer une analyse spécifique. Nous allons utilsé `vcfR` et `adegenet`.
 
 ![](./images/vcfR.png)  
 
-Le point de départ: Définissez votre espace de travail, téléchargez le fichier VCF Human1000G.2000xSubsampled.noMAF.recode.vcf dans le même dossier  
+Le point de départ: Définissez votre espace de travail, téléchargez le fichier `Human1000G.2000xSubsampled.noMAF.recode.vcf` dans le même dossier  
 
 ```
-# à ajuster
+# à ajuster!
 setwd("~/Dropbox/Daniel/Documents/UNINE/Teaching/**2018_A/TP_GenetiqueEvol_2018/")
 
-# installer les packages nécessaires
+### installer les packages nécessaires
+# si l'installation de packages échoue, ouvrez le programme R (pas RStudio) et procédéz avec l'installation des packages. Puis, retournez en RStudio.
 install.packages(c("vcfR", "ggplot2", "adegenet"))
 library(vcfR)
 library(adegenet)
 library(ggplot2)
 
-# lisez le fichier VCF & conversion en genlight
+# lisez le fichier VCF & faites la conversion en objet genlight
 vcf <- read.vcfR("Human1000G.2000xSubsampled.MAF0.05.recode.vcf")
 allchr.snps <- vcfR2genlight(vcf)
 ```
 
-Q1: Combien d'individus et de variants (SNPs) sont compris dans ce fichier réduit?
+Q2: Combien d'individus et de variants (SNPs) sont compris dans ce fichier réduit?
 
-### Assigner les individus aux populations et régions d'origine
+## Assigner les individus aux populations et régions d'origine
 
 Télécharger le fichier "Human1000G.info.txt". Ce fichier résume l'information sur chaque individu inclut dans les données.
 
@@ -70,22 +81,23 @@ info.df <- read.table("Human1000G.info.txt", header=T, sep="\t")
 
 # voir les catégories
 head(info.df)
-
+table(info.df$Population.name)
+table(info.df$Superpopulation.name)
 
 ### ci-dessous vous avez trois options de catégoriser les individus
 # assignez les individus aux populations (Population)
 pop(allchr.snps) <- info.df$Population.name[match(indNames(allchr.snps), info.df$Sample.name)]
 
-# alternativement: par continent/région (Superpopulation)
+# alternativement: aux continents/régions (Superpopulation)
 pop(allchr.snps) <- info.df$Superpopulation.name[match(indNames(allchr.snps), info.df$Sample.name)]
 
-# alternativement: par sexe
+# alternativement: aux sexes
 pop(allchr.snps) <- info.df$Sex[match(indNames(allchr.snps), info.df$Sample.name)]
 ```
 
-Q2: Faites un graphique simple résumant la taille de chaque population et super-population (régions).
+Q3: Faites un graphique simple résumant d'abord les nombres d'échantillons par population et puis super-population (régions).
 
-### Sélection de positions, chromosomes ou individus
+## Sélection de positions, chromosomes ou individus
 
 ```
 # sélectionner les premiers éléments de la matrice des génotypes (un example)
@@ -96,7 +108,11 @@ allchr.snps@position
 allchr.snps@chromosome
 allchr.snps@loc.names
 
-# en utilisant ces pièces d'information, crééer un dataframe
+# vous pouvez identifier le génotype d'un individu en sélectionnant l'information dans la matrice
+as.matrix(allchr.snps)
+# as.matrix(allchr.snps)["individu", "nomDuSNP"]
+
+# en utilisant ces pièces d'information, créer un dataframe
 allchr.df <- data.frame(position = allchr.snps@position, chromosome = allchr.snps@chromosome, SNPid = allchr.snps@loc.names)
 # générer l'ordre correct des chromosomes
 allchr.df$chromosome <- factor(allchr.df$chromosome, levels = c(1:22, "X")) 
@@ -106,8 +122,11 @@ SNP.per.chr <- as.data.frame(table(allchr.df$chromosome))
 qplot(x = allchr.df$chromosome, geom = "bar")
 ```
 
-Q3: Calculez le nombre de SNP par megabases de chromosomes (i.e. densité). Est-ce que les chromosomes diffèrent en densité?  
+Q4: Calculez le nombre de SNP par megabases de chromosomes (i.e. densité). Est-ce que les chromosomes diffèrent en densité?  
 [NB: l'information sur la taille des chromosomes humains est facilement accessible en ligne.]
+
+Q5: Quel est le génotype de l'individu "HG02334" à la première position du chromosome 2?
+
 
 ```
 # visualiser la densité des SNP
@@ -120,22 +139,11 @@ ggplot(allchr.df, aes(x = position/1000000)) + geom_histogram(binwidth = 10) +
 ggsave("SNPdensity.pdf", width = 20, height = 4)
 ```
 
-Q4: Cherchez une explications du pic principal de densité SNPs. 
-
-A4: => Pic principal: région MHC
-
-Q5: Quel est le génotype de l'individu "HG02334" à la première position du chromosome 2?
-
-["0" correspond à homozygote de l'allèle REF (même allèle comme dans le génome de référence, "2" homozygote pour l'allèle alternatif, "1" hétérozygote)]
-
-A5: ...
-head(allchr.df[allchr.df$chromosome == 2,],1)
-as.matrix(allchr.snps)["HG02334","rs300751"]
-
+Q6: Cherchez une explication possible du pic principal de densité SNPs. 
 
 ## Fréquences alléliques et allèles mineurs
 
-Une propriété importante d'une population est la distribution des fréquences alléliques. On peut extraire l'information de la fréquence de l'allèle atlernative
+Une propriété importante d'une population est la distribution des fréquences alléliques. On peut extraire l'information de la fréquence de l'allèle atlernative comme ci-dessous:
 
 ```
 # extraction des fréquences de l'allèle alternatif (l'allèle ne figurant pas dans le génome de référence)
@@ -148,32 +156,17 @@ alt.allele.freq.pop <- glMean(allchr.snps[pop(allchr.snps) == population,])
 qplot(alt.allele.freq.pop, binwidth = 0.05)
 ```
 
-Q: Modifier le code pour visualiser les fréquences d'allèles mineurs (MAF)
-
-A:
-minor.allele.freq <- alt.allelle.freq
-minor.allele.freq[minor.allele.freq > 0.5] <- 1-minor.allele.freq[minor.allele.freq > 0.5]
-qplot(minor.allele.freq, binwidth = 0.05)
+Q7: Modifier le code pour visualiser les fréquences d'allèles mineurs (MAF)
 
 NB: Ce jeux de données est filtré pour éliminer les SNP avec allèles très rare (MAF < 0.05) pour des raisons pratiques (données trop volumineuses)
 
 
+Q8: Générer les plots pour deux populations que vous supposez de montrer un constraste au niveau des fréquences d'allèles mineurs (MAF). Comparer les distributions au niveau des populations avec la distribution au niveau global.
 
-Q: Générer les plots pour deux populations que vous supposez de montrer un constraste au niveau des fréquences d'allèles mineurs (MAF). Comparer les distributions au niveau des populations avec la distribution au niveau global.
-
-A: (pour une population)
-
-```
-population <- "Finnish"
-alt.allele.freq <- glMean(allchr.snps[pop(allchr.snps) == population,])
-minor.allele.freq <- alt.allelle.freq
-minor.allele.freq[minor.allele.freq > 0.5] <- 1-minor.allele.freq[minor.allele.freq > 0.5]
-qplot(minor.allele.freq, binwidth = 0.05)
-```
 
 ## Fréquences génotypiques
 
-Les fréquences génotypiques permettent d'estimer entre autres les taux d'homozygotie.
+Les fréquences génotypiques permettent d'estimer entre autres les taux d'hétérozygotie.
 
 ```
 # accès aux données génotypiques se fait en transformant l'object allchr.snps
@@ -194,24 +187,14 @@ ggplot(heterozygosity.df, aes(x = reorder(population, -MeanHeterozygosity), y = 
 ggsave("Population_heterozygosity.pdf", width = 6, height = 4)
 ```
 
-Q: Identifiez les populations qui ne suivaient pas vos prédictions. Expliquez votre raisonnement.
+Q9: Selon vos connaissances sur les voies de colonisation de l'homme, prédisez grossièrement les différences en taux d'hétérozygotie entre populations (1-2 phrases). Puis, comparez votre prédiction avec le graphique généré ci-dessus.
 
-Q: En utilisant la procédure ci-dessus, calculez l'hétérozygotie pour la population "British" par chromosome.
-
-A: (beaucoup de variantes de ce code sont possible, allchr.df a été généré plus tôt déjà!)  
-
-```
-heterozygosity.perSNP.perPOP.t <- as.data.frame(t(heterozygosity.perSNP.perPOP[,-1]))
-names(heterozygosity.perSNP.perPOP.t) <- heterozygosity.perSNP.perPOP[,1]
-heterozygosity.perSNP.perPOP.t$SNPid <- row.names(heterozygosity.perSNP.perPOP.t)
-heterozygosity.perSNP.perPOP.fullinfo <-  merge(heterozygosity.perSNP.perPOP.t, allchr.df, by="SNPid")
-heterozygosity.perSNP.perPOP.fullinfo$chromosome <- factor(heterozygosity.perSNP.perPOP.fullinfo$chromosome, levels = c(1:22, "X")) 
-
-barplot(tapply(heterozygosity.perSNP.perPOP.fullinfo$British, INDEX = heterozygosity.perSNP.perPOP.fullinfo$chromosome, FUN = mean))
-```
+Q10 (difficile): En utilisant la procédure ci-dessus, calculez l'hétérozygotie pour la population "British" par chromosome.
 
 
 ## Analyse en composantes principales
+
+Voici le code pour visualiser le produit d'une analyse en composantes principales.
 
 ```
 # étape longue (plus. minutes!)
@@ -224,28 +207,77 @@ pca.data <- as.data.frame(allchr.pc$scores)
 pca.data$pop <- info.df$Population.name[match(row.names(pca.data), info.df$Sample.name)]
 pca.data$region <- info.df$Superpopulation.name[match(indNames(allchr.snps), info.df$Sample.name)]
 
-## visualisation des régions
+## visualisation de la structure
 ggplot(pca.data, aes(x = PC1, y = PC2, fill=region, color=region)) + 
   geom_point(size = 3, alpha = 0.5)
 
-ggsave("PCA_regions.pdf", width = 12, height = 10)
+ggsave("PCA_structure.pdf", width = 12, height = 10)
 
-## visualisation des régions, ajout de texte identifiant les populations
+## visualisation de la structure, ajout de texte identifiant les populations
 ggplot(pca.data, aes(x = PC1, y = PC2, fill=region, color=region)) + 
   geom_point(size = 3, alpha = 0.5) +
   geom_text(aes(x = PC1, y = PC2, label = pop), size = 2)
 
-ggsave("PCA_regions_poptext.pdf", width = 12, height = 10)
+ggsave("PCA_structure_poptext.pdf", width = 12, height = 10)
 ```
 
-Q: Qu'est-ce que signifie le barplot?
+Q11: Qu'est-ce que signifie le barplot?
 
-Q: En visualisant les "super-populations" (régions), expliquez la structuration observée dans la PCA. En s'appuyant sur les voies de colonisations majeures, quelles sont les raisons probables du regroupement?
+Q12: En visualisant les "super-populations" (régions) et puis les "populations", expliquez la structuration observée dans la PCA. En s'appuyant sur les voies de colonisations majeures, quelles sont les raisons probables du regroupement? Est-ce que vous trouvez des contradictions selon vos prédictions?
 
-Q: Un petit nombre d'individus non-africains se trouvent très proche du cluster africain. Explications probables?
+Q13: Un petit nombre d'individus non-africains se trouvent très proche du cluster africain. Explications probables?
 
 
-### Exercise de synthèse
+## Analyse de F<sub>ST</sub> par paires de populations
 
-Q: Créer une PCA 
+Pour effectuer au plus simple une analyse de F<sub>ST</sub>, il faudra convertir le fichier `VCF` dans un objet `genind`.
 
+```
+### installez les packages nécessaires
+# si l'installation de packages échoue, ouvrez le programme R (pas RStudio) et procédéz avec l'installation. Puis, retournez en RStudio.
+install.packages(c("hierfstat", "gplots", "RColorBrewer"))
+library(hierfstat)
+library(gplots)
+library(RColorBrewer)
+
+# lire le fichier VCF & conversion en format genind
+vcf <- read.vcfR("Human1000G.2000xSubsampled.MAF0.05.recode.vcf")
+allchr.snps.genind <- vcfR2genind(vcf)
+
+# lire le fichier
+info.df <- read.table("Human1000G.info.txt", header=T, sep="\t")
+
+# voir les catégories
+head(info.df)
+
+
+### ci-dessous vous avez deux options de catégoriser les individus
+# assignez les individus aux populations (Population)
+pop(allchr.snps.genind) <- info.df$Population.name[match(indNames(allchr.snps.genind), info.df$Sample.name)]
+
+# alternativement: par continent/région (Superpopulation)
+pop(allchr.snps.genind) <- info.df$Superpopulation.name[match(indNames(allchr.snps.genind), info.df$Sample.name)]
+
+# Estimation des Fst pour toutes les paires de populations (étape lente! plusieurs minutes)
+fst <- pairwise.fst(allchr.snps.genind, res.type="matrix")
+rownames(fst) <- dimnames(fst)[[1]]
+colnames(fst) <- dimnames(fst)[[2]]
+
+# Si le temps de calcul de pairwise.fst() vous pose des problèmes, faites l'analyses sur les 300 premiers loci
+# fst <- pairwise.fst(allchr.snps.genind[,1:300], res.type="matrix")
+
+# Changer l'ordre d'apparition des populations pour la visualisation
+pop.order <- pop(allchr.snps.genind)
+unique(pop.order)
+
+# définissez l'ordre souhaité ci-dessous (l'exemple est celui des régions)
+pop.order <- c("African", "European", "South Asian", "East Asian", "American")
+fst <- fst[pop.order, pop.order]
+
+# Visualisation des Fst
+pdf(paper = "a4", "Human.pairwiseFST.pdf")
+heatmap.2(fst, revC = F, Rowv = F, Colv = F, margins = c(10, 10), dendrogram = "none", scale="none", trace="none", density.info="none", col = rev(brewer.pal(11, "Spectral")), key.xlab="Fst")
+dev.off()
+```
+
+Q14: Faites l'analyse au niveau des régions. Décrivez brièvement le résultat obtenu et concilier les valeurs relative de F<sub>ST</sub> avec nos connaissances sur le peuplement de la terre par l'homme.
