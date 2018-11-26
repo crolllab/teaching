@@ -16,8 +16,8 @@
 
 Référez-vous aux slides du cours "Génétique évolutive" si besoin.
 
-- SNP, MAF, techniques de séquençage
-- Principal component analyses (PCA)
+- Techniques de séquençage, SNP, MAF (minor allele frequency)
+- Principal component analyses (PCA), F<sub>ST</sub>
 - Peuplement de la terre par l'homme. Pour les intéressés: [Nielsen et al. 2017](https://www.nature.com/articles/nature21347)
 
 ### Les données: "The 1000 Genomes Project"  
