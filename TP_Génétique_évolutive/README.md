@@ -18,3 +18,14 @@ Seulement deux sur trois exercises vont être notés.
 Merci de répondre à chaque question de manière succincte (1-3 phrases sont souvent suffisantes). Si vous êtes obligés d'écrire du code ou générés des graphiques, les deux devraient figurer dans le document.
 
 Document à rendre à la fin de l'après-midi par Moodle. Merci de nommer votre document Nom_Prenom.
+
+
+### Les exercises
+
+[TP 4: Analyses de polymorphisme et structuration des populations humaines](./TP_4_Structure_pop_humaines)
+
+TP 5
+
+TP 6
+
+TP 7
