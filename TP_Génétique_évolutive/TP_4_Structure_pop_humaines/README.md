@@ -158,7 +158,7 @@ qplot(alt.allele.freq.pop, binwidth = 0.05)
 
 Q7: Modifier le code pour visualiser les fréquences d'allèles mineurs (MAF)
 
-NB: Ce jeux de données est filtré pour éliminer les SNP avec allèles très rare (MAF < 0.05) pour des raisons pratiques (données trop volumineuses)
+NB: Ce jeux de données est filtré pour éliminer les SNP avec allèles très rares (MAF < 0.05) pour des raisons pratiques (données trop volumineuses)
 
 
 Q8: Générer les plots pour deux populations que vous supposez de montrer un constraste au niveau des fréquences d'allèles mineurs (MAF). Comparer les distributions au niveau des populations avec la distribution au niveau global.
@@ -251,7 +251,7 @@ info.df <- read.table("Human1000G.info.txt", header=T, sep="\t")
 head(info.df)
 
 
-### ci-dessous vous avez deux options de catégoriser les individus
+### Ci-dessous vous avez deux options de catégoriser les individus
 # assignez les individus aux populations (Population)
 pop(allchr.snps.genind) <- info.df$Population.name[match(indNames(allchr.snps.genind), info.df$Sample.name)]
 
@@ -270,7 +270,7 @@ colnames(fst) <- dimnames(fst)[[2]]
 pop.order <- pop(allchr.snps.genind)
 unique(pop.order)
 
-# définissez l'ordre souhaité ci-dessous (l'exemple est celui des régions)
+# Définissez l'ordre souhaité ci-dessous (l'exemple est celui des régions)
 pop.order <- c("African", "European", "South Asian", "East Asian", "American")
 fst <- fst[pop.order, pop.order]
 
