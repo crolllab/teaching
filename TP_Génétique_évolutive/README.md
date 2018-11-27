@@ -11,7 +11,7 @@ Document à rendre le même jour par Moodle (19:00 ou plus tôt pour TP 7). Ce d
 
 Répondez à chaque question de manière succincte (1-3 phrases sont souvent suffisantes). Si vous êtes obligés d'écrire du code ou générés des graphiques, les deux devraient figurer dans le document.
 
-Seulement deux sur trois exercises vont être notés.
+Seulement deux sur trois exercises TP4-6 vont être notés.
 
 
 ### Les exercises
