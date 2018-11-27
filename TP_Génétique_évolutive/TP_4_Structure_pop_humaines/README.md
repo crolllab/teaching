@@ -53,7 +53,7 @@ Q1: Quelle était la motivation principale d'étudier la diversité génétique 
 
 ![](./images/vcfR.png)  
 
-Le point de départ: Définissez votre espace de travail, téléchargez le fichier `Human1000G.2000xSubsampled.noMAF.recode.vcf` dans le même dossier  
+Le point de départ: Définissez votre espace de travail, téléchargez le fichier `Human1000G.2000xSubsampled.MAF0.05.recode.vcf` dans le même dossier  
 
 ```
 # à ajuster!
