@@ -172,10 +172,10 @@ Les fréquences génotypiques permettent d'estimer entre autres les taux d'hét�
 
 ```
 # accès aux données génotypiques se fait en transformant l'object allchr.snps
-allchr.df <- as.data.frame(allchr.snps)
+allchr.geno.df <- as.data.frame(allchr.snps)
 
 # identification des hétérozygotes (identifiés toujours par "1")
-allchr.het <- allchr.df == 1
+allchr.het <- allchr.geno.df == 1
 
 heterozygosity.perSNP.perPOP <- aggregate(allchr.het, as.data.frame(allchr.snps$pop), function(x) {sum(x) / length(x)})
 heterozygosity.df <- data.frame(population = heterozygosity.perSNP.perPOP[,1], MeanHeterozygosity = rowMeans(heterozygosity.perSNP.perPOP[,-1]))
