@@ -2,7 +2,7 @@
 
 ### Evaluation
 
-2018/2019: [Descriptif de cours](http://www5.unine.ch/descriptifs/plans2018-2019/plan_316_2018-2019_fr_3ZL1040.pdf)
+2018/2019: [Descriptif du cours](http://www5.unine.ch/descriptifs/plans2018-2019/plan_316_2018-2019_fr_3ZL1040.pdf)
 
 
 ### TP 4-7
