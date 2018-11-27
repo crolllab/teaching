@@ -42,6 +42,8 @@ Q1: Quelle était la motivation principale d'étudier la diversité génétique 
 
 - Les fichiers sont disponibles ci-dessus. Cliquez sur le fichier correspondant et puis sélectionnez "Raw" ou "Download". Enregistrez le fichier au bon endroit sur votre ordinateur.
 
+- Attention: Assurez vous que votre ordinateur n'a pas modifié l'extension des fichiers (e.g. `.vcf` en `.vcf.txt`)
+
 
 ## Introduction à l'analyse de fichiers VCF
 
