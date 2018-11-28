@@ -201,6 +201,10 @@ Voici le code pour visualiser le produit d'une analyse en composantes principale
 ```
 # étape longue (plus. minutes!)
 allchr.pc <- glPca(allchr.snps, nf = 2)
+
+# accélération: sélection des premiers 100 SNP
+allchr.pc <- glPca(allchr.snps[,1:100], nf = 2)
+
 barplot(allchr.pc$eig[1:10])
 
 pca.data <- as.data.frame(allchr.pc$scores)
