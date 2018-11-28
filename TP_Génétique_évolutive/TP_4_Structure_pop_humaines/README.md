@@ -282,4 +282,4 @@ heatmap.2(fst, revC = F, Rowv = F, Colv = F, margins = c(10, 10), dendrogram = "
 dev.off()
 ```
 
-Q14: Faites l'analyse au niveau des régions. Décrivez brièvement le résultat obtenu et concilier les valeurs relative de F<sub>ST</sub> avec nos connaissances sur le peuplement de la terre par l'homme.
+Q14: Faites l'analyse au niveau des régions. Décrivez brièvement le résultat obtenu et concilier les valeurs relatives de F<sub>ST</sub> avec nos connaissances sur le peuplement de la terre par l'homme.
