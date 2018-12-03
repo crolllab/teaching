@@ -1,0 +1,136 @@
+Individual	Population	Reintroduction_History	Reintroduction_Genealogy
+GR0001_al	Albris	Primary introduction	Primary_Albris
+GR0002_al	Albris	Primary introduction	Primary_Albris
+GR0003_al	Albris	Primary introduction	Primary_Albris
+GR0004_al	Albris	Primary introduction	Primary_Albris
+GR0005_al	Albris	Primary introduction	Primary_Albris
+GR0006_al	Albris	Primary introduction	Primary_Albris
+GR0007_al	Albris	Primary introduction	Primary_Albris
+GR0008_al	Albris	Primary introduction	Primary_Albris
+GR0009_al	Albris	Primary introduction	Primary_Albris
+GR0010_al	Albris	Primary introduction	Primary_Albris
+GR0011_al	Albris	Primary introduction	Primary_Albris
+GR0113_al	Albris	Primary introduction	Primary_Albris
+GR0201_al	Albris	Primary introduction	Primary_Albris
+GR0204_al	Albris	Primary introduction	Primary_Albris
+GR0379_al	Albris	Primary introduction	Primary_Albris
+VS0013_ab	Aletsch Bietschhorn	Secondary introduction	Admixture
+VS0016_ab	Aletsch Bietschhorn	Secondary introduction	Admixture
+VS0017_ab	Aletsch Bietschhorn	Secondary introduction	Admixture
+VS0043_ab	Aletsch Bietschhorn	Secondary introduction	Admixture
+VS0087_ab	Aletsch Bietschhorn	Secondary introduction	Admixture
+VS0090_ab	Aletsch Bietschhorn	Secondary introduction	Admixture
+VS0440_ab	Aletsch Bietschhorn	Secondary introduction	Admixture
+VS0464_ab	Aletsch Bietschhorn	Secondary introduction	Admixture
+VS0465_ab	Aletsch Bietschhorn	Secondary introduction	Admixture
+VS0466_ab	Aletsch Bietschhorn	Secondary introduction	Admixture
+VS0469_ab	Aletsch Bietschhorn	Secondary introduction	Admixture
+VS0471_ab	Aletsch Bietschhorn	Secondary introduction	Admixture
+VS0473_ab	Aletsch Bietschhorn	Secondary introduction	Admixture
+BE0002_br	Brienzer Rothorn	Primary introduction	Primary_BrienzerRothorn
+BE0007_br	Brienzer Rothorn	Primary introduction	Primary_BrienzerRothorn
+BE0272_br	Brienzer Rothorn	Primary introduction	Primary_BrienzerRothorn
+BE0273_br	Brienzer Rothorn	Primary introduction	Primary_BrienzerRothorn
+BE0274_br	Brienzer Rothorn	Primary introduction	Primary_BrienzerRothorn
+BE0279_br	Brienzer Rothorn	Primary introduction	Primary_BrienzerRothorn
+BE0281_br	Brienzer Rothorn	Primary introduction	Primary_BrienzerRothorn
+BE0282_br	Brienzer Rothorn	Primary introduction	Primary_BrienzerRothorn
+BE0430_br	Brienzer Rothorn	Primary introduction	Primary_BrienzerRothorn
+BE0433_br	Brienzer Rothorn	Primary introduction	Primary_BrienzerRothorn
+BE0435_br	Brienzer Rothorn	Primary introduction	Primary_BrienzerRothorn
+BE0436_br	Brienzer Rothorn	Primary introduction	Primary_BrienzerRothorn
+OW0003_br	Brienzer Rothorn	Primary introduction	Primary_BrienzerRothorn
+OW0004_br	Brienzer Rothorn	Primary introduction	Primary_BrienzerRothorn
+VD0007_cm	Cape Moine	Secondary introduction	Primary_BrienzerRothorn
+VD0023_cm	Cape Moine	Secondary introduction	Primary_BrienzerRothorn
+VD0030_cm	Cape Moine	Secondary introduction	Primary_BrienzerRothorn
+VD0038_cm	Cape Moine	Secondary introduction	Primary_BrienzerRothorn
+VD0039_cm	Cape Moine	Secondary introduction	Primary_BrienzerRothorn
+VD0048_cm	Cape Moine	Secondary introduction	Primary_BrienzerRothorn
+VD0052_cm	Cape Moine	Secondary introduction	Primary_BrienzerRothorn
+VD0057_cm	Cape Moine	Secondary introduction	Primary_BrienzerRothorn
+VD0058_cm	Cape Moine	Secondary introduction	Primary_BrienzerRothorn
+VD0059_cm	Cape Moine	Secondary introduction	Primary_BrienzerRothorn
+VD0060_cm	Cape Moine	Secondary introduction	Primary_BrienzerRothorn
+VD0067_cm	Cape Moine	Secondary introduction	Primary_BrienzerRothorn
+VD0142_cm	Cape Moine	Secondary introduction	Primary_BrienzerRothorn
+VD0147_cm	Cape Moine	Secondary introduction	Primary_BrienzerRothorn
+VD0208_cm	Cape Moine	Secondary introduction	Primary_BrienzerRothorn
+GPV07D.1_gpv	Gran Paradiso	Source	Source
+GPV07D.2_gpv	Gran Paradiso	Source	Source
+GPV08C_gpv	Gran Paradiso	Source	Source
+GPV099_gpv	Gran Paradiso	Source	Source
+GPV10C_gpv	Gran Paradiso	Source	Source
+GPV12C_gpv	Gran Paradiso	Source	Source
+GPV13C_gpv	Gran Paradiso	Source	Source
+GPV14C_gpv	Gran Paradiso	Source	Source
+GPV14D_gpv	Gran Paradiso	Source	Source
+GPV15C_gpv	Gran Paradiso	Source	Source
+GPV16C_gpv	Gran Paradiso	Source	Source
+GPV19D_gpv	Gran Paradiso	Source	Source
+SG0012_gh	Graue Hoerner	Secondary introduction	Primary_Albris
+SG0013_gh	Graue Hoerner	Secondary introduction	Primary_Albris
+SG0015_gh	Graue Hoerner	Secondary introduction	Primary_Albris
+SG0016_gh	Graue Hoerner	Secondary introduction	Primary_Albris
+SG0025_gh	Graue Hoerner	Secondary introduction	Primary_Albris
+SG0032_gh	Graue Hoerner	Secondary introduction	Primary_Albris
+SG0033_gh	Graue Hoerner	Secondary introduction	Primary_Albris
+SG0046_gh	Graue Hoerner	Secondary introduction	Primary_Albris
+SG0216_gh	Graue Hoerner	Secondary introduction	Primary_Albris
+SG0221_gh	Graue Hoerner	Secondary introduction	Primary_Albris
+VS0140_pl	Pleureur	Primary introduction	Primary_Pleureur
+VS0141_pl	Pleureur	Primary introduction	Primary_Pleureur
+VS0280_pl	Pleureur	Primary introduction	Primary_Pleureur
+VS0308_pl	Pleureur	Primary introduction	Primary_Pleureur
+VS0313_pl	Pleureur	Primary introduction	Primary_Pleureur
+VS0329_pl	Pleureur	Primary introduction	Primary_Pleureur
+VS0330_pl	Pleureur	Primary introduction	Primary_Pleureur
+VS0856_pl	Pleureur	Primary introduction	Primary_Pleureur
+VS0882_pl	Pleureur	Primary introduction	Primary_Pleureur
+VS0983_pl	Pleureur	Primary introduction	Primary_Pleureur
+VS1120_pl	Pleureur	Primary introduction	Primary_Pleureur
+VS1121_pl	Pleureur	Primary introduction	Primary_Pleureur
+VS1123_pl	Pleureur	Primary introduction	Primary_Pleureur
+VS1171_pl	Pleureur	Primary introduction	Primary_Pleureur
+VS1212_pl	Pleureur	Primary introduction	Primary_Pleureur
+GR0310_rh	Rheinwaldhorn	Secondary introduction	Primary_Albris
+GR0721_rh	Rheinwaldhorn	Secondary introduction	Primary_Albris
+GR0728_rh	Rheinwaldhorn	Secondary introduction	Primary_Albris
+GR0732_rh	Rheinwaldhorn	Secondary introduction	Primary_Albris
+GR0766_rh	Rheinwaldhorn	Secondary introduction	Primary_Albris
+GR1380_rh	Rheinwaldhorn	Secondary introduction	Primary_Albris
+GR1387_rh	Rheinwaldhorn	Secondary introduction	Primary_Albris
+GR1390_rh	Rheinwaldhorn	Secondary introduction	Primary_Albris
+GR1422_rh	Rheinwaldhorn	Secondary introduction	Primary_Albris
+GR1424_rh	Rheinwaldhorn	Secondary introduction	Primary_Albris
+GR1709_rh	Rheinwaldhorn	Secondary introduction	Primary_Albris
+GR1728_rh	Rheinwaldhorn	Secondary introduction	Primary_Albris
+BE0125_sm	Schwarz Moench	Secondary introduction	Admixture
+BE0129_sm	Schwarz Moench	Secondary introduction	Admixture
+BE0143_sm	Schwarz Moench	Secondary introduction	Admixture
+BE0146_sm	Schwarz Moench	Secondary introduction	Admixture
+BE0148_sm	Schwarz Moench	Secondary introduction	Admixture
+BE0320_sm	Schwarz Moench	Secondary introduction	Admixture
+BE0321_sm	Schwarz Moench	Secondary introduction	Admixture
+BE0322_sm	Schwarz Moench	Secondary introduction	Admixture
+BE0323_sm	Schwarz Moench	Secondary introduction	Admixture
+BE0324_sm	Schwarz Moench	Secondary introduction	Admixture
+BE0327_sm	Schwarz Moench	Secondary introduction	Admixture
+BE0328_sm	Schwarz Moench	Secondary introduction	Admixture
+BE0331_sm	Schwarz Moench	Secondary introduction	Admixture
+BE0333_sm	Schwarz Moench	Secondary introduction	Admixture
+BE0336_sm	Schwarz Moench	Secondary introduction	Admixture
+VS0003_wh	Weisshorn	Secondary introduction	Primary_Pleureur
+VS0031_wh	Weisshorn	Secondary introduction	Primary_Pleureur
+VS0034_wh	Weisshorn	Secondary introduction	Primary_Pleureur
+VS0035_wh	Weisshorn	Secondary introduction	Primary_Pleureur
+VS0037_wh	Weisshorn	Secondary introduction	Primary_Pleureur
+VS0064_wh	Weisshorn	Secondary introduction	Primary_Pleureur
+VS0079_wh	Weisshorn	Secondary introduction	Primary_Pleureur
+VS0081_wh	Weisshorn	Secondary introduction	Primary_Pleureur
+VS0082_wh	Weisshorn	Secondary introduction	Primary_Pleureur
+VS0295_wh	Weisshorn	Secondary introduction	Primary_Pleureur
+VS0491_wh	Weisshorn	Secondary introduction	Primary_Pleureur
+VS0492_wh	Weisshorn	Secondary introduction	Primary_Pleureur
+VS0515_wh	Weisshorn	Secondary introduction	Primary_Pleureur
+VS0627_wh	Weisshorn	Secondary introduction	Primary_Pleureur
