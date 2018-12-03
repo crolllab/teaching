@@ -18,7 +18,7 @@ Seulement deux sur trois exercises TP4-6 vont être notés.
 
 [TP 4: Analyses de polymorphisme et structuration des populations humaines](./TP_4_Structure_pop_humaines)
 
-TP 5: Analyses des goulots d'étranglements subis par les bouquetins
+[TP 5: Analyses des goulots d'étranglements subis par les bouquetins](./TP_5_Goulots_bouquetins)
 
 TP 6: Analyses de sélection dans les populations humaines
 
