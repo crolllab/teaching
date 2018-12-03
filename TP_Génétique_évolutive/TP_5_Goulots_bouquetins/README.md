@@ -78,7 +78,7 @@ pop(allchr.snps.genind) <- info.df$Population[match(indNames(allchr.snps.genind)
 
 Q2: Quelle est la significance des colonnes "Reintroduction_History" et "Reintroduction_History" dans le data.frame info.df?
 
-Q3: Générez une PCA de l'ensemble du jeu de données. Utilisez d'abord la catégorie "Population" pour colorer les individus, puis faites une deuxième PCA avec la coloration en fonction de la "Reintroduction_History" et "Reintroduction_Genealogy".
+Q3: Générez une PCA de l'ensemble du jeu de données. Utilisez d'abord la catégorie "Population" pour colorer les individus, puis faites une deuxième PCA avec la coloration en fonction de la "Reintroduction_History" et une troisième avec "Reintroduction_Genealogy".
 
 [NB: Vous pouvez utiliser un code quasiment identique au code fourni pour l'homme]
 
