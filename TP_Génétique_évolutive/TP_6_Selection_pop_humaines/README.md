@@ -17,7 +17,7 @@ Référez-vous aux slides du cours "Génétique évolutive" si besoin.
 
 - Techniques de séquençage, SNP
 - Principal component analyses (PCA), F<sub>ST</sub>
-- Tajima D
+- Tajima *D*
 - Peuplement de la terre par l'homme. Pour les intéressés: [Nielsen et al. 2017](https://www.nature.com/articles/nature21347)
 
 ### Les données: "The 1000 Genomes Project"  
@@ -45,7 +45,7 @@ Référez-vous aux slides du cours "Génétique évolutive" si besoin.
 
 ## La distribution des valeurs F<sub>ST</sub> à travers le génome humain
 
-Jusque-là, nous nous sommes uniquement intéressé au F<sub>ST</sub> moyen à travers le génome. Cette valeur moyenne reflète très précisément la différenciation génétique entre population.
+Jusque-là, nous nous sommes uniquement intéressés au F<sub>ST</sub> moyen à travers le génome. Cette valeur moyenne reflète très précisément la différenciation génétique entre population.
 
 Ici, nous allons étudier la distribution de ces valeurs à travers le génome. Une valeur F<sub>ST</sub> très élevée à un locus particulier indique une forte différenciation entre populations. Un tel locus pourrait alors coder pour un phénotype impliqué dans l'adaptation locale. Le raisonnement est que la sélection favoriserait localement un certain allèle. Les autres populations soit subiraient aucune sélection sur cet allèle ou favoriseraient même l'allèle alternatif. Ces processus génèrent des différenciation en fréquences alléliques entre populations.
 
@@ -273,7 +273,7 @@ ggsave(paste0("MCM6_frequency_spectrum_",pop,".pdf"), width=4, height=3)
 ```
 
 
-### Visualisation du Tajima D par population: région du *MCM6*
+### Visualisation du Tajima *D* par population: région du *MCM6*
 
 ```
 # le principe de la fonction tajima.test
