@@ -238,9 +238,6 @@ info.df <- read.table("Human1000G.info.txt", header=T, sep="\t")
 # voir les catégories
 head(info.df)
 
-# Lire le fichier résumant les populations
-info.df <- read.table("10_Hapmap.samples.txt", header=T, sep="\t")
-
 # création d'un data.frame avec les colonnes populations, région et Tajima's D
 taj.df <- data.frame(pop=unique(info.df$Population.name), tajima=NA)
 taj.df$region <- info.df$Superpopulation.name[match(taj.df$pop, info.df$Population.name)]
