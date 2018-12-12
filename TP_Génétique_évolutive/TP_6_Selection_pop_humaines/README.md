@@ -24,7 +24,7 @@ Référez-vous aux slides du cours "Génétique évolutive" si besoin.
 
 Uniquement des tests applicables au sein d'une espèce sont notés ici.
 
-![](./images/selection.png)
+![](./images/selection_overview.png)
 
 ### Les données: "The 1000 Genomes Project"  
 - La publication principale est apparue dans Nature vol 526, pages 68–74, 2015: [https://www.nature.com/articles/nature15393](https://www.nature.com/articles/nature15393)
