@@ -136,7 +136,7 @@ Q2: Est-ce que le niveau de consanguinité d'une population a un impact sur l'ef
 
 Q3: Visualisez la distribution des valeurs F<sub>ST</sub> à travers tous les loci à l'aide d'un histogramme. Rajoutez une ligne verticale pour la valeur F<sub>ST</sub> moyenne.
 
-Q4: Quel type de distribution statistique observez-vous probablement? Est-ce que toute déviation de valeur F<sub>ST</sub> à un locus par rapport au F<sub>ST</sub> moyen indiquerait un locus sous sélection? Quelle approche plus robuste pourrait-on imaginer pour identifier les locis rééllement sous sélection?
+Q4: Quel type de distribution statistique observez-vous probablement? Est-ce que toute déviation de valeur F<sub>ST</sub> à un locus par rapport au F<sub>ST</sub> moyen indiquerait un locus sous sélection? Quelle approche plus robuste pourrait-on imaginer pour identifier les loci réellement sous sélection?
 
 ### Création d'un data.frame comprenant les positions chromosomales et statistiques par locus (Hs, Fst, etc.)
 
