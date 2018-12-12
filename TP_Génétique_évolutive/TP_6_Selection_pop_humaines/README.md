@@ -20,6 +20,12 @@ Référez-vous aux slides du cours "Génétique évolutive" si besoin.
 - Tajima *D*
 - Peuplement de la terre par l'homme. Pour les intéressés: [Nielsen et al. 2017](https://www.nature.com/articles/nature21347)
 
+### Les tests principaux de sélection
+
+Uniquement des tests applicables au sein d'une espèce sont notés ici.
+
+![](./images/selection.png)
+
 ### Les données: "The 1000 Genomes Project"  
 - La publication principale est apparue dans Nature vol 526, pages 68–74, 2015: [https://www.nature.com/articles/nature15393](https://www.nature.com/articles/nature15393)
 - 2504 individus de 26 populations à travers le monde
