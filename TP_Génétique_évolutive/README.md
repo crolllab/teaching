@@ -18,4 +18,4 @@ Seulement deux sur trois exercises TP4-6 vont être notés.
 
 [TP 6: Analyses de sélection dans les populations humaines](./TP_6_Selection_pop_humaines)
 
-TP 7: Exercises de synthèse
+TP 7: Exercises de synthèse (voir Moodle)
