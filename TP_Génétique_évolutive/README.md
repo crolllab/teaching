@@ -27,8 +27,4 @@ Répondez à chaque question de manière succincte (1-3 phrases sont souvent suf
 
 ### Les exercises
 
-<<<<<<< HEAD
 Voir ci-dessus.
-=======
-TP 7: Exercises de synthèse (voir Moodle)
->>>>>>> f5e2c848d2d67431b701b6019b326dd4d191c8f4
