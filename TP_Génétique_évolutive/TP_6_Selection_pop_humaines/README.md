@@ -1,7 +1,5 @@
 ### TP Génétique évolutive 6
 
-(12 décembre 2018)
-
 
 # Analyses de sélection dans les populations humaines
 

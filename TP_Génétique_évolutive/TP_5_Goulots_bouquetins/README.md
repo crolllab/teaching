@@ -1,7 +1,5 @@
 ### TP Génétique évolutive 5
 
-(5 décembre 2018)
-
 
 # Analyses des goulots d'étranglements subis par les bouquetins
 

@@ -1,7 +1,5 @@
 ### TP Génétique évolutive 4
 
-(28 novembre 2018)
-
 
 # Analyses de polymorphisme et structuration des populations humaines
 
