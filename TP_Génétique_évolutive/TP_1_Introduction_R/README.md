@@ -369,13 +369,42 @@ ggplot(mpg, aes(x = hwy, y = cty)) + geom_point(aes(size = cyl, color = manufact
 
 ```
 ggsave("Plot.pdf")
-# control the layout!
+
+# contrôler la mise en page en spécifiant les dimensions
 ggsave("Plot.pdf", height = 6, width = 11)
 ```
 
 ## Traiter des séquences d'ADN
 
+Nous allons analyser des fichiers VCF représentant des génotypes de grandes populations plus tard. Ici, nous regardons l'exemple de traitement de séquences d'ADN du format `fasta`.
 
+On utilisera le fichier fasta de [FOXP2](./fasta/FOXP2_nucl.aligned.fasta) (cf. cours 2 Génétique évolutive)
+
+```
+install.packages(c("pegas", "seqinr"))
+
+# les packages les plus utiles
+library(ape)
+library(pegas)
+library(seqinr)
+
+# create a DNAbin object containing the fasta sequence
+FOXP2.DNAbin <- read.dna("FOXP2_nucl.aligned.fasta", format = "fasta")
+
+# visualisation de l'alignment
+image.DNAbin(FOXP2.DNAbin)
+
+# évaluation de l'alignment, visualisation du polymorphisme
+checkAlignment(FOXP2.DNAbin)
+
+# faire un arbre phylogénétique simple
+FOXP2.tree <- nj(dist(FOXP2.DNAbin))
+plot(FOXP2.tree)
+
+# changer l'enracinement
+FOXP2.tree <- root(FOXP2.tree, outgroup = "Mus_musculus_var3")
+plot(FOXP2.tree, main = "FOXP2 phylogeny")
+```
 
 ## Troubleshooting
 
