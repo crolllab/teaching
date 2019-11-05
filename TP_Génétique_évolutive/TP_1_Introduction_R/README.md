@@ -214,7 +214,7 @@ Faites extrêment attention quand vous essayez de convertir une colonne sous for
 
 ### Quelques exemples pour s'exercer
 
-Vous trouvez dans le dossier `datasets` une série d'exemples. La difficulté de réussire la lecture est variable.
+Vous trouvez dans le dossier [datasets](./datasets) une série d'exemples. La difficulté de réussire la lecture est variable.
 
 
 ## Les boucles `for`
