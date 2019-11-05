@@ -256,7 +256,7 @@ df
 
 ## Le traitement de données avec `dplyr`  
 
-Consultez aussi le ["cheatsheet"](./cheatsheet/dplyr-cheatsheet.pdf). 
+Consultez aussi le [cheatsheet](./cheatsheet/dplyr-cheatsheet.pdf). 
 
 `dplyr` permet de manipuler et résumer des tableaux (data.frame) complexes y inclut
 - de sélectionner une partie des données
