@@ -256,7 +256,7 @@ df
 
 ## Le traitement de données avec `dplyr`  
 
-Consultez aussi le [cheatsheet](./cheatsheet/dplyr-cheatsheet.pdf). 
+Consultez aussi le [cheatsheet](./cheatsheet). 
 
 `dplyr` permet de manipuler et résumer des tableaux (data.frame) complexes y inclut
 - de sélectionner une partie des données
@@ -290,7 +290,7 @@ iris.summary.df <- iris %>% group_by(Species) %>%
 
 ## Visualisation de données avec `ggplot2`
 
-Consultez aussi le ["cheatsheet"](./cheatsheet/ggplot2-cheatsheet.pdf). 
+Consultez aussi le [cheatsheet](./cheatsheet). 
 
 ```
 install.packages("ggplot2")
