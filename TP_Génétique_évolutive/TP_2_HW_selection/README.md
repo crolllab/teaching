@@ -78,7 +78,7 @@ genotypes <- genotypes.count / sum(genotypes.count)
 
 ### Fonction 1: calcul de fréquences alléliques 
 
-Cette fonction prend comme variable le vecteur des fréquences génotypiques et retourne les fréquences alléliques (p: A; q: a). Dans le contexte d'une population, nous pouvons estimer la fréquence des gamètes (haploïdes) A et a produits par la générations des parents ayant les génotypes spécifiés.
+Cette fonction prend comme variable le vecteur des fréquences génotypiques et retourne les fréquences alléliques (p: A; q: a). Dans le contexte d'une population, nous pouvons estimer la fréquence des gamètes (haploïdes) A et a produits par la génération des parents ayant les génotypes spécifiés.
 
 ```
 get.Allele.Freq <- function(genotypes) {
@@ -90,10 +90,10 @@ get.Allele.Freq <- function(genotypes) {
   }
 ```
 
-Q4: Testez la fonction ci-dessus et calculez les fréquences alléliques p et q pour des génotypes suivants AA: 39, Aa: 10, aa: 3.
+Q4: Testez la fonction ci-dessus et calculez les fréquences alléliques p et q pour les génotypes suivants AA: 39, Aa: 10, aa: 3.
 
 
-### Fonction 2: Calculez les génotypes produites à partir d'un pool de gamètes
+### Fonction 2: Calculez les génotypes produits à partir d'un pool de gamètes
 
 Nous supposons que les gamètes vont produire des zygotes selon un appariement aléatoire (pour respecter une condition de la Loi H-W).
 
@@ -114,16 +114,16 @@ get.Progeny.GenoFreq <- function(alleles) {
 get.Progeny.GenoFreq(alleles)
 ```
 
-Nous avons maintenant les deux fonctions essentielles pour simuler l'évolution des fréquences alléliques dans une population. Notamment, le passage des parents aux gamètes et puis à la formation de zygotes.
+Nous avons maintenant utiliser ces deux fonctions pour simuler l'évolution des fréquences alléliques dans une population. Notamment, le passage des parents aux gamètes et puis à la formation de zygotes.
 
-Q5: Utiliser une boucle (voir TP 1) pour enchaîner les deux fonctions ci-dessus. Notamment, assurez que vous passez les valeurs produites par une fonction à l'autre. Choisissez des fréquences génotypiques pour démarrer la boucle et faites tourner la boucle une série de fois (e.g. 10x). Comparez les fréquences alléliques/génotypiques initiales et finales.
+Q5: Utiliser une boucle (voir TP 1) pour enchaîner les deux fonctions ci-dessus. Notamment, assurez que vous passez les valeurs produites par une fonction à l'autre. Choisissez des fréquences génotypiques pour démarrer la boucle et faites tourner la boucle une série de fois (e.g. 10x). Comparez les fréquences alléliques/génotypiques initiales et finales pour valider votre code.
 
 
 ## L'impact de la sélection sur les fréquences génotypiques (et alléliques)
 
 Ci-dessus, nous avons créer un petit modèle qui nous re-calcule les fréquences génotypiques et alléliques à chaque génération. La sélection peut être intégrée au niveau des génotypes produites à partir des fréquences alléliques. Le but est alors de modifier chaque fréquence génotypique en fonction de sa valeur sélective s (ou fitness).
 
-Q6: Cherchez dans le cours de génétique évolutive les définition de la valeur sélective s et le coefficient de dominance h.
+Q6: Cherchez dans le cours de génétique évolutive les définitions de la valeur sélective s et le coefficient de dominance h.
 
 Reprenons la fonction suivante:
 
@@ -147,7 +147,7 @@ s <- 0.05
 # coéfficient de dominance
 h <- 0.5 # donc, co-dominance
 
-# Donc, nous pouvons définir la fitness de chaque génotype de la manière suivante:
+# Donc, nous pouvons définir la fitness de chaque génotype de manière suivante:
 wAA <- 1
 wAa <- 1 - h*s
 waa <- 1 - s
@@ -164,7 +164,7 @@ Vérifiez que le résultat correspond bien à vos attentes.
 Q7: La procédure ci-dessus produit des fréquences génotypiques qui ne correspondent pas à une somme de 1. Comment allez-vous remédier ceci?
 
 
-Q8: Modifiez votre boucle ci-dessus pour tester la validité de la Loi Hardy-Weinberg en intégrant une épisode de sélection sur les génotypes à chaque génération.
+Q8: Modifiez votre boucle pour tester la validité de la Loi Hardy-Weinberg ci-dessus en intégrant une épisode de sélection sur les génotypes à chaque génération. La sélection sera alors l'étape finale de la boucle.
 
 
 Q9: Testez pour des h entre 0, 0.5 et 1 si vous pouvez vérifier les analyses faites au cours.
@@ -218,5 +218,7 @@ ggplot(results.m.df, aes(x = generation, y = frequency, color = type)) +
   
 ggsave("Simulating_selection.pdf", width = 8, height = 5)
 ```
+
+Explorez l'impact du `s`, `h` et les fréquences génotypiques au départ sur l'évolution.
 
 ![](./images/Simulating_selection.png)
