@@ -8,7 +8,7 @@
 - Pouvoir visualiser la relation entre fréquences alléliques et génotypiques
 - En ajoutant la sélection, calculer le changement en fréquences alléliques d'une génération à l'autre
 - Intégrer ces changements en fréquences alléliques dans un modèle à plusieurs générations
-- Comprendre l'impact de la valeur sélective s et le coéfficient de dominance h
+- Comprendre l'impact de la valeur sélective s et le coefficient de dominance h
 
 
 ## La Loi de Hardy-Weinberg
@@ -19,7 +19,7 @@ On définit une fréquence de l'allèle A comme (p.ex. `0.2`):
 
 `p <- 0.2`
 
-Et puis pour l'allèle altérnatif a:
+Et puis pour l'allèle alternatif a:
 
 `q <- 1 - p`
 
@@ -67,17 +67,18 @@ Q3: Expliquez le principe d'une fonction en `R`? Quels sont les éléments à d�
 
 
 Définissons les variables de bases:
+
 ```
-Nous allons introduire le nombre de génotypes pour AA, Aa et aa dans un vecteur
+# Nous allons introduire le nombre de génotypes pour AA, Aa et aa dans un vecteur
 genotypes.count <- c(3, 9, 5) # alors 3 génotypes d'AA, 9 Aa et 5 aa
 
-Normalisons les fréquences génotypiques à une somme de 1
+# Normalisons les fréquences génotypiques à une somme de 1
 genotypes <- genotypes.count / sum(genotypes.count)
 ```
 
 ### Fonction 1: calcul de fréquences alléliques 
 
-Cette fonction prend comme variable le vecteur des fréquences génotypiques et retourne les fréquences allélliques (p: A; q: a). Dans le contexte d'une population, nous pouvons estimer la fréquence des gamètes (haploïdes) A et a produits par la générations des parents ayant les génotypes spécifiés.
+Cette fonction prend comme variable le vecteur des fréquences génotypiques et retourne les fréquences alléliques (p: A; q: a). Dans le contexte d'une population, nous pouvons estimer la fréquence des gamètes (haploïdes) A et a produits par la générations des parents ayant les génotypes spécifiés.
 
 ```
 get.Allele.Freq <- function(genotypes) {
@@ -89,7 +90,7 @@ get.Allele.Freq <- function(genotypes) {
   }
 ```
 
-Q4: Testez la fonction ci-dessus et calculez les fréquences allèliques p et q pour des génotypes suivants AA: 39, Aa: 10, aa: 3.
+Q4: Testez la fonction ci-dessus et calculez les fréquences alléliques p et q pour des génotypes suivants AA: 39, Aa: 10, aa: 3.
 
 
 ### Fonction 2: Calculez les génotypes produites à partir d'un pool de gamètes
@@ -115,14 +116,14 @@ get.Progeny.GenoFreq(alleles)
 
 Nous avons maintenant les deux fonctions essentielles pour simuler l'évolution des fréquences alléliques dans une population. Notamment, le passage des parents aux gamètes et puis à la formation de zygotes.
 
-Q5: Utiliser une boucle (voir TP 1) pour enchaîner les deux fonctions ci-dessus. Notamment, assurez que vous passez les valeurs produites par une fonction à l'autre. Choississez des fréquences génotypiques pour démarrer la boucle et faites tourner la boucle une série de fois (e.g. 10x). Comparez les fréquences alléliques/génotypiques initiales et finales.
+Q5: Utiliser une boucle (voir TP 1) pour enchaîner les deux fonctions ci-dessus. Notamment, assurez que vous passez les valeurs produites par une fonction à l'autre. Choisissez des fréquences génotypiques pour démarrer la boucle et faites tourner la boucle une série de fois (e.g. 10x). Comparez les fréquences alléliques/génotypiques initiales et finales.
 
 
 ## L'impact de la sélection sur les fréquences génotypiques (et alléliques)
 
 Ci-dessus, nous avons créer un petit modèle qui nous re-calcule les fréquences génotypiques et alléliques à chaque génération. La sélection peut être intégrée au niveau des génotypes produites à partir des fréquences alléliques. Le but est alors de modifier chaque fréquence génotypique en fonction de sa valeur sélective s (ou fitness).
 
-Q6: Cherchez dans le cours de génétique évolutive les définition de la valeur sélective s et le coéfficient de dominance h.
+Q6: Cherchez dans le cours de génétique évolutive les définition de la valeur sélective s et le coefficient de dominance h.
 
 Reprenons la fonction suivante:
 
@@ -158,7 +159,7 @@ Pour simplifier l'analyse, regroupons les valeurs de fitness:
 Nous avons alors la possibilité de modifier les fréquences génotypiques en appliquant `geno.fitness` sur un vecteur de `genotypes` comme ci-dessus
 `genotypes * geno.fitness`
 
-Vérifiez que le résult correspond bien à vos attentes.
+Vérifiez que le résultat correspond bien à vos attentes.
 
 Q7: La procédure ci-dessus produit des fréquences génotypiques qui ne correspondent pas à une somme de 1. Comment allez-vous remédier ceci?
 
@@ -201,7 +202,7 @@ Q10: Intégrez la collecte des données avec `results.df` dans votre boucle simu
 
 ### Visualisation de l'impact de sélection 
 
-Commencez par lancer la boucle enregristrant les résultats dans `results.df`.
+Commencez par lancer la boucle enregistrant les résultats dans `results.df`.
 
 ```
 library(reshape2)
