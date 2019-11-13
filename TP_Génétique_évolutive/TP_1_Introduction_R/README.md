@@ -214,7 +214,7 @@ Faites extrêment attention quand vous essayez de convertir une colonne sous for
 
 ### Quelques exemples pour s'exercer
 
-Vous trouvez dans le dossier [datasets](./datasets) une série d'exemples. La difficulté de réussire la lecture est variable.
+Vous trouvez dans le dossier [datasets](./datasets) une série d'exemples. La difficulté de réussire la lecture est bien variable. Essayez d'importer ou manipuler à l'avance 
 
 
 ## Les boucles `for`
@@ -230,9 +230,7 @@ for (i in 1:5) {
 	}
 
 ## une boucle suivant un data.frame ligne par ligne
-df <- data.frame(weekday = c("lundi", "mardi", "mercredi"),
-					hours = c(8,7,10),
-					breaks = c(1,3,4))
+ 
 
 # la boucle fait autant de tour que lignes dans df
 for (i in 1:nrow(df)) {
@@ -378,7 +376,7 @@ ggsave("Plot.pdf", height = 6, width = 11)
 
 Nous allons analyser des fichiers VCF représentant des génotypes de grandes populations plus tard. Ici, nous regardons l'exemple de traitement de séquences d'ADN du format `fasta`.
 
-On utilisera le fichier fasta de [FOXP2](./fasta/FOXP2_nucl.aligned.fasta) (cf. cours 2 Génétique évolutive)
+On utilisera le fichier [fasta de FOXP2](./fasta/FOXP2_nucl.aligned.fasta) (cf. cours 2 Génétique évolutive). Utilisez impérativement le fichier lié ci-dessus et pas le fichier fourni lors du cours. Ce fichier là ne contient pas encore des séquences alignées.
 
 ```
 install.packages(c("pegas", "seqinr"))
