@@ -25,13 +25,13 @@
 
 ![](./images/basic_layout.png)
 
-- Pour faciliter la lecture de fichier, déterminer la `working directory` soit dans les préferences ou en rajoutant la ligne de code tel que `setwd("/Users/dcroll/Desktop/")`. Ajustez l'emplacement.
+- Pour faciliter la lecture de fichier, déterminer le `working directory` soit dans les préferences ou en rajoutant la ligne de code tel que `setwd("/Users/dcroll/Desktop/")`. Ajustez l'emplacement.
 
 ![](./images/workingdir.png)
 
 - Utilisez la touche `tab` pour auto-compléter du code, des liens, des options, etc.
 
-- En bas du script, vous voyez la console pour interagir avec R. Mais vous pouvez exécuter du code directement du script. Pour ceci, sélectionnez la/les lignes de code et appuyer sur les touches `cmd` + `enter` (sur Mac).  
+- En bas du script, vous verrez la console pour interagir avec R. Mais vous pouvez exécuter du code directement dans le script. Pour ceci, sélectionnez la/les lignes de code et appuyer sur les touches `cmd` + `enter` (sur Mac).  
 
 ## Travailler avec des variables, vecteurs et data.frames
 
@@ -133,7 +133,7 @@ df[df$hours > 7,]
 ## Lecture et enregistrement de fichiers  
 
 La plupart des analyses `R` demandent l'importation de données. La source des données est soit
-- vous même (et vous avez décidez sur le format)
+- vous même (et vous décidez du format)
 - un collaborateur
 - téléchargement d'une banque de données en ligne 
 
@@ -143,14 +143,14 @@ Les problèmes les plus fréquents lors du chargement d'un fichier sont:
 - on ne comprend pas la structure des données
 - on ne comprend pas le format (e.g. JSON, VCF, GFF, POPGEN, FASTA, etc.)
 
-### Quelques termes téchniques pour mieux gérer les erreurs lors de l'importation:  
+### Quelques termes techniques pour mieux gérer les erreurs lors de l'importation:  
 - "Field delimiters" séparent les colonnes dans un fichier. Ceci peut être sous forme de tabulation, espace, virgule, etc.  
 􏰀- "Special characters" (`\`, `"`, etc.)  
 􏰀- "Text encoding" (UTF-8, etc.)  
 􏰀- `class` et `colClasses`: la classe caractérise un type de données (e.g. `numeric`, `character`, `factor`). Une `colClass` définie le type de données dans une colonne.  
 -􏰀 `header`: la première ligne d'un fichier qui peut optionnellement spécifier le nom de la colonne ("weight", "number of observations", etc.)  
 
-Si tout marche bien, vous ne recevez aucun message d'erreur:
+Si tout fonctionne correctement, vous ne receverez aucun message d'erreur:
 
 `data <- read.table("textfile.txt", header = T)`
 
@@ -167,7 +167,7 @@ Ajustez `header=T` ou `header=F`. Voir ci-dessus.
 
 On peut faire sauter la lecture des premières lignes avec `skip = 2` (deux lignes)
 
-Alternativement, on peut ignorer certaines colonnes: `colClasses = c(”integer”, ”NULL”, ”character”)` (après une colonne de chiffres, la deuxième colonne est ignorée, puis la troisième est lu comme des caractères)
+Alternativement, on peut ignorer certaines colonnes: `colClasses = c(”integer”, ”NULL”, ”character”)` (après une colonne de chiffres, la deuxième colonne est ignorée, puis la troisième est lue comme des caractères)
 
 ### La lecture de fichiers Excel ou csv
 
@@ -210,7 +210,7 @@ as.character(df$column1)
 as.factor(df$column1)
 as.numeric(df$column1)
 ```
-Faites extrêment attention quand vous essayez de convertir une colonne sous forme de `factor` en `character` ou `numeric`!
+Faites extrêmement attention quand vous essayez de convertir une colonne sous forme de `factor` en `character` ou `numeric`!
 
 ### Quelques exemples pour s'exercer
 
@@ -256,7 +256,7 @@ df
 
 Consultez aussi le [cheatsheet](./cheatsheets/dplyr-cheatsheet.pdf). 
 
-`dplyr` permet de manipuler et résumer des tableaux (data.frame) complexes y inclut
+`dplyr` permet de manipuler et résumer des tableaux (data.frame) complexes y compris:
 - de sélectionner une partie des données
 - résumer selon différents critères
 - rajouter des nouvelles colonnes ou variables
@@ -322,7 +322,7 @@ ggplot(mpg, aes(x = as.factor(year), y = cty)) + geom_boxplot()
 ggplot(mpg, aes(x = as.factor(cyl), y = hwy)) + geom_boxplot()
 ggplot(mpg, aes(x = as.factor(manufacturer), y = hwy)) + geom_boxplot()
 
-# faire un histogram (on a seulement besoin de spécifier l'axe x)
+# faire un histogramme (on a seulement besoin de spécifier l'axe x)
 ggplot(mpg, aes(x = hwy)) + geom_histogram()
 ggplot(mpg, aes(x = hwy)) + geom_histogram(binwidth = 2)
 ```
