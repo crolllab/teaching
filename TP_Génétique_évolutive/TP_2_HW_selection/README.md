@@ -39,7 +39,7 @@ Q2: Créez un graphe représentant à la fois pAA, pAa et paa.
 
 ![](./images/H-W.plot.png)
 
-La Loi de Hardy-Weinberg préconise que les fréquences alléliques dans une population restent constantes (en absence de sélection, dérive, mutation et migration). Nous voulons tester si cette prédiction est bien vérifiée en construisons un petit modèle.
+La Loi de Hardy-Weinberg préconise que les fréquences alléliques dans une population restent constantes (en absence de sélection, dérive, mutation et migration). Nous voulons tester si cette prédiction est bien vérifiée en construisant un petit modèle.
 
 Pour simplifier la programmation nous allons écrire des fonctions `function()` pour différents éléments.
 
@@ -114,14 +114,14 @@ get.Progeny.GenoFreq <- function(alleles) {
 get.Progeny.GenoFreq(alleles)
 ```
 
-Nous avons maintenant utiliser ces deux fonctions pour simuler l'évolution des fréquences alléliques dans une population. Notamment, le passage des parents aux gamètes et puis à la formation de zygotes.
+Nous avons maintenant utilisé ces deux fonctions pour simuler l'évolution des fréquences alléliques dans une population. Notamment, le passage des parents aux gamètes et puis à la formation de zygotes.
 
-Q5: Utiliser une boucle (voir TP 1) pour enchaîner les deux fonctions ci-dessus. Notamment, assurez que vous passez les valeurs produites par une fonction à l'autre. Choisissez des fréquences génotypiques pour démarrer la boucle et faites tourner la boucle une série de fois (e.g. 10x). Comparez les fréquences alléliques/génotypiques initiales et finales pour valider votre code.
+Q5: Utilisez une boucle (voir TP 1) pour enchaîner les deux fonctions ci-dessus. Notamment, assurez que vous passez les valeurs produites par une fonction à l'autre. Choisissez des fréquences génotypiques pour démarrer la boucle et faites tourner la boucle une série de fois (e.g. 10x). Comparez les fréquences alléliques/génotypiques initiales et finales pour valider votre code.
 
 
 ## L'impact de la sélection sur les fréquences génotypiques (et alléliques)
 
-Ci-dessus, nous avons créer un petit modèle qui nous re-calcule les fréquences génotypiques et alléliques à chaque génération. La sélection peut être intégrée au niveau des génotypes produites à partir des fréquences alléliques. Le but est alors de modifier chaque fréquence génotypique en fonction de sa valeur sélective s (ou fitness).
+Ci-dessus, nous avons créé un petit modèle qui nous re-calcule les fréquences génotypiques et alléliques à chaque génération. La sélection peut être intégrée au niveau des génotypes produits à partir des fréquences alléliques. Le but est alors de modifier chaque fréquence génotypique en fonction de sa valeur sélective s (ou fitness).
 
 Q6: Cherchez dans le cours de génétique évolutive les définitions de la valeur sélective s et le coefficient de dominance h.
 
@@ -139,7 +139,7 @@ get.Progeny.GenoFreq <- function(alleles) {
 }
 ```
 
-Le but est d'ajuster la fréquence génotypique par la valeur sélective du génotype. Donc, assumons que le génotype `AA` a la fitness maximum:
+Le but est d'ajuster la fréquence génotypique par la valeur sélective du génotype. Donc, assumons que le génotype `AA` a le fitness maximum:
 
 ```
 # valeur sélective
@@ -147,7 +147,7 @@ s <- 0.05
 # coéfficient de dominance
 h <- 0.5 # donc, co-dominance
 
-# Donc, nous pouvons définir la fitness de chaque génotype de manière suivante:
+# Donc, nous pouvons définir le fitness de chaque génotype de manière suivante:
 wAA <- 1
 wAa <- 1 - h*s
 waa <- 1 - s
@@ -187,7 +187,7 @@ results.df <- data.frame(generation=numeric(),
                           genotype.aa=numeric()) 
 ```
 
-Un exemple comment on peut introduire des données au cours de la simulation:
+Un exemple comment peut-on introduire des données au cours de la simulation:
 
 ```
 # à la génération "i" dans la boucle
