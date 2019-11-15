@@ -197,9 +197,6 @@ results.df[i, c("allele.A", "allele.a")] <- alleles
 results.df[i, c("genotype.AA", "genotype.Aa", "genotype.aa")] <- genotypes
 ```
 
-Q10: Intégrez la collecte des données avec `results.df` dans votre boucle simulant l'impact de la sélection (Q8).
-
-
 ### Visualisation de l'impact de sélection 
 
 Commencez par lancer la boucle enregistrant les résultats dans `results.df`.
@@ -214,11 +211,19 @@ results.m.df <- melt(results.df, id.vars = "generation", value.name = "frequency
 # visualisation
 ggplot(results.m.df, aes(x = generation, y = frequency, color = type)) + 
   geom_line() + 
+  scale_y_continuous(limits = c(0,1)) +
   labs(title = paste("Selection coefficient s =", s,", coefficient of dominance h =", h))
-  
+    
 ggsave("Simulating_selection.pdf", width = 8, height = 5)
+
+
+# Alternative: visualisation uniquement de pA
+ggplot(results.m.df[results.m.df$type == "allele.A",], aes(x = generation, y = frequency, color = type)) + 
+  geom_line() + 
+  scale_y_continuous(limits = c(0,1)) +
+  labs(title = paste("Population size", n))
 ```
 
-Explorez l'impact du `s`, `h` et les fréquences génotypiques au départ sur l'évolution.
+Q10: Intégrez la collecte des données avec `results.df` dans votre boucle simulant l'impact de la sélection (Q8). Explorez l'impact du `s`, `h` et les fréquences génotypiques au départ sur l'évolution.
 
 ![](./images/Simulating_selection.png)
