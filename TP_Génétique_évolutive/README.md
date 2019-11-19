@@ -20,11 +20,6 @@ Aucune évaluation
 
 ### TP 2-7
 
-Document à rendre le même jour par Moodle (ou selon l'accord avec l'enseignant). Ce document contient les réponses aux questions (Q1...Qn). Merci de nommer votre document Nom_Prenom.
+Document à rendre le jour par Moodle (ou selon l'accord avec l'enseignant) donnant les réponses aux questions (Q1...Qn). Merci de nommer votre document Nom_Prenom.
 
-Répondez à chaque question de manière succincte (1-3 phrases sont souvent suffisantes). Si vous êtes obligés d'écrire du code ou générer des graphiques, les deux devraient figurer dans le document.
-
-
-### Les exercises
-
-Voir ci-dessus.
+Répondez à chaque question de manière succincte (1-3 phrases sont souvent suffisantes). Si vous êtes obligés d'écrire du code ou générer des graphiques, les deux devraient en principe figurer dans le document.
