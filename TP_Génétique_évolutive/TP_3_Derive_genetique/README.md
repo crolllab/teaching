@@ -1,11 +1,10 @@
 ### TP Génétique évolutive 3
 
-# Dérive génétique et homozygosité
+# Dérive génétique
 
 ### But de ces travaux pratiques
 
 - Intégrer la dérive génétique dans un modèle de génétique de population
-- Comprendre l'impact de la dérive génétique sur le niveau d'homozygosité
 - Analyser l'interaction de la dérive génétique et la sélection
 
 ## La dérive génétique et l'échanntillonnage aléatoire
@@ -18,8 +17,6 @@ Nous voulons analyser tout d'abord l'effet de l'échantillonnage (répété) sur
 Nous faisons un tirage au sort de boules rouges et blanches.
 
 ```
-library(ggplot2)
-
 # Définissons la fréquence des boules rouge 
 p <- 0.5
 
