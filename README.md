@@ -2,4 +2,4 @@
 
 ## Currently available courses
 
-TP Génétique évolutive (3me année BSc)
+[TP Génétique évolutive](./TP_Génétique_évolutive) (3me année BSc)
