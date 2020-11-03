@@ -278,7 +278,7 @@ iris %>% select(Sepal.Length, Sepal.Width, Species)
 iris %>% group_by(Species)
 
 # regrouper par espèce et résumer les données
-iris %>% group_by(Species) %>% summarise(average = mean(Sepal.Length)
+iris %>% group_by(Species) %>% summarise(average = mean(Sepal.Length))
 
 # regénérer un data.frame
 iris.summary.df <- iris %>% group_by(Species) %>% 
