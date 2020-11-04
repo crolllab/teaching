@@ -171,12 +171,14 @@ Alternativement, on peut ignorer certaines colonnes: `colClasses = c(”integer�
 
 ### La lecture de fichiers Excel ou csv
 
+**Attention**: faites bien attention à correctement définir `setwd("/...")` (voir ci-dessus) ou de spécifier l'emplacement de manière explicite e.g. `"/Users/dcroll/.../.../fichier.xlsx")`
+
 ```
-install.packages("xlsx")
-library("xlsx")
+install.packages("openxlsx")
+library("openxlsx")
 
 # lire la première feuille dans le fichier Excel
-df <- read.xlsx("fichier_excel.xlsx, sheetIndex = 1, header=TRUE)
+df <- read.xlsx("fichier_excel.xlsx)
 ```
 
 Alternativement, on peut exporter le fichier Excel sous format `.csv`
