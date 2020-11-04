@@ -101,7 +101,7 @@ working.hours
 working.hours["mardi"]
 ```
 
-Echanntillonnage des éléments d'un vecteur
+Echantillonnage des éléments d'un vecteur
 
 ```
 weekdays <- c("lundi", "mardi", "mercredi")
@@ -161,7 +161,7 @@ Une erreur potentielle:
 `data <- read.table("textfile.txt", header = T)`
 `Error in scan(file = file, what = what, sep = sep, quote = quote, dec = dec, : line 1 did not have 3 elements`
 
-Là, le problème est que le fichier ne contient pas un tableau "parfait" où chaque ligne contient le même nombre de données (ou colonnes). Il faut re-vérifier le fichier d'entrée ou spécificer correctement l'option `sep=`. Séparation par des espaces/tab/virgules? `sep=" "`, `sep="\t"`, `sep=","`?
+Là, le problème est que le fichier ne contient pas un tableau "parfait" où chaque ligne contient le même nombre de données (ou colonnes). Il faut re-vérifier le fichier d'entrée ou spécifier correctement l'option `sep=`. Séparation par des espaces/tab/virgules? `sep=" "`, `sep="\t"`, `sep=","`?
 
 Ajustez `header=T` ou `header=F`. Voir ci-dessus.
 
@@ -184,7 +184,7 @@ df <- read.xlsx("fichier_excel.xlsx)
 Alternativement, on peut exporter le fichier Excel sous format `.csv`
 `df <- read.csv("fichier_excel.csv", header = T`
 
-### Contrôler l'importatation d'un fichier lu dans `R`
+### Contrôler l'importation d'un fichier lu dans `R`
 
 Il est très important de bien vérifier que le fichier est correctement importé.
 
@@ -216,12 +216,12 @@ Faites extrêmement attention quand vous essayez de convertir une colonne sous f
 
 ### Quelques exemples pour s'exercer
 
-Vous trouvez dans le dossier [datasets](./datasets) une série d'exemples. La difficulté de réussire la lecture est bien variable. Essayez d'importer ou manipuler à l'avance 
+Vous trouvez dans le dossier [datasets](./datasets) une série d'exemples. La difficulté de réuissir la lecture est bien variable. Essayez d'importer ou manipuler à l'avance 
 
 
 ## Les boucles `for`
 
-R vous permet d'éxecuter des tâches en série ou boucle
+R vous permet d'exécuter des tâches en série ou boucle
 
 ```
 ## une boucle avec i prenant les valeurs de 1 à 5
@@ -270,7 +270,7 @@ install.packages("dplyr")
 
 library(dplyr)
 
-# exemple de données integrées
+# exemple de données intégrées
 head(iris)
 
 # sélectionner des colonnes
@@ -282,7 +282,7 @@ iris %>% group_by(Species)
 # regrouper par espèce et résumer les données
 iris %>% group_by(Species) %>% summarise(average = mean(Sepal.Length))
 
-# regénérer un data.frame
+# régénérer un data.frame
 iris.summary.df <- iris %>% group_by(Species) %>% 
 							summarise(average = mean(Sepal.Length) %>% 
 							as.data.frame()
@@ -344,8 +344,7 @@ ggplot(mpg, aes(x = hwy, y = cty)) + geom_point(aes(size = cyl, color = manufact
   scale_y_continuous(limits = c(5,100))
   
 ### changer les labels
-ggplot(mpg, aes(x = hwy, y = cty)) + geom_point(aes(size = cyl, color = class), alpha = 0.5) +
-  labs(x = "highway mileage", y = "city mileage")
+ggplot(mpg, aes(x = hwy, y = cty)) + geom_point(aes(size = cyl, color = class), alpha = 0.5) + labs(x = "highway mileage", y = "city mileage")
 # google how to adjust legend labels!
 
 
@@ -411,4 +410,4 @@ plot(FOXP2.tree, main = "FOXP2 phylogeny")
 - Décortiquez une commande complexe en ses éléments les plus simples
 - ...
 
-[Suggérez vos propres astuces aux autres svp!] 
+[Suggérez vos propres astuces aux autres svp] 
