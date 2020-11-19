@@ -264,12 +264,15 @@ pop(allchr.snps.genind) <- info.df$Population.name[match(indNames(allchr.snps.ge
 pop(allchr.snps.genind) <- info.df$Superpopulation.name[match(indNames(allchr.snps.genind), info.df$Sample.name)]
 
 # Estimation des Fst pour toutes les paires de populations (étape lente! plusieurs minutes)
-fst <- pairwise.fst(allchr.snps.genind, res.type="matrix")
+allchr.snps.hs <- genind2hierfstat(allchr.snps.genind)
+
+# sélection de 100 loci (= rapide)
+fst <- pairwise.neifst(allchr.snps.hs[,1:100])
+# ALTERNATIVE: sélection de >1000 loci (précis mais lent!)
+fst <- pairwise.neifst(allchr.snps.hs)
+
 rownames(fst) <- dimnames(fst)[[1]]
 colnames(fst) <- dimnames(fst)[[2]]
-
-# Si le temps de calcul de pairwise.fst() vous pose des problèmes, faites l'analyses sur les 300 premiers loci
-# fst <- pairwise.fst(allchr.snps.genind[,1:300], res.type="matrix")
 
 # Changer l'ordre d'apparition des populations pour la visualisation
 pop.order <- pop(allchr.snps.genind)
