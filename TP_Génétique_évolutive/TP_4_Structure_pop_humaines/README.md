@@ -189,7 +189,7 @@ ggsave("Population_heterozygosity.pdf", width = 6, height = 4)
 
 Q9: Selon vos connaissances sur les voies de colonisation de l'homme, prédisez grossièrement les différences en taux d'hétérozygotie entre populations (1-2 phrases). Puis, comparez votre prédiction avec le graphique généré ci-dessus.
 
-Q10 (difficile): En utilisant la procédure ci-dessus, calculez l'hétérozygotie pour la population "British" par chromosome.
+Q10 (optionnelle): En utilisant la procédure ci-dessus, calculez l'hétérozygotie pour la population "British" par chromosome.
 
 
 ## Analyse en composantes principales

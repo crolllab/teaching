@@ -16,7 +16,7 @@
 
 - Télécharger R sur [CRAN](https://stat.ethz.ch/CRAN/)
 - Télécharger la version gratuite de [RStudio](https://rstudio.com)
-
+- **Très important pour éviter des problèmes plus tard**: Vérifiez si vous avez les versions les plus récentes avant de continuer. Sinon, répétez l'installation svp.
 
 ## Travailler avec RStudio  
 
