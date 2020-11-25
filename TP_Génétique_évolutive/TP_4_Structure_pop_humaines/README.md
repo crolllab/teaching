@@ -122,7 +122,7 @@ SNP.per.chr <- as.data.frame(table(allchr.df$chromosome))
 qplot(x = allchr.df$chromosome, geom = "bar")
 ```
 
-Q4: Calculez le nombre de SNP par megabases de chromosomes (i.e. densité). Est-ce que les chromosomes diffèrent en densité?  
+Q4 (facultative): Calculez le nombre de SNP par megabases de chromosomes (i.e. densité). Est-ce que les chromosomes diffèrent en densité?  
 [NB: l'information sur la taille des chromosomes humains est facilement accessible en ligne.]
 
 Q5: Quel est le génotype de l'individu "HG02334" à la première position du chromosome 2?
