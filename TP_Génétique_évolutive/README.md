@@ -10,6 +10,44 @@ La génétique évolutive étudie les changements de gènes et fréquences de g�
 Les travaux pratiques comprendront toujours une introduction au sujet, puis des exercises guidés avec l’appui de l’enseignant et des assistant.e.s.
 
 
+## Utilisation de R
+
+### Installation de RStudio et R sur votre ordinateur personnel
+
+Assurez-vous que vous avez installé les versions les plus récentes de [RStudio](https://rstudio.com/products/rstudio/download) et de [R](https://stat.ethz.ch/CRAN/).
+
+Sur certaines machines, l'installation de packages peut poser des problèmes qui sont difficiles à résoudre. Dans ce cas, considérez l'option ci-dessous.
+
+### Utilisation de RStudio dans un navigateur web
+
+Notre laboratoire peut vous fournir à un accès a ses machines de calculs y inclut l'utilisation de RStudio dans un navigateur web.
+
+**Marche à suivre:**  
+- Connectez-vous par [Webaccess UNINE](https://webaccess.unine.ch)  
+- Naviguez par la suite dans le dossier "Logiciels VPN" pour télécharger un client VPN qui vous permettra de vous connecter au réseau UNINE. Il y a des versions pour Mac, Windows et Linux.  
+- Installez le logiciel VPN.  
+- Lancez le logiciel en fournissant votre login UNINE.  
+- Si la connexion est bien établie, utilisez un navigateur web pour vous rendre sur le site suivant: [http://130.125.25.244:8787](http://130.125.25.244:8787)  
+
+![](./images/image_1.png)
+
+- Votre Username est: tp-prénom (alors e.g. tp-daniel). Sans accent, tout en minuscule. 
+- Votre Password est: tpgenevol   
+- L'utilisation de RStudio sur notre serveur est identique à RStudio installé sur votre ordinateur sauf:
+  - le dossier de travail ne devrait pas être modifié
+  - ignorer toute demande d'installer des packages lors du cours (`install.packages(...)`), procédez directement au chargement du package (`library(...)`)
+  - par défaut, tout document enregistré va se trouver sur notre serveur
+  - pour transférer un document de votre ordinateur au serveur: Identifiez le tab "Files", cliquez sur "Upload" et puis "Choose File". Le fichier sera placé alors sur le serveur. Vous le trouverez sous "Files".
+
+![](./images/image_2.png)  
+![](./images/image_3.png)  
+
+  - pour récupérer un fichier du serveur vers votre ordinateur: Identifiez le tab "Files", sélectionnez le(s) fichiers à télécharger, "More" et puis "Export...". Ceci permettra de procéder au téléchargement.
+
+![](./images/image_4.png)  
+
+  - Cette méthode vous permettra aussi de récupérer votre script R enregistré sur le serveur.
+	
 ## Mode d'évaluation
 
 Référez-vous à IS-Academia pour plus de détails.
