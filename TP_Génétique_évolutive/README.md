@@ -33,21 +33,42 @@ Notre laboratoire peut vous fournir à un accès a ses machines de calculs y inc
 
 - Votre Username est: tp-prénom (alors e.g. tp-daniel). Sans accent, tout en minuscule. 
 - Votre Password est: tpgenevol   
+
+```
+tp-fanny
+tp-jordan
+tp-loan
+tp-alexandre
+tp-caroline
+tp-jeremy
+tp-louis
+tp-piraveen
+tp-gilles
+tp-alexandre
+tp-sebastien-l
+tp-sidney
+tp-margo
+tp-sebastien-q
+tp-clement
+tp-camille
+```
+
 - L'utilisation de RStudio sur notre serveur est identique à RStudio installé sur votre ordinateur sauf:
   - le dossier de travail ne devrait pas être modifié
   - ignorer toute demande d'installer des packages lors du cours (`install.packages(...)`), procédez directement au chargement du package (`library(...)`)
   - par défaut, tout document enregistré va se trouver sur notre serveur
-  - pour transférer un document de votre ordinateur au serveur: Identifiez le tab "Files", cliquez sur "Upload" et puis "Choose File". Le fichier sera placé alors sur le serveur. Vous le trouverez sous "Files".
+  - pour **transférer un document de votre ordinateur au serveur**: Identifiez le tab "Files", cliquez sur "Upload" et puis "Choose File". Le fichier sera placé alors sur le serveur. Vous le trouverez sous "Files".
 
 ![](./images/image_2.png)  
 ![](./images/image_3.png)  
 
-  - pour récupérer un fichier du serveur vers votre ordinateur: Identifiez le tab "Files", sélectionnez le(s) fichiers à télécharger, "More" et puis "Export...". Ceci permettra de procéder au téléchargement.
+  - pour **récupérer un fichier du serveur vers votre ordinateur**: Identifiez le tab "Files", sélectionnez le(s) fichiers à télécharger, "More" et puis "Export...". Ceci permettra de procéder au téléchargement.
 
 ![](./images/image_4.png)  
 
   - Cette méthode vous permettra aussi de récupérer votre script R enregistré sur le serveur.
-	
+  
+  	
 ## Mode d'évaluation
 
 Référez-vous à IS-Academia pour plus de détails.
@@ -61,3 +82,5 @@ Aucune évaluation
 Document à rendre le jour par Moodle (ou selon l'accord avec l'enseignant) donnant les réponses aux questions (Q1...Qn). Merci de nommer votre document Nom_Prenom.
 
 Répondez à chaque question de manière succincte (1-3 phrases sont souvent suffisantes). Si vous êtes obligés d'écrire du code ou générer des graphiques, les deux devraient en principe figurer dans le document.
+
+Je m'attends à un effort correspondant aux heures des travaux pratiques et pas plus. Donc, si vous rencontrez des difficultés particulières sans résolution simple (installation des packages, etc.), documentez brièvement les problèmes dans votre rapport.

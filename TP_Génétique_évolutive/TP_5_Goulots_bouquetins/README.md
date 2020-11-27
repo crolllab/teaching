@@ -78,7 +78,7 @@ Q2: Quelle est la significance des colonnes "Reintroduction_History" et "Reintro
 
 Q3: Générez une PCA de l'ensemble du jeu de données. Utilisez d'abord la catégorie "Population" pour colorer les individus, puis faites une deuxième PCA avec la coloration en fonction de la "Reintroduction_History" et une troisième avec "Reintroduction_Genealogy".
 
-[NB: Vous pouvez utiliser un code quasiment identique au code fourni pour l'homme]
+[NB: Vous pouvez utiliser un code quasiment identique au code fourni pour les populations humaines]
 
 Q4: Expliquez la séparation des populations sur la PCA et surtout la position de la population Gran Paradiso.
 
@@ -134,7 +134,7 @@ Q9: Visualisez l'évolution de l'hétérozygotie au cours des réintroductions �
 
 ## L'effet des goulots d'étranglement sur le F<sub>IS</sub>
 
-Q10: Donnez la définition du F<sub>IS</sub> et son interprétation.
+Q10 (optionnelle): Donnez la définition du F<sub>IS</sub> et son interprétation.
 
 Ci-dessous, nous allons utiliser le package `hierfstat` pour calculer une série de paramètres de génétique de populations (y inclut le F<sub>IS</sub> et F<sub>ST</sub>).
 
@@ -157,7 +157,7 @@ head(pop.stats$Ho)
 head(pop.stats$Fis)
 ```
 
-Q11: Quelles sont les différentes statistiques incluses dans l'objet `pop.stats` (au niveau locus et population)?
+Q11 (optionnelle): Quelles sont les différentes statistiques incluses dans l'objet `pop.stats` (au niveau locus et population)?
 
 Génération d'un résumé des données dans un seul data.frame et visualisez les F<sub>IS</sub>
 
@@ -178,7 +178,7 @@ ggplot(pop.stats.df, aes(y = Fis, x = reorder(Population, Fis), fill = Reintrodu
 ggsave("Fis_populations.pdf", width = 6, height = 4)
 ```
 
-Q12: Avec vos connaissances acquises sur les populations de bouquetins, expliquez la distribution des valeurs F<sub>IS</sub> à travers les populations.
+Q12 (optionnelle): Avec vos connaissances acquises sur les populations de bouquetins, expliquez la distribution des valeurs F<sub>IS</sub> à travers les populations.
 
 ## Impact des goulots d'étranglement sur les fréquences alléliques
 
@@ -251,6 +251,6 @@ ggplot(REF.freq.history.df[REF.freq.history.df$locus %in% ten.random.loci,], aes
 ggsave("Allele_Freq.Ten_random_loci.pdf", width = 7, height = 4.5)
 ```
 
-Q15: Essayez une série de loci aléatoirement choisis (relancer la sélection de 10 loci ci-dessus). Sélectionnez un graphique qui vous paraît explicative et puis interprétez l'évolution des fréquences alléliques en fonction de l'histoire évolutive des  populations (introductions primaires, secondaires, admixture, etc.)
+Q15 (optionnelle): Essayez une série de loci aléatoirement choisis (relancer la sélection de 10 loci ci-dessus). Sélectionnez un graphique qui vous paraît explicative et puis interprétez l'évolution des fréquences alléliques en fonction de l'histoire évolutive des  populations (introductions primaires, secondaires, admixture, etc.)
 
-Q16: Après avoir fait toutes ces analyses: Est-ce qu'il vous semble que les bouquetins des Alpes sont en danger? Et puis, si vous étiez en charge de planifier des translocations d'invidus, vous les feriez entre quelles populations? Argumentez en s'appuyant sur les résultats que vous avez obtenus.
+Q16 (optionnelle): Après avoir fait toutes ces analyses: Est-ce qu'il vous semble que les bouquetins des Alpes sont en danger? Et puis, si vous étiez en charge de planifier des translocations d'invidus, vous les feriez entre quelles populations? Argumentez en s'appuyant sur les résultats que vous avez obtenus.
