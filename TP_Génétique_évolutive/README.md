@@ -20,7 +20,7 @@ Sur certaines machines, l'installation de packages peut poser des problèmes qui
 
 ### Utilisation de RStudio dans un navigateur web
 
-Notre laboratoire peut vous fournir à un accès a ses machines de calculs y inclut l'utilisation de RStudio dans un navigateur web.
+Notre laboratoire peut vous fournir un accès à ses machines de calculs y inclut l'utilisation de RStudio dans un navigateur web.
 
 **Marche à suivre:**  
 - Connectez-vous par [Webaccess UNINE](https://webaccess.unine.ch)  
