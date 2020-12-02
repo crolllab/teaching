@@ -188,6 +188,9 @@ Code pour la visualisation des fréquences alléliques à un locus aléatoire
 
 ```
 # locus aléatoire chr4_21289899 (chromosome 4, position 21'289'899 bp)
+pop(allchr.snps.genind) <- info.df$Population[match(indNames(allchr.snps.genind), info.df$Individual)]
+pop.stats <- basic.stats(allchr.snps.genind)
+
 pop.stats$pop.freq$chr4_21289899
 
 # création d'un data.frame avec les fréquence REF et ALT
