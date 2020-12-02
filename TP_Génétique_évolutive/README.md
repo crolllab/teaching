@@ -35,6 +35,7 @@ Notre laboratoire peut vous fournir un accès à ses machines de calculs y inclu
 - Votre Password est: tpgenevol   
 
 ```
+# les noms d'utilisateurs actifs
 tp-fanny
 tp-jordan
 tp-loan
@@ -57,12 +58,12 @@ tp-camille
   - le dossier de travail ne devrait pas être modifié
   - ignorer toute demande d'installer des packages lors du cours (`install.packages(...)`), procédez directement au chargement du package (`library(...)`)
   - par défaut, tout document enregistré va se trouver sur notre serveur
-  - pour **transférer un document de votre ordinateur au serveur**: Identifiez le tab "Files", cliquez sur "Upload" et puis "Choose File". Le fichier sera placé alors sur le serveur. Vous le trouverez sous "Files".
+  - pour **transférer un document de votre ordinateur au serveur**: Identifiez le tab "Files" (en bas à droite de RStudio), cliquez sur "Upload" et puis "Choose File". Le fichier sera placé alors sur le serveur. Vous le trouverez sous "Files".
 
 ![](./images/image_2.png)  
 ![](./images/image_3.png)  
 
-  - pour **récupérer un fichier du serveur vers votre ordinateur**: Identifiez le tab "Files", sélectionnez le(s) fichiers à télécharger, "More" et puis "Export...". Ceci permettra de procéder au téléchargement.
+  - pour **récupérer un fichier du serveur vers votre ordinateur**: Identifiez le tab "Files" (en bas à droite de RStudio), sélectionnez le(s) fichier à télécharger, "More" et puis "Export...". Ceci permettra de procéder au téléchargement.
 
 ![](./images/image_4.png)  
 
