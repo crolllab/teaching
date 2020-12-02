@@ -31,11 +31,11 @@ Notre laboratoire peut vous fournir un accès à ses machines de calculs y inclu
 
 ![](./images/image_1.png)
 
-- Votre Username est: tp-prénom (alors e.g. tp-daniel). Sans accent, tout en minuscule. 
-- Votre Password est: tpgenevol   
+- Votre "Password" est: tpgenevol   
+- Votre "Username" est: tp-prénom (alors e.g. tp-daniel). Sans accent, tout en minuscule. 
 
 ```
-# les noms d'utilisateurs actifs
+# les noms d'utilisateurs exacts sont
 tp-fanny
 tp-jordan
 tp-loan
