@@ -108,7 +108,7 @@ Q8: Quelle est l'impact d'un goulot d'étranglement sur le niveau de l'hétéroz
 
 Génération d'un graphique résumant l'hétérozygotie par population.
 ```
-# accès aux données génotypiques se fait en transformant l'object allchr.snps
+# accès aux données génotypiques se fait en transformant l'objet allchr.snps
 allchr.geno.df <- as.data.frame(allchr.snps)
 
 # identification des hétérozygotes (identifiés toujours par "1")
