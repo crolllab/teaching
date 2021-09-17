@@ -47,23 +47,23 @@ Type now the command shown above and press Enter. You see that the code above is
 
 We will now explore a series of very simple commands.
 
-### The command `pwd`
+### The `pwd` command
 
 "Present working directory" - This tells you the "path" where you are currently. `/home/daniel` means that I am in a folder called `home` placed at the top of the folder hierarchy. This is the `/`. Inside `home`, there is a folder with my name `daniel`.
 
 This command is very useful to see where you are in case you get lost.
 
-### The command `mkdir`
+### The `mkdir` command
 
 "Make directory" - This does exactly this. Use this to create a directory called `my_first_scripts` by issuing the command `mkdir my_first_scripts`.
 
 Tip: Avoid using spaces in names. It is not forbidden but inconvenient. Use `_` instead.
 
-### The command `ls`
+### The `ls` command
 
 "List" - This command provides you with a list of files and folders in your current directory. Use the command to see whether your newly created folder exists.
 
-### The command `cd`
+### The `cd` command
 
 "Change directory" - Allows you to change to a different directory. Start an example like this:
 ```
@@ -77,11 +77,86 @@ cd my_first_scripts
 
 # use pwd to verify your new location
 pwd
+
+# to go back one level (go "up" in the hierarchy)
+cd ..
+
+# go to your home directory /home/username
+cd
+
+# go can also go deeper in a single command at once
+cd /folder1/subfolder/subsubfolder
+# the above will not work unless the folders actually exist!
 ```
 
-Q1: Describe what the following commands are doing.
+Q1: Briefly describe what the following command options are doing. Google the answer if you are unsure.
 
+```
+# start with going to your home directory
+cd
 
-### Troubleshooting tips
+# the commands to check out
+ls -l  
+ls -s  
+ls -a
+ls -h
+ls -lsh # this is a combination of options!
+ls -R
+
+# use Google to find what mkir options exist, mention at least one in your answer
+mkdir
+```
+
+### The `echo` command
+
+As we have seen above, you can simply write some text to be displayed.
+`echo "Hello world"`
+
+The output is written by default into the Terminal, but we can modify this using the `>` sign.
+
+This command here will write the same text to a new text file.
+`echo "Hello world" > new_file.txt`
+
+Use `ls` to check whether the new file was created.
+
+PS: the `.txt` extension is not necessary. The computer creates a text file regardless. Extensions are used by Windows or macOS to launch the correct application (e.g. Word for `.docx`).
+
+You can _add_ also text to an existing file using `>>`. So if you have created alreads `new_file.txt`, this will create a second line to this file.
+`echo "Hello again!" >> new_file.txt`
+
+### The `cat` command
+
+How to know what the text file `new_file.txt` actually contains? Use `cat`:
+`cat new_file.txt`
+
+Do you see the expected text?
+
+### The `head` and `tail` commands
+
+These commands work like `cat` but show you only the first (`head`) or the last (`head`) lines of the file. By default, the commands show the first or last 10 lines. You can change this behavior like this:
+
+To show only the very first line:
+`head -n 1 new_file.txt`
+
+To show only the two very last lines:
+`tail -n 2 new_file.txt`
+
+Q2: Use the `echo "Hello again!" >> new_file.txt` command to add at least 10 lines to your `new_file.txt`. Use now only the `head` command to create a new file called `only_the_top3.txt` containing the first three lines of `new_file.txt`. Use `cat` to check that it is working.
+
+### The `less` command
+
+The `less` commands shows you the beginning of a large file and lets you scroll down using the arrow keys. Type `q` to get out if you are stuck.
+
+### A very simple text editor called `nano`
+
+`nano` is a miniature text editor that is accessible in the Terminal. You can create a new text file called `my_code.sh` like this:
+
+`nano my_code.sh`
+
+You have now entered the text editor. Type any text you like. Press Enter for a new line. The cursor helps you to move around. To save your file use the key combination CTRL and the letter "o". You can always CTRL and "x" to exit. It will ask you to save the file. Answers are also given with the CTRL and some letter code.
+
+Try out some of the other options offered by `nano`.
+
+### General troubleshooting tips
 - We will look at a command called `cp`. Googling for "Linux cp" tells you already what to do
 - Google the error message. Copy the error message and search for it. Helpful? Improve your code googling skills during the course.
