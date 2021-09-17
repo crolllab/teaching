@@ -13,7 +13,7 @@ Our lab offers for you the possibility to access RStudio Server. This allows you
 - Connect using [Webaccess UNINE](https://webaccess.unine.ch)  
 - Navigate to "Logiciels VPN" to download a VPN client (there are also iOS/Android options for tablets) & install it.
 - Launch a VPN connection.  
-- Use a web browser to navigate to this site here: [http://130.125.25.244:8787](http://130.125.25.244:8787) (if no page is loading, you may have issues with your VPN connection)
+- Use a web browser to navigate to this site here: [http://130.125.25.239:8787](http://130.125.25.239:8787) (if no page is loading, you may have issues with your VPN connection)
 
 ![](./images/image_1.png)
 
