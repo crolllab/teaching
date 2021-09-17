@@ -17,12 +17,16 @@ Our lab offers for you the possibility to access RStudio Server. This allows you
 
 ![](./images/image_1.png)
 
-- You find your "Username" below.
-- Your password is: `bioinfo21`   
+- Please request your username by adding your first name [here](https://docs.google.com/spreadsheets/d/1mE2cfUr14qA17YftYb2O4ualr3K9wKWXXtxEknLZuU0/edit?usp=sharing).
+- Your password will be: `bioinfo21`   
 
 ```
-# user names for you are (to be completed)
-bioinfo-test
+# already active usernames are
+bt-daniel
+bt-sarai
+bt-sara
+bt-sabina
+
 ```
 
   - Anything you save while using RStudio is on the server.
