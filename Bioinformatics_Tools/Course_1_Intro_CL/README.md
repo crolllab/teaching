@@ -103,8 +103,7 @@ ls -h
 ls -lsh # this is a combination of options!
 ls -R
 
-# use Google to find what mkir options exist, mention at least one in your answer
-mkdir
+# use Google to find what  mkdir options exist, mention at least one in your answer
 ```
 
 ### The `echo` command
