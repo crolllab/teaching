@@ -39,7 +39,7 @@ Type now the command shown above and press Enter. You see that the code above is
 - You can decide to write all code in the script file and execute the commands below by selecting a particular line (or multiple lines) of script code. Then copy-paste below. Press Enter.
 - Even better, you can select the line(s) and press CMD and ENTER (on a Mac keyboard) or CTRL and ENTER (on a Windows keyboard). This will immediately run the code without copy-pasting.
 - If you decide to write code directly in the Terminal, use the auto-complete function. So, to use the `echo` command, start by typing `ec` and then press the TAB key twice quickly. You see that there are `echo ecitmatch econtact` as commands starting with `ec`. Type now `h` to have the word `ech` in the Terminal. Press the TAB key twice again and you will see that the `ech` was completed to `echo`. You can use this for any command. Once a command is complete in the Terminal, press ENTER.
-
+- Check out the troubleshooting tips at the bottom if you get stuck.
 
 ## Simple programs to use in a shell
 
@@ -59,9 +59,7 @@ This command is very useful to see where you are in case you get lost.
 
 Tip: Avoid using spaces in names. It is not forbidden but inconvenient. Use `_` instead.
 
-### The `ls` command
-
-"List" - This command provides you with a list of files and folders in your current directory. Use the command to see whether your newly created folder exists.
+Use Google to find what mkdir options exist. An example is `mkdir -p.
 
 ### The `cd` command
 
@@ -89,7 +87,11 @@ cd /folder1/subfolder/subsubfolder
 # the above will not work unless the folders actually exist!
 ```
 
-Q1: Briefly describe what the following command options are doing. Google the answer if you are unsure.
+### The `ls` command
+
+"List" - This command provides you with a list of files and folders in your current directory. Use the command to see whether your newly created folder exists.
+
+Briefly describe what the following command options are doing. Google the answer if you are unsure.
 
 ```
 # start with going to your home directory
@@ -102,8 +104,6 @@ ls -a
 ls -h
 ls -lsh # this is a combination of options!
 ls -R
-
-# use Google to find what  mkdir options exist, mention at least one in your answer
 ```
 
 ### The `echo` command
@@ -116,7 +116,7 @@ The output is written by default into the Terminal, but we can modify this using
 This command here will write the same text to a new text file.
 `echo "Hello world" > new_file.txt`
 
-Use `ls` to check whether the new file was created.
+Use `ls -lsh` to check whether the new file was created.
 
 PS: the `.txt` extension is not necessary. The computer creates a text file regardless. Extensions are used by Windows or macOS to launch the correct application (e.g. Word for `.docx`).
 
@@ -125,7 +125,8 @@ You can _add_ also text to an existing file using `>>`. So if you have created a
 
 ### The `cat` command
 
-How to know what the text file `new_file.txt` actually contains? Use `cat`:
+How to know what the text file `new_file.txt` actually contains? Use `cat`:  
+
 `cat new_file.txt`
 
 Do you see the expected text?
@@ -160,7 +161,7 @@ Try out some of the other options offered by `nano`.
 
 The first step is find the correct link to a file. The link should typically end in a recognizable format (.txt, .html, .jpeg, .pdf, etc.).
 
-Here's a the image of the UNINE MSc Biology page:
+Here's an image from the UNINE MSc Biology page:
 
 `wget https://www.unine.ch/files/live/sites/systemsite/files/bandeaux/FS/UNINE_FS_MA.jpg`
 
