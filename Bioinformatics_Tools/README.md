@@ -17,7 +17,7 @@ Our lab offers for you the possibility to access RStudio Server. This allows you
 
 ![](./images/image_1.png)
 
-- Please request your username by adding your first name [here](https://docs.google.com/spreadsheets/d/1mE2cfUr14qA17YftYb2O4ualr3K9wKWXXtxEknLZuU0/edit?usp=sharing).
+- Please request your username by adding your first name [here](https://docs.google.com/spreadsheets/d/1mE2cfUr14qA17YftYb2O4ualr3K9wKWXXtxEknLZuU0/edit?usp=sharing). Wait until your account was created.
 - Your password will be: `bioinfo21`   
 
 ```
