@@ -156,7 +156,7 @@ You have now entered the text editor. Type any text you like. Press Enter for a 
 
 Try out some of the other options offered by `nano`.
 
-### Downloading a file from the web
+### Downloading a file from the web with `wget`
 
 The first step is find the correct link to a file. The link should typically end in a recognizable format (.txt, .html, .jpeg, .pdf, etc.).
 
@@ -166,6 +166,75 @@ Here's a the image of the UNINE MSc Biology page:
 
 Check with `ls -lhs` whether you've actually saved the file.
 
+You see that this uses a command called `wget` stands for "World Wide Web and get". So, that seems to fit.
+
+In the folder `datasets` of Course 1, you find a file called `QTW58944_protein.fasta`. You can try to download this "manually" by clicking on the file.
+
+But with our `wget` command it's much simpler
+
+`wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_1_Intro_CL/datasets/QTW58944_protein.fasta`
+
+As a little exercise, find another file on the internet and try to download it.
+
+### Copying and moving with `cp` and `mv`
+
+The `cp` copy command works very simply as a "what" to "where" command.
+
+Using the file we've downloaded above, create a new copy:
+
+`cp QTW58944_protein.fasta QTW58944_protein.second_copy.fasta`
+
+Check with `ls -lhs` whether it worked as expected.
+
+Let's create now a new folder called `new_folder` like this:
+
+`mkdir new_folder`
+
+Now, let's move the newly copied file into this folder:
+
+`mv QTW58944_protein.second_copy.fasta new_folder`
+
+Check with `ls -lhs` whether it worked as expected. Did the file "disappear" into the new folder?
+
+Check the content of the folder:
+
+`ls -lhs new_folder`
+
+Do you see the moved file?
+
+If you need to copy an entire folder (not just a file), use the option `-r`. As an example, let's create first a second folder.
+
+`mkdir second_folder`
+
+Now let's copy the entire `new_folder` into the `second_folder`
+
+`cp -r new_folder second_folder`
+
+Check the contents of the various folders (inside folders):
+
+```
+ls -lhs
+ls -lhs second_folder
+ls -lhs second_folder/new_folder
+```
+
+Did everything work as expected?
+
+## Synthesis exercise
+
+Try to accomplish the following tasks
+- Download the `QTW58944_protein.fasta` file as above
+- Use `nano` to edit the first line of the file. Called it simply "delta variant". Make sure to keep the `>` at the beginning of the first line.
+- Rename the entire file using `mv` to `Delta_variant_spike_protein.fasta`
+- Use `cat` to see the entire file content. Copy the entire content by selecting the text and then use COMMAND + "c" (Mac) or CTRL + "c" (Windows).
+- Go to the [NCBI Blast website](https://blast.ncbi.nlm.nih.gov/Blast.cgi) and click on "Protein BLAST".
+- Paste the entire text into the "Enter Query Sequence" field.
+- Scroll down and push on the "BLAST" button. It will take now a couple of minutes for something to happen. The page should refresh automatically though.
+- What have you done? What do we see? (Remember also to click on the "Results for" option to select a different sequence).
+
+
 ### General troubleshooting tips
 - We will look at a command called `cp`. Googling for "Linux cp" tells you already what to do
+- Read the message that you get in the Terminal following your commands. You may not understand these, but it's a good sign that you should expect something strange (a missing file, etc.).
 - Google the error message. Copy the error message and search for it. Helpful? Improve your code googling skills during the course.
+- If you can't find a file that you have downloaded or created, start by checking with `pwd` where you are. Then check whether you might have saved the file in a folder? Was there any error message previously?
