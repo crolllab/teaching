@@ -37,7 +37,7 @@ Type now the command shown above and press Enter. You see that the code above is
 
 ### Tips to save you time
 - You can decide to write all code in the script file and execute the commands below by selecting a particular line (or multiple lines) of script code. Then copy-paste below. Press Enter.
-- Even better, you can select the line(s) and press CMD and ENTER. This will immediately run the code.
+- Even better, you can select the line(s) and press CMD and ENTER (on a Mac keyboard) or CTRL and ENTER (on a Windows keyboard). This will immediately run the code without copy-pasting.
 - If you decide to write code directly in the Terminal, use the auto-complete function. So, to use the `echo` command, start by typing `ec` and then press the TAB key twice quickly. You see that there are `echo ecitmatch econtact` as commands starting with `ec`. Type now `h` to have the word `ech` in the Terminal. Press the TAB key twice again and you will see that the `ech` was completed to `echo`. You can use this for any command. Once a command is complete in the Terminal, press ENTER.
 
 
@@ -132,7 +132,7 @@ Do you see the expected text?
 
 ### The `head` and `tail` commands
 
-These commands work like `cat` but show you only the first (`head`) or the last (`head`) lines of the file. By default, the commands show the first or last 10 lines. You can change this behavior like this:
+These commands work like `cat` but show you only the first (`head`) or the last (`tail`) lines of the file. By default, the commands show the first or last 10 lines. You can change this behavior like this:
 
 To show only the very first line:
 `head -n 1 new_file.txt`
@@ -152,9 +152,19 @@ The `less` commands shows you the beginning of a large file and lets you scroll 
 
 `nano my_code.sh`
 
-You have now entered the text editor. Type any text you like. Press Enter for a new line. The cursor helps you to move around. To save your file use the key combination CTRL and the letter "o". You can always CTRL and "x" to exit. It will ask you to save the file. Answers are also given with the CTRL and some letter code.
+You have now entered the text editor. Type any text you like. Press Enter for a new line. The cursor helps you to move around. To save your file use the key combination CTRL and the letter "x". It will ask you to save the file yes/no. So, answer with "y" if you want to save it. It will then show you a line where you can accept the file name or provide a new one. Exit with ENTER.
 
 Try out some of the other options offered by `nano`.
+
+### Downloading a file from the web
+
+The first step is find the correct link to a file. The link should typically end in a recognizable format (.txt, .html, .jpeg, .pdf, etc.).
+
+Here's a the image of the UNINE MSc Biology page:
+
+`wget https://www.unine.ch/files/live/sites/systemsite/files/bandeaux/FS/UNINE_FS_MA.jpg`
+
+Check with `ls -lhs` whether you've actually saved the file.
 
 ### General troubleshooting tips
 - We will look at a command called `cp`. Googling for "Linux cp" tells you already what to do
