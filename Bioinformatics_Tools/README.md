@@ -23,10 +23,38 @@ Our lab offers for you the possibility to access RStudio Server. This allows you
 ```
 # already active usernames are
 bt-daniel
+bt-nikolai
 bt-sarai
 bt-sara
 bt-sabina
-
+bt-alexandre
+bt-anne-sophie
+bt-anouchka
+bt-baptiste
+bt-clemence
+bt-corentin
+bt-daniel
+bt-david
+bt-diane
+bt-elsa
+bt-erwan
+bt-esteban
+bt-frederic
+bt-gaston
+bt-genevieve
+bt-guido
+bt-henri
+bt-jordan
+bt-justin
+bt-louis
+bt-manon
+bt-marco
+bt-roxane
+bt-sabina
+bt-sara
+bt-sarai
+bt-sebastien
+bt-teo
 ```
 
   - Anything you save while using RStudio is on the server.
