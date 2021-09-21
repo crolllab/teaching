@@ -166,6 +166,13 @@ To delete a single file: `rm my_script_file.sh`
 
 Add the `-r` option to also delete a folder: `rm -r my_folder`
 
+Warning - be careful to not delete important files!
+You can also delete many files at once using a "wild card". To delete all files ending with `.sh`, you could run this command:  
+
+`rm *.sh`
+
+
+
 ### A very simple text editor called `nano`
 
 `nano` is a miniature text editor that is accessible in the Terminal. You can create a new text file called `my_code.sh` like this:
