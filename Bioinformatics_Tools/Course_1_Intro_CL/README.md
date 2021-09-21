@@ -254,6 +254,12 @@ ls -lhs second_folder/new_folder
 
 Did everything work as expected?
 
+You can also use `mv` to rename a file or folder.
+
+`mv my_old_file.txt my_new_file.txt`
+
+The code above will rename the first file (`my_old_file.txt`) with the name `my_new_file.txt`
+
 ## Synthesis exercise of the first course
 
 Try to accomplish the following tasks
