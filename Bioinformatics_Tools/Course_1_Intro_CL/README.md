@@ -158,6 +158,14 @@ As a little exercise: Use the `echo "Hello again!" >> new_file.txt` command to a
 
 The `less` command shows you the beginning of a large file and lets you scroll down using the arrow keys. Type `q` to get out if you are stuck.
 
+### The `rm` command
+
+This command can delete files and folders.
+
+To delete a single file: `rm my_script_file.sh`
+
+Add the `-r` option to also delete a folder: `rm -r my_folder`
+
 ### A very simple text editor called `nano`
 
 `nano` is a miniature text editor that is accessible in the Terminal. You can create a new text file called `my_code.sh` like this:
