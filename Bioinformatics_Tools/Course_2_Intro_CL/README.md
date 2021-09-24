@@ -286,13 +286,13 @@ We proceed now to build a phylogenetic tree using [RAxML](https://cme.h-its.org/
 
 `raxmlHPC-PTHREADS -s SARS-CoV2.genome.nucl.mafft.fasta.clipkit -m GTRCAT -p 1234719872 -n SARS-CoV2.genome -T 10`
 
-The code above allows `RAxML` to use 10 CPU to make the analyses faster. But it will still take around 5-7'. Have a coffee...
+The code above allows `RAxML` to use 10 CPU to make the analyses faster. But it will still take a couple of minutes.
 
 Q9: How many output files did RAxML produce?
 
 Our most important file is `RAxML_bestTree.SARS-CoV2.genome` containing the phylogenetic tree.
 
-Have a look at this file using `head`. You see now how a tree is encoded in a simple text format.
+Have a look at this file using `head`. You see now how a tree is encoded in a simple text format using parentheses.
 
 Note: If you decide to re-run RAxML, you must delete the output files first. As ours start with `RAxML...`, we can use `rm RAxML_*`
 
@@ -320,13 +320,17 @@ tree <- read.tree("RAxML_bestTree.SARS-CoV2.genome")
 # define the root with the very early viral genome sequence
 tree.rooted <- root(tree, outgroup = "LR757998.1")
 
-# Now, let's visualize the tree
+# Now, let's visualize the tree, red shows the "origin" of SARS-CoV-2
 ggtree(tree.rooted) +
   geom_treescale() +
-  geom_rootpoint(color="red", size=3) +
-  geom_tiplab()
+  geom_rootpoint(color="red", size=3)
+
+# adding this command shows in green the location of the Delta variant sequence
++  geom_tiplab(aes(color=grepl("MW931310", label)), size = 1)
 
 ggsave("SARS-CoV2_genomes_tree.pdf")
 ```
 
 Q10: Paste the tree in your report and briefly describe what you see.
+
+For a much more thorough phylogenetic analysis, please head to the excellent [Nextstrain website](https://nextstrain.org/ncov/open/global).
