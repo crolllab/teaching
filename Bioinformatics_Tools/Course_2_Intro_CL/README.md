@@ -203,13 +203,13 @@ Now we want to search not for a single sequence (or accession) but for all seque
 
 We will use the following search term. Note also that we will now look for the nucleotide (or genome) sequence, not the protein sequence.
 
-`esearch -db nucleotide -query "surface glycoprotein Severe acute respiratory syndrome coronavirus 2"`
+`esearch -db nucleotide -query "Severe acute respiratory syndrome coronavirus 2 isolate SARS-CoV-2"`
 
 Q6: How many such sequences exist on NCBI?
 
-We now proceed to downloading these sequences. There are far too many, so we need to limit ourselves. Let's analyze 1000 sequences using the `-stop` option like this.
+We now proceed to downloading these sequences. There are far too many, so we need to limit ourselves. Let's analyze 500 sequences using the `-stop` option like this.
 
-`esearch -db nucleotide -query "surface glycoprotein Severe acute respiratory syndrome coronavirus 2" | efetch -format fasta -stop 1000 > SARS-CoV2.genome.nucl.fasta`
+`esearch -db nucleotide -query "Severe acute respiratory syndrome coronavirus 2 isolate SARS-CoV-2" | efetch -format fasta -stop 500 > SARS-CoV2.genome.nucl.fasta`
 
 Q7: Use `head` to check the accession number of the very first sequence in the newly created file. Write down the name.
 
@@ -221,11 +221,20 @@ Q8: Where and when was the virus sample collected?
 
 Let's retrieve also this specific genome.
 
-`esearch -db nucleotide -query "MW931310" | efetch -format fasta > MW931310.fasta`
+`esearch -db nucleotide -query "LR757998.1" | efetch -format fasta > LR757998.fasta`
+
+Let's append now the sequence to our existing file with the 1000 sequences using the `>>` sign.
+
+`cat LR757998.fasta >> SARS-CoV2.genome.nucl.fasta`
+
+Now, do the same for our Delta variant genome of last week.
+
+`esearch -db nucleotide -query "MW931310.1" | efetch -format fasta > MW931310.fasta`
 
 Let's append now the sequence to our existing file with the 1000 sequences using the `>>` sign.
 
 `cat MW931310.fasta >> SARS-CoV2.genome.nucl.fasta`
+
 
 ## Generate a multiple sequence alignment and phylogenetic tree
 
@@ -259,9 +268,9 @@ Let's install all needed tools for the remainder of the exercise.
 
 We will use the program [mafft](https://mafft.cbrc.jp/alignment/software/) to generate an aligned set of sequences.
 
-`mafft --thread 12 SARS-CoV2.genome.nucl.fasta > SARS-CoV2.genome.nucl.mafft.fasta`
+`mafft --auto --thread 10 SARS-CoV2.genome.nucl.fasta > SARS-CoV2.genome.nucl.mafft.fasta`
 
-The code above allows `mafft` to use 12 CPU to make the analyses faster. It will still take a couple of minutes.
+The code above allows `mafft` to use 10 CPU to make the analyses faster. It will still take a about 15'. Plan in a break or some other work.
 
 The resulting file contains our aligned sequences.
 
@@ -275,9 +284,9 @@ The output file is called `SARS-CoV2.genome.nucl.mafft.fasta.clipkit`
 
 We proceed now to build a phylogenetic tree using [RAxML](https://cme.h-its.org/exelixis/web/software/raxml/).
 
-`raxmlHPC-PTHREADS -s SARS-CoV2.genome.nucl.mafft.fasta.clipkit -m GTRCAT -p 1234719872 -n SARS-CoV2.genome -T 12`
+`raxmlHPC-PTHREADS -s SARS-CoV2.genome.nucl.mafft.fasta.clipkit -m GTRCAT -p 1234719872 -n SARS-CoV2.genome -T 10`
 
-The code above allows `RAxML` to use 12 CPU to make the analyses faster. But it will still take around 15'. Have a coffee...
+The code above allows `RAxML` to use 10 CPU to make the analyses faster. But it will still take around 5-7'. Have a coffee...
 
 Q9: How many output files did RAxML produce?
 
@@ -309,12 +318,13 @@ library("ggtree")
 tree <- read.tree("RAxML_bestTree.SARS-CoV2.genome")
 
 # define the root with the very early viral genome sequence
-tree.rooted <- root(tree, outgroup = "MW931310.1")
+tree.rooted <- root(tree, outgroup = "LR757998.1")
 
 # Now, let's visualize the tree
 ggtree(tree.rooted) +
   geom_treescale() +
-  geom_rootpoint(color="red", size=3)
+  geom_rootpoint(color="red", size=3) +
+  geom_tiplab()
 
 ggsave("SARS-CoV2_genomes_tree.pdf")
 ```
