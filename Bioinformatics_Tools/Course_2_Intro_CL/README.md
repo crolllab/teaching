@@ -1,10 +1,9 @@
-˚### Bioinformatics Tools
-
+### Bioinformatics Tools
 
 # Course 2
 
 ### Major aims  
-- Know to how to install bioinformatics software using conda
+- Know how to install bioinformatics software using conda
 - Access the NCBI sequence database to retrieve data
 - Build a phylogenetic tree and visualize it
 
@@ -106,7 +105,7 @@ ls -lhs $HOME/bin
 Start using bowtie2
 ```
 # make sure the computer knows about your own bin folder
-`export PATH=$PATH:$HOME/bin`
+export PATH=$PATH:$HOME/bin
 
 # now run bowtie2
 bowtie2
@@ -212,7 +211,7 @@ We now proceed to downloading these sequences. There are far too many, so we nee
 
 `esearch -db nucleotide -query "surface glycoprotein Severe acute respiratory syndrome coronavirus 2" | efetch -format fasta -stop 1000 > SARS-CoV2.genome.nucl.fasta`
 
-Q7: Use `head` to check the name of the very first sequence of the newly created file. Write down the name.
+Q7: Use `head` to check the accession number of the very first sequence in the newly created file. Write down the name.
 
 We will now add one more very specific genome sequence from a virus sampled almost at near the origin of the pandemic. This will help us define the root of the phylogenetic tree later.
 
@@ -220,9 +219,9 @@ Check the accession here on [NCBI](https://www.ncbi.nlm.nih.gov/nuccore/LR757998
 
 Q8: Where and when was the virus sample collected?
 
-Download the sequence from github matching the genome sequence.
+Let's retrieve also this specific genome.
 
-`wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_2_Intro_CL/datasets/MW931310.fasta`
+`esearch -db nucleotide -query "MW931310" | efetch -format fasta > MW931310.fasta`
 
 Let's append now the sequence to our existing file with the 1000 sequences using the `>>` sign.
 
@@ -262,7 +261,7 @@ We will use the program [mafft](https://mafft.cbrc.jp/alignment/software/) to ge
 
 `mafft --thread 12 SARS-CoV2.genome.nucl.fasta > SARS-CoV2.genome.nucl.mafft.fasta`
 
-The code above allows `mafft` to use 12 CPU to make the analyses faster.
+The code above allows `mafft` to use 12 CPU to make the analyses faster. It will still take a couple of minutes.
 
 The resulting file contains our aligned sequences.
 
@@ -275,7 +274,10 @@ We asked for any site with too many gaps (see `-` above) to be removed.
 The output file is called `SARS-CoV2.genome.nucl.mafft.fasta.clipkit`
 
 We proceed now to build a phylogenetic tree using [RAxML](https://cme.h-its.org/exelixis/web/software/raxml/).
+
 `raxmlHPC -s SARS-CoV2.genome.nucl.mafft.fasta.clipkit -m GTRCAT -p 1234719872 -n SARS-CoV2.genome -T 12`
+
+The code above allows `RAxML` to use 12 CPU to make the analyses faster. But it will still take around 15'. Have a coffee...
 
 Q9: How many output files did RAxML produce?
 

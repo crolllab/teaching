@@ -1,6 +1,5 @@
 ### Bioinformatics Tools
 
-
 # Course 1: Introduction to the command line or a "shell"
 
 
