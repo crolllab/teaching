@@ -275,7 +275,7 @@ The output file is called `SARS-CoV2.genome.nucl.mafft.fasta.clipkit`
 
 We proceed now to build a phylogenetic tree using [RAxML](https://cme.h-its.org/exelixis/web/software/raxml/).
 
-`raxmlHPC -s SARS-CoV2.genome.nucl.mafft.fasta.clipkit -m GTRCAT -p 1234719872 -n SARS-CoV2.genome -T 12`
+`raxmlHPC-PTHREADS -s SARS-CoV2.genome.nucl.mafft.fasta.clipkit -m GTRCAT -p 1234719872 -n SARS-CoV2.genome -T 12`
 
 The code above allows `RAxML` to use 12 CPU to make the analyses faster. But it will still take around 15'. Have a coffee...
 
@@ -294,7 +294,10 @@ We need to now switch tabs from "Terminal" to "Console". With this we stay thoug
 Here follows the R code to visualize the tree.
 
 ```
-# make sure that you are in the same folder where you have your RAxML output, define this with setwd("/home/bt-.....") if necessary.
+### R code
+
+# make sure that you are in the same folder of your RAxML output
+# use setwd("/home/bt-.....") if necessary.
 
 # load the libraries
 library("ape")
