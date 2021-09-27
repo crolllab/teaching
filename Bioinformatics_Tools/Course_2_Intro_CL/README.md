@@ -231,7 +231,7 @@ Q8: Where and when was the virus sample collected?
 Let's retrieve also this specific genome.  
 `esearch -db nucleotide -query "LR757998.1" | efetch -format fasta > LR757998.fasta`  
 
-Let's append the sequence to our existing file with the 500 sequences using the `>>` sign.  
+Let's append the sequence to our existing file with the 500 sequences using the `>>` sign (see Course 1 for `>>`).  
 `cat LR757998.fasta >> SARS-CoV2.genome.nucl.fasta`
 
 We will now repeat it for our Delta variant genome of last week.  
@@ -330,6 +330,7 @@ library("ape")
 library("Biostrings")
 library("ggplot2")
 library("ggtree")
+library(treeio)
 
 # load the tree file
 tree <- read.tree("RAxML_bestTree.SARS-CoV2.genome")
@@ -337,17 +338,33 @@ tree <- read.tree("RAxML_bestTree.SARS-CoV2.genome")
 # define the root with the very early viral genome sequence
 tree.rooted <- root(tree, outgroup = "LR757998.1")
 
-# Now, let's visualize the tree, red shows the "origin" of SARS-CoV-2
-ggtree(tree.rooted) +
+# modify tree tip labels to show only variant names
+tree.df <- data.frame(label = tree.rooted$tip.label)
+
+# start with an empty new label
+tree.df$new_label <- ""
+
+# for each specific variant sequence, set a label
+tree.df[grepl("LR757998", tree.df$label),"new_label"] <- "Wuhan, China"
+tree.df[grepl("MW931310", tree.df$label),"new_label"] <- "Delta variant"
+tree.df[grepl("OU297363", tree.df$label),"new_label"] <- "Alpha variant"
+tree.df[grepl("OK252993", tree.df$label),"new_label"] <- "Gamma variant"
+tree.df[grepl("MZ727692", tree.df$label),"new_label"] <- "Mu variant"
+
+# replace the labels in the tree
+final.tree <- rename_taxa(tree.rooted, tree.df, label, new_label)
+
+# visualize the tree
+ggtree(final.tree) +
   geom_treescale() +
-  geom_rootpoint(color="red", size=3)
+  geom_tiplab(aes(color = label), size = 5) +
+  geom_tippoint(size=2, fill="white", color="black")
 
-# adding this command shows in green the location of the Delta variant sequence
-+  geom_tiplab(aes(color=grepl("MW931310", label)), size = 1)
+# save it to PDF
+ggsave("SARS-CoV2_genomes_tree.pdf", height = 16, width = 12)
 
-ggsave("SARS-CoV2_genomes_tree.pdf")
 ```
 
-Q10: Paste the tree in your report and briefly describe what you see.
+Q10: Paste the tree in your report and briefly describe what you see. To what variant belong most of your sequences?
 
 For a much more thorough phylogenetic analysis, please head to the excellent [Nextstrain website](https://nextstrain.org/ncov/open/global).
