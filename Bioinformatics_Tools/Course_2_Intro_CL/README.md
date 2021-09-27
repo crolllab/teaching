@@ -43,7 +43,7 @@ Q1: Copy the output of `export PATH` and say how many different bin folders are 
 The most basic approach is to find a compatible program (or binary) online and place it in any of the above discovered `bin` folders. You typically do not have the permission though to place a program in e.g. `/usr/bin`, but you could create your own `bin` directory in your home folder like this:
 
 ```
-# this directs you to your home directory
+# this changes your location to your home directory (if necessary)
 cd
 
 # create your own bin directory
@@ -54,11 +54,17 @@ Now we need to tell the computer that you have a new `bin` directory. This works
 
 `export PATH=$PATH:$HOME/bin`
 
-`export` is a command that defines a variable. Here it is `PATH`, the variable containing all `bin` folders. Note that defining a variable in bash is done without the `$` sign.
+`export` is a command that defines a variable. Here it is `PATH`, the variable containing all `bin` folders.
 
-`$PATH:$HOME/bin` creates a combination of the existing content of `$PATH` (remember that we need `$` to ask something from a variable) and your new `bin` folder located in your home directory. You see that we can write this as `$HOME`. Check it out by typing `echo $HOME`.
+Note that using a variable `VAR` in bash is a bit unintuitive:
+- To define a variable use: `export VAR=1234`
+- To ask for the content use: `echo $VAR`
 
-You can check the full code: `echo $PATH:$HOME/bin`
+You see that we need the `$` sign only when recalling a variable, but not when defining it.
+
+`$PATH:$HOME/bin` creates a combination of the existing content of `$PATH` (remember that we need `$` to ask something from a variable) and your new `bin` folder located in your home directory. The `:` marks the separation between the two elements.
+
+You can check the full content: `echo $PATH:$HOME/bin`
 
 The challenge with downloading programs directly as bins is that often the correct version is unavailable and would need to be created first from the source code. This process is called "compilation".
 
@@ -160,7 +166,8 @@ Start by installing it using conda. Don't forget to activate `conda` if necessar
 
 You can check that you have installed it properly by typing:
 
-`esearch` and the answer should be `Must supply -db database on command line`
+`esearch` and the answer should be `ERROR: Missing -db argument`. If you have not installed the program correctly, the error should read `...command not found...`
+
 
 ### Retrieving a sequence with a known accession number
 
@@ -220,20 +227,28 @@ Check the accession here on [NCBI](https://www.ncbi.nlm.nih.gov/nuccore/LR757998
 Q8: Where and when was the virus sample collected?
 
 Let's retrieve also this specific genome.
-
 `esearch -db nucleotide -query "LR757998.1" | efetch -format fasta > LR757998.fasta`
 
-Let's append now the sequence to our existing file with the 1000 sequences using the `>>` sign.
-
+Let's append the sequence to our existing file with the 500 sequences using the `>>` sign.
 `cat LR757998.fasta >> SARS-CoV2.genome.nucl.fasta`
 
-Now, do the same for our Delta variant genome of last week.
-
+We will now repeat it for our Delta variant genome of last week.
 `esearch -db nucleotide -query "MW931310.1" | efetch -format fasta > MW931310.fasta`
-
-Let's append now the sequence to our existing file with the 1000 sequences using the `>>` sign.
-
 `cat MW931310.fasta >> SARS-CoV2.genome.nucl.fasta`
+
+And an Alpha variant from the UK.
+`esearch -db nucleotide -query "OU297363.1" | efetch -format fasta > OU297363.fasta`
+`cat OU297363.fasta >> SARS-CoV2.genome.nucl.fasta`
+
+A Gamma variant from South America.
+`esearch -db nucleotide -query "OK252993.1" | efetch -format fasta > OK252993.fasta`
+`cat OK252993.fasta >> SARS-CoV2.genome.nucl.fasta`
+
+And finally a Mu variant from North America.
+`esearch -db nucleotide -query "MZ727692.1" | efetch -format fasta > MZ727692.fasta`
+`cat MZ727692.fasta >> SARS-CoV2.genome.nucl.fasta`
+
+Our `SARS-CoV2.genome.nucl.fasta` should now contain the 500 sequences retrieved initially and the 5 variant sequences.
 
 
 ## Generate a multiple sequence alignment and phylogenetic tree
