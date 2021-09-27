@@ -9,7 +9,9 @@
 
 ### Report to submit
 
-Please compile brief answers to the questions for your report ("Q1", "Q2", etc.). Depending on the question, you can add a short text, some code or a graphic.
+Please compile brief answers to the questions for your report ("Q1", "Q2", etc.). Depending on the question, you can add a short text, some code or a graphic. The answers can be in a text file, Word doc, etc.
+
+You can work alone or in groups. Every student should submit their own report through Moodle though. No copy-pasting, please. Formulate answers in your own words.
 
 
 ## How to install software (the easy way)
@@ -226,27 +228,27 @@ Check the accession here on [NCBI](https://www.ncbi.nlm.nih.gov/nuccore/LR757998
 
 Q8: Where and when was the virus sample collected?
 
-Let's retrieve also this specific genome.
-`esearch -db nucleotide -query "LR757998.1" | efetch -format fasta > LR757998.fasta`
+Let's retrieve also this specific genome.  
+`esearch -db nucleotide -query "LR757998.1" | efetch -format fasta > LR757998.fasta`  
 
 Let's append the sequence to our existing file with the 500 sequences using the `>>` sign.
 `cat LR757998.fasta >> SARS-CoV2.genome.nucl.fasta`
 
-We will now repeat it for our Delta variant genome of last week.
-`esearch -db nucleotide -query "MW931310.1" | efetch -format fasta > MW931310.fasta`
+We will now repeat it for our Delta variant genome of last week.  
+`esearch -db nucleotide -query "MW931310.1" | efetch -format fasta > MW931310.fasta`  
 `cat MW931310.fasta >> SARS-CoV2.genome.nucl.fasta`
 
 And an Alpha variant from the UK.
-`esearch -db nucleotide -query "OU297363.1" | efetch -format fasta > OU297363.fasta`
-`cat OU297363.fasta >> SARS-CoV2.genome.nucl.fasta`
+`esearch -db nucleotide -query "OU297363.1" | efetch -format fasta > OU297363.fasta`  
+`cat OU297363.fasta >> SARS-CoV2.genome.nucl.fasta`  
 
-A Gamma variant from South America.
-`esearch -db nucleotide -query "OK252993.1" | efetch -format fasta > OK252993.fasta`
-`cat OK252993.fasta >> SARS-CoV2.genome.nucl.fasta`
+A Gamma variant from South America.  
+`esearch -db nucleotide -query "OK252993.1" | efetch -format fasta > OK252993.fasta`  
+`cat OK252993.fasta >> SARS-CoV2.genome.nucl.fasta`  
 
-And finally a Mu variant from North America.
-`esearch -db nucleotide -query "MZ727692.1" | efetch -format fasta > MZ727692.fasta`
-`cat MZ727692.fasta >> SARS-CoV2.genome.nucl.fasta`
+And finally a Mu variant from North America.  
+`esearch -db nucleotide -query "MZ727692.1" | efetch -format fasta > MZ727692.fasta`  
+`cat MZ727692.fasta >> SARS-CoV2.genome.nucl.fasta`  
 
 Our `SARS-CoV2.genome.nucl.fasta` should now contain the 500 sequences retrieved initially and the 5 variant sequences.
 
