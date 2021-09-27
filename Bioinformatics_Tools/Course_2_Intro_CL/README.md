@@ -216,11 +216,11 @@ We will use the following search term. Note also that we will now look for the n
 
 Q6: How many such sequences exist on NCBI?
 
-We now proceed to downloading these sequences. There are far too many, so we need to limit ourselves. Let's analyze 500 sequences using the `-stop` option like this.
+We now proceed to downloading these sequences. There are far too many, so we need to limit ourselves. Let's analyze 500 random sequences using the `-stop` option like this. [If you are brave, you can try more than 500]
 
 `esearch -db nucleotide -query "Severe acute respiratory syndrome coronavirus 2 isolate SARS-CoV-2" | efetch -format fasta -stop 500 > SARS-CoV2.genome.nucl.fasta`
 
-Q7: Use `head` to check the accession number of the very first sequence in the newly created file. Write down the name.
+Q7: Use `head` to check the accession number of the very first sequence in the newly created file. Is it actually a SARS sequence?
 
 We will now add one more very specific genome sequence from a virus sampled almost at near the origin of the pandemic. This will help us define the root of the phylogenetic tree later.
 
@@ -287,7 +287,7 @@ We will use the program [mafft](https://mafft.cbrc.jp/alignment/software/) to ge
 
 `mafft --auto --thread 10 SARS-CoV2.genome.nucl.fasta > SARS-CoV2.genome.nucl.mafft.fasta`
 
-The code above allows `mafft` to use 10 CPU to make the analyses faster. It will still take a about 15'. Plan in a break or some other work.
+The code above allows `mafft` to use 10 CPU to make the analyses faster. It will still take between 3-15'. Plan in a break or some other work.
 
 The resulting file contains our aligned sequences.
 
