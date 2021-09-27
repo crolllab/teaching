@@ -231,14 +231,14 @@ Q8: Where and when was the virus sample collected?
 Let's retrieve also this specific genome.  
 `esearch -db nucleotide -query "LR757998.1" | efetch -format fasta > LR757998.fasta`  
 
-Let's append the sequence to our existing file with the 500 sequences using the `>>` sign.
+Let's append the sequence to our existing file with the 500 sequences using the `>>` sign.  
 `cat LR757998.fasta >> SARS-CoV2.genome.nucl.fasta`
 
 We will now repeat it for our Delta variant genome of last week.  
 `esearch -db nucleotide -query "MW931310.1" | efetch -format fasta > MW931310.fasta`  
 `cat MW931310.fasta >> SARS-CoV2.genome.nucl.fasta`
 
-And an Alpha variant from the UK.
+And an Alpha variant from the UK.  
 `esearch -db nucleotide -query "OU297363.1" | efetch -format fasta > OU297363.fasta`  
 `cat OU297363.fasta >> SARS-CoV2.genome.nucl.fasta`  
 
