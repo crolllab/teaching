@@ -373,3 +373,9 @@ ggsave("SARS-CoV2_genomes_tree.pdf", height = 16, width = 12)
 Q10: Paste the tree in your report and briefly describe what you see. To what variant belong most of your sequences most likely?
 
 For a much more thorough phylogenetic analysis, please head to the excellent [Nextstrain website](https://nextstrain.org/ncov/open/global).
+
+![](./images/nextstrain.png)  
+
+![](./images/nextstrain_2.png)  
+
+![](./images/nextstrain_3.png)  
