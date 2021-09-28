@@ -7,6 +7,8 @@
 - Access the NCBI sequence database to retrieve data
 - Build a phylogenetic tree and visualize it
 
+![](./images/phylogeny.png)  
+
 ### Report to submit
 
 Please compile brief answers to the questions for your report ("Q1", "Q2", etc.). Depending on the question, you can add a short text, some code or a graphic. The answers can be in a text file, Word doc, etc.
@@ -17,6 +19,8 @@ You can work alone or in groups. Every student should submit their own report th
 ## How to install software (the easy way)
 
 The first step in a bioinformatics project often includes installing software. Here's a quick overview how software or programs are added in a command line environment.
+
+![](./images/conda.png)  
 
 ### Where are last week's programs located?
 
@@ -170,6 +174,7 @@ You can check that you have installed it properly by typing:
 
 `esearch` and the answer should be `ERROR: Missing -db argument`. If you have not installed the program correctly, the error should read `...command not found...`
 
+![](./images/ncbi.png)  
 
 ### Retrieving a sequence with a known accession number
 
