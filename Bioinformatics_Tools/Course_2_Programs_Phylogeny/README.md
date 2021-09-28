@@ -40,7 +40,7 @@ The command above displays what is contained in `$PATH`. The `$` indicates that 
 
 The output shows a large number of folder locations or "paths". Each location is separated by a `:`.
 
-Q1: Copy the output of `export PATH` and say how many different bin folders are listed in `$PATH`?
+_Q1: Copy the output of `export PATH` and say how many different bin folders are listed in `$PATH`?_
 
 ## How to install new programs - two recipies
 
@@ -104,7 +104,7 @@ head -n 50 bowtie_main.cpp
 make
 ```
 
-Q2: List the newly created files by the `make` command.
+_Q2: List the newly created files by the `make` command._
 
 ```
 # copy the newly created files to your own bin directory
@@ -125,7 +125,7 @@ bowtie2
 
 You should see a long list of options how to perform an analysis with `bowtie2`.
 
-Q3: What is the output of `which bowtie2`? What does this mean?
+_Q3: What is the output of `which bowtie2`? What does this mean?_
 
 We will not go any further with this approach here. Just remember that this exists as an option.
 
@@ -155,7 +155,7 @@ Check that we actually have now BLAST installed by typing:
 
 You see that the output starts with `BLAST query/options error: ...`. So, we have obviously not yet properly started the program or defined the correct files.
 
-Q4: Where is `blastp` located?
+_Q4: Where is `blastp` located?_
 
 
 ## Searching and retrieving sequences from the NCBI database
@@ -188,7 +188,7 @@ PS: If for some reason the `esearch` command sends you error messages and won't 
 
 The standard output of `esearch` is in a format called xml and rather difficult to read at first glance. But you see the `<Count>...</Count>` line that shows how many matches there were in the database.
 
-Q5: How many times did Entrez find the accession number?
+_Q5: How many times did Entrez find the accession number?
 
 We can now combine the `esearch` command with a second tool by Entrez Direct called `efetch`. The idea is to provide the search results of `esearch` to `efetch` so that the latter program can download the actual sequence. This works like this:
 
@@ -219,19 +219,19 @@ We will use the following search term. Note also that we will now look for the n
 
 `esearch -db nucleotide -query "Severe acute respiratory syndrome coronavirus 2 isolate SARS-CoV-2"`
 
-Q6: How many such sequences exist on NCBI?
+_Q6: How many such sequences exist on NCBI?_
 
 We now proceed to downloading these sequences. There are far too many, so we need to limit ourselves. Let's analyze 500 random sequences using the `-stop` option like this. [If you are brave, you can try more than 500]
 
 `esearch -db nucleotide -query "Severe acute respiratory syndrome coronavirus 2 isolate SARS-CoV-2" | efetch -format fasta -stop 500 > SARS-CoV2.genome.nucl.fasta`
 
-Q7: Use `head` to check the accession number of the very first sequence in the newly created file. Is it actually a SARS sequence?
+_Q7: Use `head` to check the accession number of the very first sequence in the newly created file. Is it actually a SARS sequence?_
 
 We will now add one more very specific genome sequence from a virus sampled almost at near the origin of the pandemic. This will help us define the root of the phylogenetic tree later.
 
 Check the accession here on [NCBI](https://www.ncbi.nlm.nih.gov/nuccore/LR757998.1?report=genbank).
 
-Q8: Where and when was the virus sample collected?
+_Q8: Where and when was the virus sample collected?_
 
 Let's retrieve also this specific genome.  
 `esearch -db nucleotide -query "LR757998.1" | efetch -format fasta > LR757998.fasta`  
@@ -310,7 +310,7 @@ We proceed now to build a phylogenetic tree using [RAxML](https://cme.h-its.org/
 
 The code above allows `RAxML` to use 10 CPU to make the analyses faster. But it will still take a couple of minutes.
 
-Q9: How many output files did RAxML produce?
+_Q9: How many output files did RAxML produce?_
 
 Our most important file is `RAxML_bestTree.SARS-CoV2.genome` containing the phylogenetic tree.
 
@@ -370,7 +370,7 @@ ggsave("SARS-CoV2_genomes_tree.pdf", height = 16, width = 12)
 
 ```
 
-Q10: Paste the tree in your report and briefly describe what you see. To what variant belong most of your sequences most likely?
+_Q10: Paste the tree in your report and briefly describe what you see. To what variant belong most of your sequences most likely?_
 
 For a much more thorough phylogenetic analysis, please head to the excellent [Nextstrain website](https://nextstrain.org/ncov/open/global).
 
