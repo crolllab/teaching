@@ -306,7 +306,7 @@ The output file is called `SARS-CoV2.genome.nucl.mafft.fasta.clipkit`
 
 We proceed now to build a phylogenetic tree using [RAxML](https://cme.h-its.org/exelixis/web/software/raxml/).
 
-`raxmlHPC-PTHREADS -s SARS-CoV2.genome.nucl.mafft.fasta.clipkit -m GTRCAT -p 1234719872 -n SARS-CoV2.genome -T 10`
+`raxmlHPC-PTHREADS --no-seq-check -s SARS-CoV2.genome.nucl.mafft.fasta.clipkit -m GTRCAT -p 1234719872 -n SARS-CoV2.genome -T 10`
 
 The code above allows `RAxML` to use 10 CPU to make the analyses faster. But it will still take a couple of minutes.
 
@@ -370,6 +370,6 @@ ggsave("SARS-CoV2_genomes_tree.pdf", height = 16, width = 12)
 
 ```
 
-Q10: Paste the tree in your report and briefly describe what you see. To what variant belong most of your sequences?
+Q10: Paste the tree in your report and briefly describe what you see. To what variant belong most of your sequences most likely?
 
 For a much more thorough phylogenetic analysis, please head to the excellent [Nextstrain website](https://nextstrain.org/ncov/open/global).
