@@ -40,7 +40,7 @@ The command above displays what is contained in `$PATH`. The `$` indicates that 
 
 The output shows a large number of folder locations or "paths". Each location is separated by a `:`.
 
-_Q1: Copy the output of `export PATH` and say how many different bin folders are listed in `$PATH`?_
+_Q1: Copy the output of `echo $PATH` and say how many different bin folders are listed in `$PATH`?_
 
 ## How to install new programs - two recipies
 
@@ -188,7 +188,7 @@ PS: If for some reason the `esearch` command sends you error messages and won't 
 
 The standard output of `esearch` is in a format called xml and rather difficult to read at first glance. But you see the `<Count>...</Count>` line that shows how many matches there were in the database.
 
-_Q5: How many times did Entrez find the accession number?
+_Q5: How many times did `esearch` find the accession number?_
 
 We can now combine the `esearch` command with a second tool by Entrez Direct called `efetch`. The idea is to provide the search results of `esearch` to `efetch` so that the latter program can download the actual sequence. This works like this:
 
