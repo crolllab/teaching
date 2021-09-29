@@ -209,8 +209,13 @@ Use `ls` and `cat` to verify that all worked as expected.
 
 ## Search the NCBI database for many SARS-Cov-2 genome sequences.
 
-We start with making sure conda is active.
+Let's make sure you work in your
+ home directory, so type:
+`cd`
 
+(you can obviously also choose to work in a different folder, but be aware that 1-2 lines of code below may need tweaking)
+
+We start with making sure conda is active.
 `conda activate $HOME/conda-env`
 
 Now we want to search not for a single sequence (or accession) but for all sequences of the SARS-CoV-2 virus.
