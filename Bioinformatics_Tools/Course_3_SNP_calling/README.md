@@ -253,3 +253,13 @@ ggsave("PCA_Alpine_ibex.pdf", width = 10, height = 8)
 ```
 
 _Q11: Include the PCA graph and briefly state whether the two populations in the Valais (Weisshorn) and Grisons (Albris) are clearly separated genetically._
+
+---
+
+Further reading about Alpine ibex population genomics:
+
+- Grossen, C, Biebach, I, Angelone-Alasaad, S, Keller, LF, Croll, D. Population genomics analyses of European ibex species show lower diversity and higher inbreeding in reintroduced populations. Evol Appl. 2018; 11: 123– 139. [https://doi.org/10.1111/eva.12490](https://doi.org/10.1111/eva.12490)
+
+![](./images/ibex_graph1.png)  
+
+![](./images/ibex_graph2.png)  
