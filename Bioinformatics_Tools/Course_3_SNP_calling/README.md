@@ -71,7 +71,7 @@ _Q3: What is the name of the ibex individual? Use the [NCBI SRA website](https:/
 For our little project, we want to analyze the following individuals:
 
 ```
-SRA_ID population  individual
+SRA_ID  population  individual
 SRR6649844	Albris	GR0201
 SRR6649845	Albris	GR0379
 SRR6649843	Weisshorn	VS0492
