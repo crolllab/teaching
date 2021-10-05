@@ -140,7 +140,12 @@ _Q6: Explain the basic features of this format (using Google)_
 Alpine ibex do not have a very well assembled genome yet. This is why we typically use the genome of the closely related domestic goat. Here you find the full information about this genome on [Ensembl Genome](https://www.ensembl.org/Capra_hircus/Info/Annotation).
 
 To save time, the genome exists already on our server. The location is here:
-`/home/genomes/fasta/Capra_hircus.ARS1.dna.toplevel.fa`
+```
+/home/genomes/fasta/Capra_hircus.ARS1.dna.toplevel.fa
+
+# or view all related files
+ls -lhs /home/genomes/fasta/Capra_hircus.ARS1.dna.toplevel.*
+`
 
 _Q7: Use `head` to read the name of the very first sequence._
 
