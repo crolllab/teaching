@@ -55,7 +55,7 @@ The first line below brings you to your home folder. You can choose a different 
 ```
 cd
 conda activate $HOME/conda-env
-conda install -c bioconda sra-tools=2.10 bowtie2 freebayes vcftools
+conda install -c bioconda sra-tools
 ```
 
 ### Download datasets from the NCBI SRA
@@ -145,6 +145,10 @@ To save time, the genome exists already on our server. The location is here:
 _Q7: Use `head` to read the name of the very first sequence._
 
 We will now use a loop to align each set of sequences to the domestic goat genome. The tool is called `bowtie2` (see also Course 2).
+
+Install the missing tools
+`conda install -c bioconda bowtie2 freebayes vcftools`
+
 
 The code below will run for a few minutes.
 
