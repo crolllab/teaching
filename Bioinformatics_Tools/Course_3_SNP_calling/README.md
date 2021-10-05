@@ -145,7 +145,7 @@ To save time, the genome exists already on our server. The location is here:
 
 # or view all related files
 ls -lhs /home/genomes/fasta/Capra_hircus.ARS1.dna.toplevel.*
-`
+```
 
 _Q7: Use `head` to read the name of the very first sequence._
 
