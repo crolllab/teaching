@@ -83,6 +83,8 @@ SRR6649850	Weisshorn	VS0034
 SRR6649851	Weisshorn	VS0037
 ```
 
+![](./images/map.png)  
+
 To avoid creating 9 commands to download each file, we can use a loop.
 
 Here's a loop example that prints out a series of numbers:
