@@ -218,7 +218,7 @@ _Q10: How many SNPs (or sites) did vcftools retain after filtering?_
 We will switch now to R ("Console", not "Terminal"). Before you start, create a text file containing exactly what is below. Name the file `Alpine_ibex.info.txt`
 
 ```
-SRA_ID population  individual
+SRA_ID  population  individual
 SRR6649844	Albris	GR0201
 SRR6649845	Albris	GR0379
 SRR6649843	Weisshorn	VS0492
@@ -244,7 +244,7 @@ vcf <- read.vcfR("Alpine_ibex.filtered.recode.vcf")
 allchr.snps <- vcfR2genlight(vcf)
 
 # reading in the info file
-info.df <- read.table("Alpine_ibex.info.txt", header=T, sep="\t")
+info.df <- read.table("Alpine_ibex.info.txt", header=T)
 
 # check the content
 head(info.df)
