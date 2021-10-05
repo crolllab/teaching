@@ -219,6 +219,8 @@ SRR6649850	Weisshorn	VS0034
 SRR6649851	Weisshorn	VS0037
 ```
 
+![](./images/map.jpg)  
+
 Here we start with R.
 
 ```
