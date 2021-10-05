@@ -17,11 +17,11 @@ You can work alone or in groups. Every student should submit their own report th
 
 Conda helps you install bioinformatics software easily.
 
-1.) Only the first time: `conda create -p $HOME/conda-env` to create an environment for conda to run in the folder `conda-env`.
+1.) At first use, run `conda create -p $HOME/conda-env` to create an environment for conda to run in the folder `conda-env`. The folder name can be chosen freely.
 
 2.) Every time you open a new terminal window: `conda activate $HOME/conda-env`
 
-3.) Install software like this `conda install -c bioconda vcftools` (`-c bioconda` helps conda to search in the right place)
+3.) Install software like this `conda install -c bioconda vcftools` (`-c bioconda` helps conda to search in the right place but is not strictly necessary)
 
 
 ## Accessing Illumina (short read) sequencing data
@@ -42,13 +42,15 @@ There are two ways to download such a dataset:
 
 1.) You can find the link to the sequence files. Start by clicking on the [SRR6473757](https://trace.ncbi.nlm.nih.gov/Traces/sra/?run=SRR6473757) link at the bottom of the page. The tab "Data access" provides you with links. You could e.g. use `wget ...` to download one set.
 
-2.) The much more convenient way is to use the `sra-tools`. We will use this below.
+2.) The much more convenient way is to use the `sra-tools` (see below).
 
 ## Analyzing Alpine ibex populations
 
 ![](./images/ibex.png)  
 
 ### Install all necessary tools with conda
+
+The first line below brings you to your home folder. You can choose a different folder, but be aware that you may need to search files in a different location later.
 
 ```
 cd
@@ -91,7 +93,7 @@ echo $i
 done
 ```
 
-In the above example, you see the "ingredients" of a loop. `for` defines what should repeated. We will use the variable `i` to take the values from 1 to 5.
+In the above example, you see the "ingredients" of a loop. `for` defines what should be repeated. We will use the variable `i` to take the values from 1 to 5.
 
 Between `do` and `done` are all the commands that should be included in the loop. The example will simply print out the content of the variable `i` (now written as `$i`).
 
@@ -186,7 +188,7 @@ The `Alpine_ibex.vcf` is a "variant call format", which is a standard way to rep
 
 You can explore the beginning and end of the file using `head` and `tail`, respectively.
 
-_Q9: Describe the basic features of a line reporting a SNP (what you see with `tail -n Alpine_ibex.vcf`). Use Google for help._
+_Q9: Describe the basic features of a line reporting a SNP (what you see with `tail -n 1 Alpine_ibex.vcf`). Use Google for help._
 
 ### Apply basic filtering steps to the SNPs
 
