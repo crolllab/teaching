@@ -14,9 +14,11 @@
 
 ### Installations requises
 
+**NB: pour ces TPs, nous préférons d'utiliser [RStudio en ligne](http://130.125.25.239:8787)!**
+
 - Télécharger R sur [CRAN](https://stat.ethz.ch/CRAN/)
 - Télécharger la version gratuite de [RStudio](https://rstudio.com)
-- **Très important pour éviter des problèmes plus tard**: Vérifiez si vous avez les versions les plus récentes avant de continuer. Sinon, répétez l'installation svp.
+- Très important pour éviter des problèmes plus tard: Vérifiez si vous avez les versions les plus récentes avant de continuer. Sinon, répétez l'installation svp.
 
 ## Travailler avec RStudio  
 
@@ -135,7 +137,7 @@ df[df$hours > 7,]
 La plupart des analyses `R` demandent l'importation de données. La source des données est soit
 - vous même (et vous décidez du format)
 - un collaborateur
-- téléchargement d'une banque de données en ligne 
+- téléchargement d'une banque de données en ligne
 
 Les petits jeux de données sont souvent stockés sous format text (.txt) ou Excel (.xlsx).
 
@@ -216,7 +218,7 @@ Faites extrêmement attention quand vous essayez de convertir une colonne sous f
 
 ### Quelques exemples pour s'exercer
 
-Vous trouvez dans le dossier [datasets](./datasets) une série d'exemples. La difficulté de réuissir la lecture est bien variable. Essayez d'importer ou manipuler à l'avance 
+Vous trouvez dans le dossier [datasets](./datasets) une série d'exemples. La difficulté de réuissir la lecture est bien variable. Essayez d'importer ou manipuler à l'avance
 
 
 ## Les boucles `for`
@@ -232,16 +234,16 @@ for (i in 1:5) {
 	}
 
 ## une boucle suivant un data.frame ligne par ligne
- 
+
 
 # la boucle fait autant de tour que lignes dans df
 for (i in 1:nrow(df)) {
-	
+
 	# exemples d'opérations
 	print(df[i,])
 
 	print(df$breaks[i] * 60)
-	
+
 	# enregistrer des données dans la colonne "breaks.in.minutes"
 	# on sélectionne la i-ième ligne
 	df$breaks.in.minutes[i] <- df$breaks[i] * 60
@@ -249,14 +251,14 @@ for (i in 1:nrow(df)) {
 	print(paste("fin de la boucle",i))
 	}
 
-# inspectez le résultat	
+# inspectez le résultat
 df
 ```
 
 
 ## Le traitement de données avec `dplyr`  
 
-Consultez aussi le [cheatsheet](./cheatsheets/dplyr-cheatsheet.pdf). 
+Consultez aussi le [cheatsheet](./cheatsheets/dplyr-cheatsheet.pdf).
 
 `dplyr` permet de manipuler et résumer des tableaux (data.frame) complexes y compris:
 - de sélectionner une partie des données
@@ -283,21 +285,21 @@ iris %>% group_by(Species)
 iris %>% group_by(Species) %>% summarise(average = mean(Sepal.Length))
 
 # régénérer un data.frame
-iris.summary.df <- iris %>% group_by(Species) %>% 
-							summarise(average = mean(Sepal.Length) %>% 
+iris.summary.df <- iris %>% group_by(Species) %>%
+							summarise(average = mean(Sepal.Length) %>%
 							as.data.frame()
 ```
 
 ## Visualisation de données avec `ggplot2`
 
-Consultez aussi le [cheatsheet](./cheatsheets/ggplot2-cheatsheet.pdf). 
+Consultez aussi le [cheatsheet](./cheatsheets/ggplot2-cheatsheet.pdf).
 
 ```
 install.packages("ggplot2")
 
 library(ggplot2)
 
-# utilisant les données mpg 
+# utilisant les données mpg
 head(mpg)
 ```
 
@@ -333,7 +335,7 @@ ggplot(mpg, aes(x = hwy)) + geom_histogram(binwidth = 2)
 
 ```
 ggplot(mpg, aes(x = hwy, y = cty)) + geom_point(shape = 20, size = 5, color = "red", alpha = 0.2)
-# the geom_point() parameters can  be used to represent data. Define it under aesthetics instead. 
+# the geom_point() parameters can  be used to represent data. Define it under aesthetics instead.
 ggplot(mpg, aes(x = hwy, y = cty)) + geom_point(aes(size = cyl), alpha = 0.5)
 ggplot(mpg, aes(x = hwy, y = cty)) + geom_point(aes(size = cyl, color = manufacturer), alpha = 0.5)
 
@@ -342,7 +344,7 @@ ggplot(mpg, aes(x = hwy, y = cty)) + geom_point(aes(size = cyl, color = manufact
 ggplot(mpg, aes(x = hwy, y = cty)) + geom_point(aes(size = cyl, color = manufacturer), alpha = 0.5) +
   scale_x_continuous(limits = c(5,50), breaks = seq(5,50,5)) +
   scale_y_continuous(limits = c(5,100))
-  
+
 ### changer les labels
 ggplot(mpg, aes(x = hwy, y = cty)) + geom_point(aes(size = cyl, color = class), alpha = 0.5) + labs(x = "highway mileage", y = "city mileage")
 # google how to adjust legend labels!
@@ -354,7 +356,7 @@ ggplot(mpg, aes(x = hwy, y = cty)) + geom_point(aes(size = cyl, color = manufact
   theme(axis.text = element_text(color = "black", size = 5))
 
 ```
-  
+
 ### subdiviser un graphe selon un facteur
 
 ```
@@ -410,4 +412,4 @@ plot(FOXP2.tree, main = "FOXP2 phylogeny")
 - Décortiquez une commande complexe en ses éléments les plus simples
 - ...
 
-[Suggérez vos propres astuces aux autres svp] 
+[Suggérez vos propres astuces aux autres svp]
