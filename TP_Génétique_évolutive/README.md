@@ -32,26 +32,30 @@ Notre laboratoire peut vous fournir un accès à ses machines de calculs y inclu
 ![](./images/image_1.png)
 
 - Votre "Password" est: tpgenevol   
-- Votre "Username" est: tp-prénom (alors e.g. tp-daniel). Sans accent, tout en minuscule. 
+- Votre "Username" est: ge-prénom (alors e.g. ge-daniel). Sans accent, tout en minuscule.
 
 ```
 # les noms d'utilisateurs exacts sont
-tp-fanny
-tp-jordan
-tp-loan
-tp-alexandre
-tp-caroline
-tp-jeremy
-tp-louis
-tp-piraveen
-tp-gilles
-tp-alexandre
-tp-sebastien-l
-tp-sidney
-tp-margo
-tp-sebastien-q
-tp-clement
-tp-camille
+ge-jessica
+ge-carla
+ge-quentin
+ge-armand
+ge-ihssane
+ge-roxane
+ge-antonio
+ge-samuel
+ge-christophe
+ge-vithuna
+ge-lalya
+ge-anais
+ge-regine
+ge-loic
+ge-alois
+ge-foaad
+ge-celeste
+ge-jeremy
+ge-nuria
+ge-amy
 ```
 
 - L'utilisation de RStudio sur notre serveur est identique à RStudio installé sur votre ordinateur sauf:
@@ -68,8 +72,8 @@ tp-camille
 ![](./images/image_4.png)  
 
   - Cette méthode vous permettra aussi de récupérer votre script R enregistré sur le serveur.
-  
-  	
+
+
 ## Mode d'évaluation
 
 Référez-vous à IS-Academia pour plus de détails.
