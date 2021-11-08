@@ -62,7 +62,7 @@ wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_T
 
 _Q1: Use `head` to briefly check out each of the three files. Briefly describe the information you find in each._
 
-## Visualize the Genotyping-by-sequencing (GBS) data of maize
+### Visualize the Genotyping-by-sequencing (GBS) data of maize
 
 From here on, we will work entirely in R ("Console"), not the "Terminal"!
 
@@ -73,13 +73,12 @@ We want to get a good representation of the genetic diversity of our maize indiv
 
 library(ggplot2)
 
+# read in the data (principal components and info)
+PCA.df <- read.table("MaizeDivPanel_282_genotypes_PCs.txt", header=T)
+info.df <- read.table("MaizeDivPanel_282_genotypes_INFO.txt", header=T, sep="\t")
 
-# read in the data (genotypes and info)
-PCA <- read.table("MaizeDivPanel_282_genotypes_PCs.txt", header=T)
-Info <- read.table("MaizeDivPanel_282_genotypes_INFO.txt", header=T, sep="\t")
-
-#
-joint.df <- merge(PCA, Info, all.x = T)
+# combine the two datasets
+joint.df <- merge(PCA.df, info.df, all.x = T)
 
 ggplot(joint.df, aes(x=PC1, y=PC2, color=Subpopulation)) +
   geom_point(size = 3, alpha = 0.5) +
@@ -87,3 +86,59 @@ ggplot(joint.df, aes(x=PC1, y=PC2, color=Subpopulation)) +
   theme(axis.text = element_text(color = "black"))
 
 ggsave("PCA.MaizeAccessions.pdf", width=6, height=4.5)
+```
+
+_Q2: What groups (subpopulations) of maize appear most distinct from the others?_
+
+### Visualize the distribution of phenotypic traits
+
+```
+# In R "Console"
+
+library(ggplot2)
+library(reshape2)
+
+# read in the data (principal components and info)
+info.df <- read.table("MaizeDivPanel_282_genotypes_INFO.txt", header=T, sep="\t")
+pheno.df <- read.table("MaizeDivPanel_282_phenotypes_33traits.txt", header=T, sep="\t")
+
+# rename the first column name (from <Traits> to Accessions)
+names(pheno.df)[1] <- "Accession"
+
+
+# combine the two datasets
+joint.df <- merge(pheno.df, info.df)
+
+# melt the data
+joint.m.df <- melt(joint.df, value.vars = names(joint.df)[2:34], value.name = "Trait_value", variable.name = "Trait")
+
+# plot histograms for each trait
+ggplot(joint.m.df, aes(x = Trait_value)) +
+
+  geom_histogram(bins = 10) +
+  facet_wrap(~Trait, scales = "free")
+
+ggsave("Traits.MaizeAccessions.pdf", width=12, height=8)
+```
+
+_Q3: What kind of distribution describes best the majority of the traits?_
+
+## Perform association mapping (GWAS)
+
+We will now use the R package GAPIT3 to perform GWAS analysis for all traits.
+
+```
+# In R "Console"
+
+library(GAPIT3)
+traits.data  <- read.table("MaizeDivPanel_282_phenotypes_33traits.txt", head = TRUE)
+genotypes.data <- read.table("MaizeDivPanel_282_genotypes_GBS.hmp.txt", head = FALSE)
+
+# Please check if the code above gives some error message. Anything related to "File not found" or "can't open" usually means one of two things: 1) you have not yet downloaded the files (successfully) or 2) you are running the code in a different folder than the downloaded files.
+
+# Perform a mixed linear model (MLM) GWAS
+myGAPIT <- GAPIT(
+  Y=traits.data[,1:2],
+  G=genotypes.data,
+  PCA.total=3,
+)
