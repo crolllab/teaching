@@ -30,13 +30,13 @@ We will analyze a set of 3093 SNPs (single nucleotide polymorphisms) of 282 inbr
 
 ![](./images/pca.png)  
 
-## Visualize the Genotyping-by-sequencing (GBS) data of maize
+## Access the datasets
 
 This genotyping method mainly exists to save money during sequencing. Instead of covering the entire genome, GBS allows to target a small subset of regions. This reduced number of variants (or SNPs) is often sufficient for analyses.
 
 ![](./images/gbs.png)  
 
-### Access the datasets
+
 
 Before we download the datasets, let's navigate to a specific folder:
 
@@ -50,9 +50,40 @@ This ensure that we all start the analyses in the same place (our home folder). 
 # Genotype dataset
 wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_9_GWAS/datasets/MaizeDivPanel_282_genotypes_GBS.hmp.txt
 
+# Principal component analysis
+wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_9_GWAS/datasets/MaizeDivPanel_282_genotypes_PCs.txt
+
 # Information about the accessions (individuals)
 wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_9_GWAS/datasets/MaizeDivPanel_282_genotypes_INFO.txt
 
 # Phenotypic trait dataset
 wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_9_GWAS/datasets/MaizeDivPanel_282_phenotypes_33traits.txt
 ```
+
+_Q1: Use `head` to briefly check out each of the three files. Briefly describe the information you find in each._
+
+## Visualize the Genotyping-by-sequencing (GBS) data of maize
+
+From here on, we will work entirely in R ("Console"), not the "Terminal"!
+
+We want to get a good representation of the genetic diversity of our maize individuals (accessions). Here is code to produce a principal component analysis (PCA) of the dataset.
+
+```
+# In R "Console"
+
+library(ggplot2)
+
+
+# read in the data (genotypes and info)
+PCA <- read.table("MaizeDivPanel_282_genotypes_PCs.txt", header=T)
+Info <- read.table("MaizeDivPanel_282_genotypes_INFO.txt", header=T, sep="\t")
+
+#
+joint.df <- merge(PCA, Info, all.x = T)
+
+ggplot(joint.df, aes(x=PC1, y=PC2, color=Subpopulation)) +
+  geom_point(size = 3, alpha = 0.5) +
+  labs(x = "Principal component 1", y = "Principal component 2") +
+  theme(axis.text = element_text(color = "black"))
+
+ggsave("PCA.MaizeAccessions.pdf", width=6, height=4.5)
