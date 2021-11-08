@@ -46,9 +46,13 @@ This ensure that we all start the analyses in the same place (our home folder). 
 
 ```
 ### Download links from the github site
+
+# Genotype dataset
 wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_9_GWAS/datasets/MaizeDivPanel_282_genotypes_GBS.hmp.txt
 
+# Information about the accessions (individuals)
 wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_9_GWAS/datasets/MaizeDivPanel_282_genotypes_INFO.txt
 
+# Phenotypic trait dataset
 wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_9_GWAS/datasets/MaizeDivPanel_282_phenotypes_33traits.txt
 ```
