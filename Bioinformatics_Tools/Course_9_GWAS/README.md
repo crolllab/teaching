@@ -134,6 +134,7 @@ library(GAPIT3)
 traits.data  <- read.table("MaizeDivPanel_282_phenotypes_33traits.txt", head = TRUE)
 genotypes.data <- read.table("MaizeDivPanel_282_genotypes_GBS.hmp.txt", head = FALSE)
 
+
 # Please check if the code above gives some error message. Anything related to "File not found" or "can't open" usually means one of two things: 1) you have not yet downloaded the files (successfully) or 2) you are running the code in a different folder than the downloaded files.
 
 # Perform a mixed linear model (MLM) GWAS
