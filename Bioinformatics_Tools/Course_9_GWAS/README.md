@@ -38,4 +38,17 @@ This genotyping method mainly exists to save money during sequencing. Instead of
 
 ### Access the datasets
 
-First, we will access
+Before we download the datasets, let's navigate to a specific folder:
+
+`cd $HOME`
+
+This ensure that we all start the analyses in the same place (our home folder). All data is in the *datasets* folder.
+
+```
+### Download links from the github site
+wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_9_GWAS/datasets/MaizeDivPanel_282_genotypes_GBS.hmp.txt
+
+wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_9_GWAS/datasets/MaizeDivPanel_282_genotypes_INFO.txt
+
+wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_9_GWAS/datasets/MaizeDivPanel_282_phenotypes_33traits.txt
+```
