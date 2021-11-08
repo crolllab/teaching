@@ -139,7 +139,10 @@ genotypes.data <- read.table("MaizeDivPanel_282_genotypes_GBS.hmp.txt", head = F
 
 # Perform a mixed linear model (MLM) GWAS
 myGAPIT <- GAPIT(
-  Y=traits.data[,1:2],
+  Y=traits.data,
   G=genotypes.data,
   PCA.total=3,
 )
+```
+
+If all runs well, you will find a large number of
