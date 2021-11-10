@@ -27,13 +27,21 @@
 
 ![](./images/basic_layout.png)
 
-- Pour faciliter la lecture de fichier, déterminer le `working directory` soit dans les préferences ou en rajoutant la ligne de code tel que `setwd("/Users/dcroll/Desktop/")`. Ajustez l'emplacement.
+- Pour RStudio installé sur votre ordinateur uniquement, déterminer le `working directory` soit dans les préférences ou en rajoutant la ligne de code tel que `setwd("/Users/dcroll/Desktop/")`. Ajustez l'emplacement. **NB: pour ces TPs, nous préférons d'utiliser [RStudio en ligne](http://130.125.25.239:8787), donc l'ajustement se fait dans le menu "Session" => "Set Working Directory" => "Choose Directory"**.
 
 ![](./images/workingdir.png)
 
 - Utilisez la touche `tab` pour auto-compléter du code, des liens, des options, etc.
 
 - En bas du script, vous verrez la console pour interagir avec R. Mais vous pouvez exécuter du code directement dans le script. Pour ceci, sélectionnez la/les lignes de code et appuyer sur les touches `cmd` + `enter` (sur Mac).  
+
+
+## Suggestion pour le troubleshooting: une liste à compléter!
+
+- Décortiquez une commande complexe en ses éléments les plus simples
+- Lisez toujours tous les messages d'erreur et apprenez petit à petit de reconnaître le type de problème. (e.g. "File not found" => faux nom ou emplacement?)
+
+[Suggérez vos propres astuces aux autres svp]
 
 ## Travailler avec des variables, vecteurs et data.frames
 
@@ -147,10 +155,10 @@ Les problèmes les plus fréquents lors du chargement d'un fichier sont:
 
 ### Quelques termes techniques pour mieux gérer les erreurs lors de l'importation:  
 - "Field delimiters" séparent les colonnes dans un fichier. Ceci peut être sous forme de tabulation, espace, virgule, etc.  
-􏰀- "Special characters" (`\`, `"`, etc.)  
-􏰀- "Text encoding" (UTF-8, etc.)  
-􏰀- `class` et `colClasses`: la classe caractérise un type de données (e.g. `numeric`, `character`, `factor`). Une `colClass` définie le type de données dans une colonne.  
--􏰀 `header`: la première ligne d'un fichier qui peut optionnellement spécifier le nom de la colonne ("weight", "number of observations", etc.)  
+- "Special characters" (`\`, `"`, etc.)  
+- "Text encoding" (UTF-8, etc.)  
+- `class` et `colClasses`: la classe caractérise un type de données (e.g. `numeric`, `character`, `factor`). Une `colClass` définie le type de données dans une colonne.  
+- `header`: la première ligne d'un fichier qui peut optionnellement spécifier le nom de la colonne ("weight", "number of observations", etc.)  
 
 Si tout fonctionne correctement, vous ne receverez aucun message d'erreur:
 
@@ -218,7 +226,7 @@ Faites extrêmement attention quand vous essayez de convertir une colonne sous f
 
 ### Quelques exemples pour s'exercer
 
-Vous trouvez dans le dossier [datasets](./datasets) une série d'exemples. La difficulté de réuissir la lecture est bien variable. Essayez d'importer ou manipuler à l'avance
+Vous trouvez dans le dossier [datasets](./datasets) une série d'exemples. La difficulté de réussir la lecture est bien variable. Essayez d'importer ou manipuler à l'avance
 
 
 ## Les boucles `for`
@@ -406,10 +414,3 @@ plot(FOXP2.tree)
 FOXP2.tree <- root(FOXP2.tree, outgroup = "Mus_musculus_var3")
 plot(FOXP2.tree, main = "FOXP2 phylogeny")
 ```
-
-## Troubleshooting
-
-- Décortiquez une commande complexe en ses éléments les plus simples
-- ...
-
-[Suggérez vos propres astuces aux autres svp]

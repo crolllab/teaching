@@ -121,7 +121,10 @@ ggplot(joint.m.df, aes(x = Trait_value)) +
 ggsave("Traits.MaizeAccessions.pdf", width=12, height=8)
 ```
 
-_Q3: What kind of distribution describes best the majority of the traits?_
+_Q3: What kind of distribution describes best the majority of the traits? (no proper analysis required - just a general appreciation)_
+
+_Q4: Do you expect very few or many loci (i.e. genes) contributing to these traits? Briefly explain why._
+
 
 ## Perform association mapping (GWAS)
 
@@ -135,14 +138,69 @@ traits.data  <- read.table("MaizeDivPanel_282_phenotypes_33traits.txt", head = T
 genotypes.data <- read.table("MaizeDivPanel_282_genotypes_GBS.hmp.txt", head = FALSE)
 
 
-# Please check if the code above gives some error message. Anything related to "File not found" or "can't open" usually means one of two things: 1) you have not yet downloaded the files (successfully) or 2) you are running the code in a different folder than the downloaded files.
+# Please check if the code above gives some error message. Anything related to "File not found" or "can't open" usually means one of two things: 1) you have not yet downloaded the files (successfully), or 2) you are running the code in a different folder than the downloaded files.
 
-# Perform a mixed linear model (MLM) GWAS
+# Select a phenotype to analyze, replace "GDDAnthesis" with your preferred phenotype (see the plot)
+trait <- "GDDAnthesis.SilkingInterval"
+trait.index <- which(names(traits.data)==trait)
+
+# Perform a mixed linear model (MLM) GWAS. This is a standard model to
 myGAPIT <- GAPIT(
-  Y=traits.data,
+  Y=traits.data[,c(1,trait.index)],
   G=genotypes.data,
   PCA.total=3,
 )
 ```
 
-If all runs well, you will find a large number of
+The GWAS package produces a large number of output files. Here's the output for the phenotype "GDDAnthesis".
+
+You can find more information about the importance of the silking interval of anthesis (the time the flower is open and functional) [here](https://www.sciencedirect.com/science/article/abs/pii/0378429096000366).
+
+```
+GAPIT.Heterozygosity.pdf
+GAPIT.Kin.VanRaden.csv
+GAPIT.Kin.VanRaden.pdf
+GAPIT.Marker.Density.pdf
+GAPIT.Marker.LD.pdf
+GAPIT.MLM.GDDAnthesis.SilkingInterval.Df.tValue.StdErr.csv
+GAPIT.MLM.GDDAnthesis.SilkingInterval.GWAS.Results.csv
+GAPIT.MLM.GDDAnthesis.SilkingInterval.Log.csv
+GAPIT.MLM.GDDAnthesis.SilkingInterval.MAF.pdf
+GAPIT.MLM.GDDAnthesis.SilkingInterval.Manhattan.Plot.Chromosomewise.pdf
+GAPIT.MLM.GDDAnthesis.SilkingInterval.Manhattan.Plot.Genomewise.pdf
+GAPIT.MLM.GDDAnthesis.SilkingInterval.Optimum.pdf
+GAPIT.MLM.GDDAnthesis.SilkingInterval.phenotype_view.pdf
+GAPIT.MLM.GDDAnthesis.SilkingInterval.PRED.csv
+GAPIT.MLM.GDDAnthesis.SilkingInterval.QQ-Plot.pdf
+GAPIT.MLM.GDDAnthesis.SilkingInterval.ROC.csv
+GAPIT.MLM.GDDAnthesis.SilkingInterval.ROC.pdf
+GAPIT.PCA.2D.pdf
+GAPIT.PCA.3D.pdf
+GAPIT.PCA.csv
+GAPIT.PCA.eigenValue.pdf
+GAPIT.PCA.eigenvalues.csv
+GAPIT.PCA.loadings.csv
+```
+
+Use the "Files" tab on the right to click on the following files.
+
+- `GAPIT.PCA.2D.pdf`
+- `GAPIT.Kin.VanRaden.pdf`
+- `GAPIT.MLM.GDDAnthesis.SilkingInterval.Manhattan.Plot.Genomewise.pdf`
+
+_Q5: Try to find out what each file represents and very briefly describe what you see. Hint: "Kin" stands for kinship._
+
+The full statistical outcomes of the GWAS is in the file `GAPIT.MLM.GDDAnthesis.SilkingInterval.GWAS.Results.csv`. This file reports for every SNP in the dataset the association with the analyzed trait.
+
+Let's use R to identify the SNP showing the most significant association with the phenotype. You can graphically identify this SNP also by opening the file `GAPIT.MLM.GDDAnthesis.SilkingInterval.Manhattan.Plot.Genomewise.pdf`
+
+```
+# In R "Console"
+
+GWAS.df <- read.csv("GAPIT.MLM.GDDAnthesis.SilkingInterval.GWAS.Results.csv", header = T)
+
+# The file is already sorted by p-value. Let's check the most significant SNPs at the top of the file.
+head(GWAS.df)
+```
+
+_Q6: What's the the position (Chromosome + Position) of the most significant SNP?_
