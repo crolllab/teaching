@@ -4,7 +4,7 @@
 
 ### Major aims  
 - A basic understanding of phenotype-genotype association mapping (i.e. GWAS)
-- Know key filter steps
+- Know key steps of mapping a locus
 
 ### Report to submit
 
@@ -60,7 +60,7 @@ wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_T
 wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_9_GWAS/datasets/MaizeDivPanel_282_phenotypes_33traits.txt
 ```
 
-_Q1: Use `head` to briefly check out each of the three files. Briefly describe the information you find in each._
+_Q1: Use `head` to briefly check out each of the four files. What kind of information is recorded here?_
 
 ### Visualize the Genotyping-by-sequencing (GBS) data of maize
 
@@ -102,6 +102,8 @@ library(reshape2)
 info.df <- read.table("MaizeDivPanel_282_genotypes_INFO.txt", header=T, sep="\t")
 pheno.df <- read.table("MaizeDivPanel_282_phenotypes_33traits.txt", header=T, sep="\t")
 
+# Please check if the code above gives some error message. Anything related to "File not found" or "can't open" usually means one of two things: 1) you have not yet downloaded the files (successfully), or 2) you are running the code in a different folder than the downloaded files.
+
 # rename the first column name (from <Traits> to Accessions)
 names(pheno.df)[1] <- "Accession"
 
@@ -126,9 +128,9 @@ _Q3: What kind of distribution describes best the majority of the traits? (no pr
 _Q4: Do you expect very few or many loci (i.e. genes) contributing to these traits? Briefly explain why._
 
 
-## Perform association mapping (GWAS)
+## Performing the association mapping (GWAS)
 
-We will now use the R package GAPIT3 to perform GWAS analysis for all traits.
+We will now use the R package GAPIT3 to perform the GWAS analyses for individual traits.
 
 ```
 # In R "Console"
@@ -140,7 +142,8 @@ genotypes.data <- read.table("MaizeDivPanel_282_genotypes_GBS.hmp.txt", head = F
 
 # Please check if the code above gives some error message. Anything related to "File not found" or "can't open" usually means one of two things: 1) you have not yet downloaded the files (successfully), or 2) you are running the code in a different folder than the downloaded files.
 
-# Select a phenotype to analyze, replace "GDDAnthesis" with your preferred phenotype (see the plot)
+# Select a phenotype to analyze, replace "GDDAnthesis.SilkingInterval" with your preferred phenotype (see the plot)
+
 trait <- "GDDAnthesis.SilkingInterval"
 trait.index <- which(names(traits.data)==trait)
 
@@ -152,9 +155,11 @@ myGAPIT <- GAPIT(
 )
 ```
 
-The GWAS package produces a large number of output files. Here's the output for the phenotype "GDDAnthesis".
+The GAPIT3 GWAS package produces a large number of output files. Here's the output for the phenotype "GDDAnthesis.SilkingInterval".
 
-You can find more information about the importance of the silking interval of anthesis (the time the flower is open and functional) [here](https://www.sciencedirect.com/science/article/abs/pii/0378429096000366).
+- Corn silk is explained here on [Wikipedia](https://en.wikipedia.org/wiki/Corn_silk).
+- You can find more information about the importance of the  interval of anthesis (the time the flower is open and functional) [here](https://www.sciencedirect.com/science/article/abs/pii/0378429096000366).
+- GDD refers to Growing Degrees Days, which is a measure of heat accumulated during a certain period. One takes the temperature of a certain day into account if it's above a certain baseline (a minimum growth temperature). For each acceptably warm day, the temperature readings are added up. More info on [Wikipedia](https://en.wikipedia.org/wiki/Growing_degree-day).
 
 ```
 GAPIT.Heterozygosity.pdf
@@ -190,9 +195,9 @@ Use the "Files" tab on the right to click on the following files.
 
 _Q5: Try to find out what each file represents and very briefly describe what you see. Hint: "Kin" stands for kinship._
 
-The full statistical outcomes of the GWAS is in the file `GAPIT.MLM.GDDAnthesis.SilkingInterval.GWAS.Results.csv`. This file reports for every SNP in the dataset the association with the analyzed trait.
+The full statistics outcome of the GWAS is in the file `GAPIT.MLM.GDDAnthesis.SilkingInterval.GWAS.Results.csv`. This file reports for every SNP in the dataset the association with the analyzed trait.
 
-Let's use R to identify the SNP showing the most significant association with the phenotype. You can graphically identify this SNP also by opening the file `GAPIT.MLM.GDDAnthesis.SilkingInterval.Manhattan.Plot.Genomewise.pdf`
+Let's use R to identify the SNP showing the most significant association with the phenotype. You can graphically identify this SNP also by opening the file `GAPIT.MLM.GDDAnthesis.SilkingInterval.Manhattan.Plot.Genomewise.pdf` (see above).
 
 ```
 # In R "Console"
@@ -204,3 +209,7 @@ head(GWAS.df)
 ```
 
 _Q6: What's the the position (Chromosome + Position) of the most significant SNP?_
+
+You can use the [maize genome browser](https://www.maizegdb.org/gbrowse) online to localize the position in the genome. The genes are shown with the black symbols representing exons. Genes also typically carry the "Zm..." label.
+
+_Q7 What gene(s) are nearby the top SNP identified above? Briefly mention the gene function if there's something known._
