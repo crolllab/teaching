@@ -4,7 +4,7 @@
 
 ### Major aims  
 - A basic understanding of phenotype-genotype association mapping (i.e. GWAS)
-- Know key steps of mapping a locus
+- Know key steps of mapping a locus associated with a specific trait
 
 ### Report to submit
 
@@ -12,7 +12,7 @@ Please compile brief answers to the questions for your report ("Q1", "Q2", etc.)
 
 You can work alone or in groups. Every student should submit their own report through Moodle though. No copy-pasting, please. Formulate answers in your own words.
 
-## The maize dataset
+## The maize accession dataset
 
 As a manageable dataset to work with, we will use a diversity study of maize accessions covering the genetic diversity of the crop. At its center of origin in Mexico, farmers retained a very high degree of diversity.
 
@@ -125,7 +125,7 @@ ggsave("Traits.MaizeAccessions.pdf", width=12, height=8)
 
 _Q3: What kind of distribution describes best the majority of the traits? (no proper analysis required - just a general appreciation)_
 
-_Q4: Do you expect very few or many loci (i.e. genes) contributing to these traits? Briefly explain why._
+_Q4: Do you expect only one or many loci (i.e. genes) contributing to each of these traits? Briefly explain why._
 
 
 ## Performing the association mapping (GWAS)
@@ -157,10 +157,6 @@ myGAPIT <- GAPIT(
 
 The GAPIT3 GWAS package produces a large number of output files. Here's the output for the phenotype "GDDAnthesis.SilkingInterval".
 
-- Corn silk is explained here on [Wikipedia](https://en.wikipedia.org/wiki/Corn_silk).
-- You can find more information about the importance of the  interval of anthesis (the time the flower is open and functional) [here](https://www.sciencedirect.com/science/article/abs/pii/0378429096000366).
-- GDD refers to Growing Degrees Days, which is a measure of heat accumulated during a certain period. One takes the temperature of a certain day into account if it's above a certain baseline (a minimum growth temperature). For each acceptably warm day, the temperature readings are added up. More info on [Wikipedia](https://en.wikipedia.org/wiki/Growing_degree-day).
-
 ```
 GAPIT.Heterozygosity.pdf
 GAPIT.Kin.VanRaden.csv
@@ -186,6 +182,12 @@ GAPIT.PCA.eigenValue.pdf
 GAPIT.PCA.eigenvalues.csv
 GAPIT.PCA.loadings.csv
 ```
+
+Some information about this trait:
+- Corn silk is explained here on [Wikipedia](https://en.wikipedia.org/wiki/Corn_silk).
+- You can find more information about the importance of the  interval of anthesis (the time the flower is open and functional) [here](https://www.sciencedirect.com/science/article/abs/pii/0378429096000366).
+- GDD refers to Growing Degrees Days, which is a measure of heat accumulated during a certain period. One takes the temperature of a certain day into account if it's above a certain baseline (a minimum growth temperature). For each acceptably warm day, the temperature readings are added up. More info on [Wikipedia](https://en.wikipedia.org/wiki/Growing_degree-day).
+
 
 Use the "Files" tab on the right to click on the following files.
 
