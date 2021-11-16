@@ -44,7 +44,7 @@ La Loi de Hardy-Weinberg préconise que les fréquences alléliques dans une pop
 Pour simplifier la programmation nous allons écrire des fonctions `function()` pour différents éléments.
 
 ```
-### Principe de base d'une fonction en R 
+### Principe de base d'une fonction en R
 
 add.two <- function(x) {
 
@@ -76,7 +76,7 @@ genotypes.count <- c(3, 9, 5) # alors 3 génotypes d'AA, 9 Aa et 5 aa
 genotypes <- genotypes.count / sum(genotypes.count)
 ```
 
-### Fonction 1: calcul de fréquences alléliques 
+### Fonction 1: calcul de fréquences alléliques
 
 Cette fonction prend comme variable le vecteur des fréquences génotypiques et retourne les fréquences alléliques (p: A; q: a). Dans le contexte d'une population, nous pouvons estimer la fréquence des gamètes (haploïdes) A et a produits par la génération des parents ayant les génotypes spécifiés.
 
@@ -176,7 +176,7 @@ Q9: Testez pour des h entre 0, 0.5 et 1 si vous pouvez vérifier les analyses fa
 
 Dans cette partie finale, nous voulons enregistrer l'évolution des fréquences alléliques et génotypiques au cours des générations. Ceci dans le but de pouvoir ensuite visualiser les changements à long terme.
 
-Commencez par l'intégration d'un `data.frame` qui enregistre les données au chaque tour de la boucle (voir TP 1).
+Commencez par l'intégration d'un `data.frame` qui enregistre les données à chaque tour de la boucle (voir TP 1 pour une introduction aux boucles).
 
 ```
 results.df <- data.frame(generation=numeric(),
@@ -184,7 +184,7 @@ results.df <- data.frame(generation=numeric(),
                           allele.a=numeric(),
                           genotype.AA=numeric(),
                           genotype.Aa=numeric(),
-                          genotype.aa=numeric()) 
+                          genotype.aa=numeric())
 ```
 
 Le principe pour introduire des données (les fréquences a, A, aa, ...) au cours de la simulation:
@@ -197,7 +197,7 @@ results.df[i, c("allele.A", "allele.a")] <- alleles
 results.df[i, c("genotype.AA", "genotype.Aa", "genotype.aa")] <- genotypes
 ```
 
-### Visualisation de l'impact de sélection 
+### Visualisation de l'impact de sélection
 
 Commencez par lancer la boucle enregistrant les résultats dans `results.df`.
 
@@ -209,17 +209,17 @@ library(ggplot2)
 results.m.df <- melt(results.df, id.vars = "generation", value.name = "frequency", variable.name = "type")
 
 # visualisation
-ggplot(results.m.df, aes(x = generation, y = frequency, color = type)) + 
-  geom_line() + 
+ggplot(results.m.df, aes(x = generation, y = frequency, color = type)) +
+  geom_line() +
   scale_y_continuous(limits = c(0,1)) +
   labs(title = paste("Selection coefficient s =", s,", coefficient of dominance h =", h))
-    
+
 ggsave("Simulating_selection.pdf", width = 8, height = 5)
 
 
 # Alternative: visualisation uniquement de pA
-ggplot(results.m.df[results.m.df$type == "allele.A",], aes(x = generation, y = frequency, color = type)) + 
-  geom_line() + 
+ggplot(results.m.df[results.m.df$type == "allele.A",], aes(x = generation, y = frequency, color = type)) +
+  geom_line() +
   scale_y_continuous(limits = c(0,1)) +
   labs(title = paste("Population size", n))
 ```
