@@ -191,10 +191,18 @@ Le principe pour introduire des données (les fréquences a, A, aa, ...) au cour
 
 ```
 # à la génération "i" dans la boucle
+results.df[i,"generation"] <- i
+results.df[i, c("allele.A", "allele.a")] <- alleles
+results.df[i, c("genotype.AA", "genotype.Aa", "genotype.aa")] <- genotypes
+```
+
+```
+# pour tester le code en dehors d'une boucle en mettant i = 1
 i <- 1
 results.df[i,"generation"] <- i
 results.df[i, c("allele.A", "allele.a")] <- alleles
 results.df[i, c("genotype.AA", "genotype.Aa", "genotype.aa")] <- genotypes
+
 ```
 
 ### Visualisation de l'impact de sélection
