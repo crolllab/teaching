@@ -10,6 +10,8 @@
 - Intégrer ces changements en fréquences alléliques dans un modèle à plusieurs générations
 - Comprendre l'impact de la valeur sélective s et le coefficient de dominance h
 
+![](./images/cycle.png)
+
 
 ## La Loi de Hardy-Weinberg
 
