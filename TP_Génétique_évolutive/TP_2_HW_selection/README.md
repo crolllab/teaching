@@ -37,7 +37,7 @@ curve(x^2, from=0, to=1, ylab = "genotype frequency", xlab = "allele frequency A
 text(0.5, 1, labels = "pAA", col = "black")
 ```
 
-Q2: Créez un graphe représentant à la fois pAA, pAa et paa.
+Q2 (optionnelle): Créez un graphe représentant à la fois pAA, pAa et paa.
 
 ![](./images/H-W.plot.png)
 
@@ -65,7 +65,7 @@ multiply.numbers <- function(x,y) {
 multiply.numbers(4,8)
 ```
 
-Q3: Expliquez le principe d'une fonction en `R`? Quels sont les éléments à définir?
+Q3 (optionnelle): Expliquez le principe d'une fonction en `R`? Quels sont les éléments à définir?
 
 
 Définissons les variables de bases:
@@ -125,7 +125,7 @@ Q5: Utilisez une boucle (voir TP 1) pour enchaîner les deux fonctions ci-dessus
 
 Ci-dessus, nous avons créé un petit modèle qui nous re-calcule les fréquences génotypiques et alléliques à chaque génération. La sélection peut être intégrée au niveau des génotypes produits à partir des fréquences alléliques. Le but est alors de modifier chaque fréquence génotypique en fonction de sa valeur sélective s (ou fitness).
 
-Q6: Cherchez dans le cours de génétique évolutive les définitions de la valeur sélective s et le coefficient de dominance h.
+Q6 (optionnelle): Cherchez dans le cours de génétique évolutive les définitions de la valeur sélective s et le coefficient de dominance h.
 
 Reprenons la fonction suivante:
 
@@ -169,7 +169,7 @@ Q7: La procédure ci-dessus produit des fréquences génotypiques qui ne corresp
 Q8: Modifiez votre boucle pour tester la validité de la Loi Hardy-Weinberg ci-dessus en intégrant une épisode de sélection sur les génotypes à chaque génération. La sélection sera alors l'étape finale de la boucle.
 
 
-Q9: Testez pour des h entre 0, 0.5 et 1 si vous pouvez vérifier les analyses faites au cours.
+Q9: Testez pour des h entre 0, 0.5 et 1 si vous pouvez vérifier les analyses faites au cours (voir ci-dessous).
 
 ![](./images/fixation.png)
 
