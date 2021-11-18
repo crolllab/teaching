@@ -7,18 +7,22 @@
 - Intégrer la dérive génétique dans un modèle de génétique de populations
 - Analyser l'interaction de la dérive génétique et la sélection
 
+![](./images/drift_selection.jpg)
+
 ## La dérive génétique et l'échantillonnage aléatoire
 
-Nous voulons analyser tout d'abord l'effet de l'échantillonnage (répété) sur la distribution des valeurs observées.
+La dérive génétique peut être assimilée à un tirage au sort de génotypes contribuant à la reproduction. Le plus que le nombre de génotypes tiré au sort devient restreint, le plus que nous observons des fluctuations fortes d'une génération à l'autre. Le cas le plus extrême serait de tirer un seul génotype au sort contribuant à la prochaine génération.
+
+Pour cette raison, nous voulons d'abord analyser l'effet d'un tel échantillonnage (répété) sur la distribution des valeurs observées.
 
 ![](./images/balls.jpg)
 [source: https://moderndive.com]
 
-Nous faisons un tirage au sort de boules rouges et blanches.
+Faisons un tirage au sort de boules rouges et blanches.
 
 ```
-# Définissons la fréquence des boules rouge 
-p <- 0.5
+# Définissons la fréquence des boules rouge
+p <- 0.5    # alors la moitié est rouge
 
 # Nombre de boules à tirer
 n <- 10
@@ -54,7 +58,7 @@ Nous voyons que si nous tirons peu de boules au total, nous observons une plus g
 Nous pouvons utiliser cette observation pour mieux comprendre l'impact de la dérive génétique sur la composition des génotypes. Plus les individus se reproduisent à chaque génération ("tirer des génotypes pour la prochaine génération"), plus la fréquence des génotypes à la prochaine génération devient prévisible (= une dispersion plus faible). Autrement dit, l'importance du hasard est la plus forte si peu d'individus se reproduisent.
 
 
-### Introduire la dérive génétique dans notre modèle 
+### Introduire la dérive génétique dans notre modèle
 
 Nous voulons maintenant introduire la dérive génétique au niveau de la production des zygotes. Au lieu de déterminer les fréquences génotypiques selon la loi de Hardy-Weinberg (voir TP 2), nous allons tirer au hasard des allèles `A` et `a` du pool des gamètes. Les probabilités de former des génotypes `AA`, `Aa` et `aa` vont être les mêmes comme dans le modèle sans dérive, mais on aura un effet stochastique en tirant au sort les combinaisons.
 
@@ -69,10 +73,26 @@ Nous simplifions les calculs en représentant l'allèle A étant `1` et l'allèl
 Q2: Générez 500 combinaisons d'allèles (= génotypes) sans utiliser une boucle (voir `replicate()` en haut). Résumez les génotypes en faisant la somme des codes utilisés pour les allèles. Allèle A étant `1` et l'allèle a étant `0`.
 
 
-Q3: Résumez les génotypes produits ci-dessus sous la forme `genotypes <- c(40, 20, 10) # pour AA, Aa, aa` adoptée pour le TP 2.
+Q3 (optionnelle): Résumez les génotypes produits ci-dessus sous la forme `genotypes <- c(40, 20, 10) # pour AA, Aa, aa` adoptée pour le TP 2.
 
+Solution proposée pour Q3
 
-Q4: Ecrivez une fonction analogue à `get.Progeny.GenoFreq(alleles)` (voir TP 2) qui prend comme valeurs des fréquences alléliques et un nombre de génotypes à échantillonner `n`. La fonction devrait produire des fréquences génotypiques soumises à la dérive génétique. Appelez la fonction `Progeny.GenoFreq.withDrift(alleles, n)`. Vous voyez qu'on doit pouvoir spécifier la taille de la population à la fonction (n). (Vous avez déjà écrit la plupart du code nécessaire pour répondre à la Q3)
+```
+# définir les variables pour faire un exemple
+p <- 0.2    # allèle A
+q <- 1 - p  # allèle a
+n <- 500
+
+# générer les résumés
+sampled.genotypes <- replicate(n, sample(0:1, 2, c(q, p), replace = T))
+sampled.genotypes.012 <- colSums(sampled.genotypes)
+aa <- sum(sampled.genotypes.012 == 0)
+Aa <- sum(sampled.genotypes.012 == 1)
+AA <- sum(sampled.genotypes.012 == 2)
+genotypes <- c(AA, Aa, aa)
+```
+
+Q4: Ecrivez une fonction analogue à `get.Progeny.GenoFreq(alleles)` (voir TP 2) qui prend comme valeurs des fréquences alléliques et un nombre de génotypes à échantillonner `n`. La fonction devrait produire des fréquences génotypiques soumises à la dérive génétique. Appelez la fonction `Progeny.GenoFreq.withDrift(alleles, n)`. Vous voyez qu'on doit pouvoir spécifier la taille de la population à la fonction (n). La solution proposée pour Q3 vous fournie la grande majorité du code nécessaire.
 
 
 Q5: Reprenez le code proposé dans le corrigé TP 2 pour Q10 (ou votre code). Enlevez la partie du code qui intègre la sélection et rajoutez le code pour implémenter la dérive génétique. Enregistrez un `results.df` comme proposé la dernière fois.

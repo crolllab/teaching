@@ -72,7 +72,7 @@ Définissons les variables de bases:
 
 ```
 # Nous allons introduire le nombre de génotypes pour AA, Aa et aa dans un vecteur
-genotypes.count <- c(3, 9, 5) # alors 3 génotypes d'AA, 9 Aa et 5 aa
+genotypes.count <- c(3, 9, 50) # alors 3 génotypes d'AA, 9 Aa et 50 aa
 
 # Normalisons les fréquences génotypiques à une somme de 1
 genotypes <- genotypes.count / sum(genotypes.count)
