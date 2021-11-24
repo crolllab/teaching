@@ -11,7 +11,7 @@
 
 ## La dérive génétique et l'échantillonnage aléatoire
 
-La dérive génétique peut être assimilée à un tirage au sort de génotypes contribuant à la reproduction. Le plus que le nombre de génotypes tiré au sort devient restreint, le plus que nous observons des fluctuations fortes d'une génération à l'autre. Le cas le plus extrême serait de tirer un seul génotype au sort contribuant à la prochaine génération.
+La dérive génétique peut être assimilée à un tirage au sort d'allèles contribuant à la reproduction. Le plus que le nombre d'allèles tiré au sort devient restreint, le plus que nous observons des fluctuations fortes d'une génération à l'autre. Le cas le plus extrême serait de tirer un seul allèle au sort contribuant à la prochaine génération.
 
 Pour cette raison, nous voulons d'abord analyser l'effet d'un tel échantillonnage (répété) sur la distribution des valeurs observées.
 
@@ -51,7 +51,7 @@ dist.val <- replicate(n = rep, sum(sample(c(0,1), prob = c(p, 1-p), size = n, re
 hist(dist.val, col = "grey", main = paste(n, "balls"), xlim = c(0,n), xlab = "White balls")
 ```
 
-Q1: Refaites le graphe en variant seulement le nombre de boules à tirer par répétition. Essayez e.g. 10, 100 et 1000 boules. Faites un graphe pour chaque cas. Quelles sont vos observations? Quel est l'impact du nombre de boules tirées par rapport à la distribution des boules blanches obtenues à travers les répétitions? Discutez brièvement ce que nous apprenons par rapport à la dérive génétique. En continuant la parallèle avec la dérive génétique, qu'est-ce que représente p et n?
+Q1: Refaites le graphe en variant seulement le nombre de boules à tirer par répétition. Essayez e.g. 10, 100 et 1000 boules. Faites un graphe pour chaque cas. Quelles sont vos observations? Quel est l'impact du nombre de boules tirées par rapport à la distribution des boules blanches obtenues à travers les répétitions? Discutez brièvement ce que nous apprenons par rapport à la dérive génétique. En continuant la parallèle avec la dérive génétique, qu'est-ce que représente _p_ et _n_?
 
 Nous voyons que si nous tirons peu de boules au total, nous observons une plus grande dispersion dans le nombre de boules blanches tirées au hasard. Avec un nombre plus élevé de boules tirées, nous avons une dispersion beaucoup plus faible (proportionnellement à n).
 
@@ -60,7 +60,7 @@ Nous pouvons utiliser cette observation pour mieux comprendre l'impact de la dé
 
 ### Introduire la dérive génétique dans notre modèle
 
-Nous voulons maintenant introduire la dérive génétique au niveau de la production des zygotes. Au lieu de déterminer les fréquences génotypiques selon la loi de Hardy-Weinberg (voir TP 2), nous allons tirer au hasard des allèles `A` et `a` du pool des gamètes. Les probabilités de former des génotypes `AA`, `Aa` et `aa` vont être les mêmes comme dans le modèle sans dérive, mais on aura un effet stochastique en tirant au sort les combinaisons.
+Nous voulons maintenant introduire la dérive génétique au niveau de la production des zygotes. Au lieu de déterminer les fréquences génotypiques selon la loi de Hardy-Weinberg (voir TP 2), nous allons tirer au hasard des allèles `A` et `a` du pool des gamètes pour former des génotypes `AA`, `Aa` et `aa`.
 
 Définissons les fréquences alléliques
 `p <- 0.2`    # allèle A
@@ -83,25 +83,31 @@ p <- 0.2    # allèle A
 q <- 1 - p  # allèle a
 n <- 500
 
-# générer les résumés
+# tirage au sort de combinaisons d'allèles (= génotypes)
 sampled.genotypes <- replicate(n, sample(0:1, 2, c(q, p), replace = T))
+
+# générer les résumés par colonne
 sampled.genotypes.012 <- colSums(sampled.genotypes)
+
+# compter le nombre de génotypes selon le format 0, 1 et 2 (= somme des valeurs attribuées aux allèles)
 aa <- sum(sampled.genotypes.012 == 0)
 Aa <- sum(sampled.genotypes.012 == 1)
 AA <- sum(sampled.genotypes.012 == 2)
-genotypes <- c(AA, Aa, aa)
+
+# remplir un vecteur avec le résultat du comptage
+genotypes.count <- c(AA, Aa, aa)
 ```
 
 Q4: Ecrivez une fonction analogue à `get.Progeny.GenoFreq(alleles)` (voir TP 2) qui prend comme valeurs des fréquences alléliques et un nombre de génotypes à échantillonner `n`. La fonction devrait produire des fréquences génotypiques soumises à la dérive génétique. Appelez la fonction `Progeny.GenoFreq.withDrift(alleles, n)`. Vous voyez qu'on doit pouvoir spécifier la taille de la population à la fonction (n). La solution proposée pour Q3 vous fournie la grande majorité du code nécessaire.
 
 
-Q5: Reprenez le code proposé dans le corrigé TP 2 pour Q10 (ou votre code). Enlevez la partie du code qui intègre la sélection et rajoutez le code pour implémenter la dérive génétique. Enregistrez un `results.df` comme proposé la dernière fois.
+Q5: Reprenez le code proposé dans le corrigé TP 2 pour Q10 (ou votre version code). Enlevez la partie du code qui intègre la sélection et rajoutez le code pour implémenter la dérive génétique. Enregistrez un `results.df` comme proposé la dernière fois.
 
 
 Q6: Réutilisez le code de la fin des TP 2 pour visualiser `results.df`. Etudiez l'impact d'une taille de population `n` variable dans des graphes séparés (ou conjoints). Essayez alternativement de visualiser uniquement les fréquences alléliques (e.g. pA) pour simplifier la présentation.
 
 
-Q7: Intégrez votre modèle de sélection (TP2) et le modèle de dérive génétique dans une seule boucle. Faites une décision sur la séquence des trois étapes (e.g. production des gamètes, dérive génétique, sélection).
+Q7: Intégrez votre modèle de sélection (TP2 et corrigé) et le modèle de dérive génétique (ce TP) dans une seule boucle. Faites une décision sur la séquence des trois étapes (e.g. production des gamètes, dérive génétique, sélection). Vérifiez bien que vous êtes consistent dans l'utilisation des variables (e.g. toujours `alleles` et `genotypes`).
 
 
-Q8: Identifiez grossièrement des conditions limites (pour n et s) où la dérive génétique prend le dessus sur la sélection et domine l'évolution des fréquences alléliques.
+Q8: Identifiez grossièrement des conditions limites (soit pour _n_ ou _s_) où la dérive génétique prend le dessus sur la sélection et domine l'évolution des fréquences alléliques.
