@@ -33,7 +33,7 @@ Q1: Quelle était la motivation principale d'étudier la diversité génétique 
 
 
 ![](./images/vcf1.png)
-  
+
 ![](./images/vcf2.png)  
 
 - Pour ces TPs, nous avons généré un sous-échantillonnage des SNPs (1 sur 2000) pour ne pas alourdir trop les analyses. Le fichier complet serait d'environ 1 TB. Le fichier préparé pour les TPs s'appelle `Human1000G.2000xSubsampled.MAF0.05.recode.vcf` (format VCF). Ce fichier est aussi filtré pour une fréquence allélique mineure (MAF) >0.05. Donc, les allèles rares n'y figurent plus!
@@ -54,12 +54,13 @@ Q1: Quelle était la motivation principale d'étudier la diversité génétique 
 Le point de départ: Définissez votre espace de travail, téléchargez le fichier `Human1000G.2000xSubsampled.MAF0.05.recode.vcf` dans le même dossier  
 
 ```
-# à ajuster!
-setwd("~/Dropbox/Daniel/Documents/UNINE/Teaching/**2018_A/TP_GenetiqueEvol_2018/")
+# à ajuster si besoin!
+setwd("/home/ge-daniel/some_folder")
 
-### installer les packages nécessaires
-# si l'installation de packages échoue, ouvrez le programme R (pas RStudio) et procédéz avec l'installation des packages. Puis, retournez en RStudio.
-install.packages(c("vcfR", "ggplot2", "adegenet"))
+# L'installation n'est pas nécessaire!
+# install.packages(c("vcfR", "ggplot2", "adegenet"))
+
+# chargez les packages
 library(vcfR)
 library(adegenet)
 library(ggplot2)
@@ -115,22 +116,22 @@ as.matrix(allchr.snps)
 # en utilisant ces pièces d'information, créer un dataframe
 allchr.df <- data.frame(position = allchr.snps@position, chromosome = allchr.snps@chromosome, SNPid = allchr.snps@loc.names)
 # générer l'ordre correct des chromosomes
-allchr.df$chromosome <- factor(allchr.df$chromosome, levels = c(1:22, "X")) 
+allchr.df$chromosome <- factor(allchr.df$chromosome, levels = c(1:22, "X"))
 
 # Nombre de SNP inclut par chromosome
 SNP.per.chr <- as.data.frame(table(allchr.df$chromosome))
 qplot(x = allchr.df$chromosome, geom = "bar")
 ```
 
-Q4 (facultative): Calculez le nombre de SNP par megabases de chromosomes (i.e. densité). Est-ce que les chromosomes diffèrent en densité?  
+Q4 (optionnelle): Calculez le nombre de SNP par megabases de chromosomes (i.e. densité). Est-ce que les chromosomes diffèrent en densité?  
 [NB: l'information sur la taille des chromosomes humains est facilement accessible en ligne.]
 
-Q5: Quel est le génotype de l'individu "HG02334" à la première position du chromosome 2?
+Q5 (optionnelle): Quel est le génotype de l'individu "HG02334" à la première position du chromosome 2?
 
 
 ```
 # visualiser la densité des SNP
-ggplot(allchr.df, aes(x = position/1000000)) + geom_histogram(binwidth = 10) + 
+ggplot(allchr.df, aes(x = position/1000000)) + geom_histogram(binwidth = 10) +
   labs(x = "Position sur le chromosome (en Mb)", y = "Densité SNP") +
   scale_x_continuous(breaks = seq(0,1000,50)) +
   theme(panel.background = element_blank()) +
@@ -139,7 +140,7 @@ ggplot(allchr.df, aes(x = position/1000000)) + geom_histogram(binwidth = 10) +
 ggsave("SNPdensity.pdf", width = 20, height = 4)
 ```
 
-Q6: Cherchez une explication possible du pic principal de densité SNPs. 
+Q6: Discutez une explication possible du pic principal de densité des SNPs.
 
 ## Fréquences alléliques et allèles mineurs
 
@@ -213,13 +214,13 @@ pca.data$pop <- info.df$Population.name[match(row.names(pca.data), info.df$Sampl
 pca.data$region <- info.df$Superpopulation.name[match(indNames(allchr.snps), info.df$Sample.name)]
 
 ## visualisation de la structure
-ggplot(pca.data, aes(x = PC1, y = PC2, fill=region, color=region)) + 
+ggplot(pca.data, aes(x = PC1, y = PC2, fill=region, color=region)) +
   geom_point(size = 3, alpha = 0.5)
 
 ggsave("PCA_structure.pdf", width = 12, height = 10)
 
 ## visualisation de la structure, ajout de texte identifiant les populations
-ggplot(pca.data, aes(x = PC1, y = PC2, fill=region, color=region)) + 
+ggplot(pca.data, aes(x = PC1, y = PC2, fill=region, color=region)) +
   geom_point(size = 3, alpha = 0.5) +
   geom_text(aes(x = PC1, y = PC2, label = pop), size = 2)
 
@@ -230,7 +231,18 @@ Q11: Qu'est-ce que signifie le barplot?
 
 Q12: En visualisant les "super-populations" (régions) et puis les "populations", expliquez la structuration observée dans la PCA. En s'appuyant sur les voies de colonisations majeures, quelles sont les raisons probables du regroupement? Est-ce que vous trouvez des contradictions selon vos prédictions?
 
-Q13: Un petit nombre d'individus non-africains se trouvent très proche du cluster africain. Explications probables?
+NB: Pour correctement attribuer les couleurs selon les régions _ou_ populations, vous devez définir correctement la catégorie avec `pop()`.
+
+```
+# assignez les individus aux populations (Population)
+pop(allchr.snps) <- info.df$Population.name[match(indNames(allchr.snps), info.df$Sample.name)]
+
+# alternativement: aux continents/régions (Superpopulation)
+pop(allchr.snps) <- info.df$Superpopulation.name[match(indNames(allchr.snps), info.df$Sample.name)]
+```
+
+
+Q13: Un petit nombre d'individus non-africains se trouvent très proche du cluster africain. Explications probables selon votre avis?
 
 
 ## Analyse de F<sub>ST</sub> par paires de populations
@@ -238,9 +250,11 @@ Q13: Un petit nombre d'individus non-africains se trouvent très proche du clust
 Pour effectuer au plus simple une analyse de F<sub>ST</sub>, il faudra convertir le fichier `VCF` dans un objet `genind`.
 
 ```
-### installez les packages nécessaires
-# si l'installation de packages échoue, ouvrez le programme R (pas RStudio) et procédéz avec l'installation. Puis, retournez en RStudio.
-install.packages(c("hierfstat", "gplots", "RColorBrewer"))
+
+# L'installation n'est pas nécessaire!
+# install.packages(c("hierfstat", "gplots", "RColorBrewer"))
+
+# chargez les packages
 library(hierfstat)
 library(gplots)
 library(RColorBrewer)
@@ -268,13 +282,13 @@ allchr.snps.hs <- genind2hierfstat(allchr.snps.genind)
 
 # sélection de 100 loci (= rapide)
 fst <- pairwise.neifst(allchr.snps.hs[,1:100])
-# ALTERNATIVE: sélection de >1000 loci (précis mais lent!)
+# ALTERNATIVE: sélection de >1000 loci (plus précis mais plus lent)
 fst <- pairwise.neifst(allchr.snps.hs)
 
 rownames(fst) <- dimnames(fst)[[1]]
 colnames(fst) <- dimnames(fst)[[2]]
 
-# Changer l'ordre d'apparition des populations pour la visualisation
+# Optionnel: changer l'ordre d'apparition des populations pour la visualisation
 pop.order <- pop(allchr.snps.genind)
 unique(pop.order)
 
