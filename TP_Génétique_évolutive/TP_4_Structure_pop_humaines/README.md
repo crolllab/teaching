@@ -232,7 +232,7 @@ allchr.pc <- glPca(allchr.snps, nf = 2)
 # allchr.pc <- glPca(allchr.snps[,1:300], nf = 2)
 
 
-qplot(allchr.pc$eig[1:10])
+barplot(allchr.pc$eig[1:10])
 
 pca.data <- as.data.frame(allchr.pc$scores)
 
@@ -257,16 +257,6 @@ ggsave("PCA_structure_poptext.pdf", width = 12, height = 10)
 Q11: Qu'est-ce que signifie le barplot?
 
 Q12: En visualisant les "super-populations" (régions) et puis les "populations", expliquez la structuration observée dans la PCA. En s'appuyant sur les voies de colonisations majeures, quelles sont les raisons probables du regroupement? Est-ce que vous trouvez des contradictions selon vos prédictions?
-
-NB: Pour correctement attribuer les couleurs selon les régions _ou_ populations, vous devez définir correctement la catégorie avec `pop()` au préalable.
-
-```
-# assignez les individus aux populations (Population)
-pop(allchr.snps) <- info.df$Population.name[match(indNames(allchr.snps), info.df$Sample.name)]
-
-# alternativement: aux continents/régions (Superpopulation)
-pop(allchr.snps) <- info.df$Superpopulation.name[match(indNames(allchr.snps), info.df$Sample.name)]
-```
 
 
 Q13: Un petit nombre d'individus non-africains se trouvent très proche du cluster africain. Explications probables selon votre avis?
