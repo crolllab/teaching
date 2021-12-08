@@ -157,12 +157,21 @@ alt.allele.freq.pop <- glMean(allchr.snps[pop(allchr.snps) == population,])
 qplot(alt.allele.freq.pop, binwidth = 0.05)
 ```
 
-Q7: Modifier le code pour visualiser les fréquences d'allèles mineurs (MAF)
+Q7: Modifier le code pour visualiser les fréquences d'allèles mineurs (MAF).
+
+Proposition de solution (partielle):
+```
+alt.allele.freq <- glMean(allchr.snps)
+minor.allele.freq <- alt.allele.freq
+
+minor.allele.freq[minor.allele.freq > 0.5] <- 1-minor.allele.freq[minor.allele.fre
+ q > 0.5]
+```
 
 NB: Ce jeux de données est filtré pour éliminer les SNP avec allèles très rares (MAF < 0.05) pour des raisons pratiques (données trop volumineuses)
 
 
-Q8: Générer les plots pour deux populations que vous supposez de montrer un constraste au niveau des fréquences d'allèles mineurs (MAF). Comparer les distributions au niveau des populations avec la distribution au niveau global.
+Q8: Générer les plots pour deux populations que vous supposez de montrer un constraste au niveau des spectres de fréquences d'allèles mineurs (MAF). Décrivez brièvement (et verbalement) les différences au niveaux des spectres.
 
 
 ## Fréquences génotypiques
@@ -188,17 +197,31 @@ ggplot(heterozygosity.df, aes(x = reorder(population, -MeanHeterozygosity), y = 
 ggsave("Population_heterozygosity.pdf", width = 6, height = 4)
 ```
 
-Q9: Selon vos connaissances sur les voies de colonisation de l'homme, prédisez grossièrement les différences en taux d'hétérozygotie entre populations (1-2 phrases). Puis, comparez votre prédiction avec le graphique généré ci-dessus.
+Q9: Selon vos connaissances sur les voies de colonisation de l'humain, prédisez grossièrement les différences en taux d'hétérozygotie entre populations (1-2 phrases). Puis, comparez votre prédiction avec le graphique généré ci-dessus.
 
 Q10 (optionnelle): En utilisant la procédure ci-dessus, calculez l'hétérozygotie pour la population "British" par chromosome.
 
+
+Une variante pour répondre à la question:
+```
+heterozygosity.perSNP.perPOP.t <- as.data.frame(t(heterozygosity.perSNP.perPOP[,-1
+]))
+names(heterozygosity.perSNP.perPOP.t) <- heterozygosity.perSNP.perPOP[,1]
+heterozygosity.perSNP.perPOP.t$SNPid <- row.names(heterozygosity.perSNP.perPOP.t)
+heterozygosity.perSNP.perPOP.fullinfo <-  merge(heterozygosity.perSNP.perPOP.t, al
+lchr.df, by="SNPid")
+heterozygosity.perSNP.perPOP.fullinfo$chromosome <- factor(heterozygosity.perSNP.p
+erPOP.fullinfo$chromosome, levels = c(1:22, "X"))
+barplot(tapply(heterozygosity.perSNP.perPOP.fullinfo$British, INDEX = heterozygosi
+ty.perSNP.perPOP.fullinfo$chromosome, FUN = mean))
+```
 
 ## Analyse en composantes principales
 
 Voici le code pour visualiser le produit d'une analyse en composantes principales.
 
 ```
-# étape longue (5-10 minutes!)
+# étape longue (~5 minutes!)
 allchr.pc <- glPca(allchr.snps, nf = 2)
 
 # accélération: sélection des premiers 300 SNP mais vous perdez significativement en résolution!
@@ -231,7 +254,7 @@ Q11: Qu'est-ce que signifie le barplot?
 
 Q12: En visualisant les "super-populations" (régions) et puis les "populations", expliquez la structuration observée dans la PCA. En s'appuyant sur les voies de colonisations majeures, quelles sont les raisons probables du regroupement? Est-ce que vous trouvez des contradictions selon vos prédictions?
 
-NB: Pour correctement attribuer les couleurs selon les régions _ou_ populations, vous devez définir correctement la catégorie avec `pop()`.
+NB: Pour correctement attribuer les couleurs selon les régions _ou_ populations, vous devez définir correctement la catégorie avec `pop()` au préalable.
 
 ```
 # assignez les individus aux populations (Population)
