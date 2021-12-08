@@ -155,7 +155,8 @@ Une propriété importante d'une population est la distribution des fréquences 
 alt.allele.freq <- glMean(allchr.snps)
 
 # pour une population seulement
-population <- "Yoruba"   #population <- "Finnish"
+population <- "Yoruba"
+
 alt.allele.freq.pop <- glMean(allchr.snps[pop(allchr.snps) == population,])
 
 qplot(alt.allele.freq.pop, binwidth = 0.05)
@@ -168,8 +169,7 @@ Proposition de solution (partielle):
 alt.allele.freq <- glMean(allchr.snps)
 minor.allele.freq <- alt.allele.freq
 
-minor.allele.freq[minor.allele.freq > 0.5] <- 1-minor.allele.freq[minor.allele.fre
- q > 0.5]
+minor.allele.freq[minor.allele.freq > 0.5] <- 1-minor.allele.freq[minor.allele.freq > 0.5]
 ```
 
 NB: Ce jeux de données est filtré pour éliminer les SNP avec allèles très rares (MAF < 0.05) pour des raisons pratiques (données trop volumineuses)
