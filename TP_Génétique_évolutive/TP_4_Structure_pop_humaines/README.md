@@ -55,7 +55,7 @@ Le point de départ: Définissez votre espace de travail, téléchargez le fichi
 
 ```
 # à ajuster si besoin!
-setwd("/home/ge-daniel/some_folder")
+# setwd("/home/ge-daniel/some_folder")
 
 # obtenir les fichiers
 system("wget https://raw.githubusercontent.com/crolllab/teaching/master/TP_Génétique_évolutive/TP_4_Structure_pop_humaines/Human1000G.2000xSubsampled.MAF0.05.recode.vcf")
