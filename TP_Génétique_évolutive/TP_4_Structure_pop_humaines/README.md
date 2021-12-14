@@ -61,7 +61,7 @@ Le point de départ: Définissez votre espace de travail, téléchargez le fichi
 system("wget https://raw.githubusercontent.com/crolllab/teaching/master/TP_Génétique_évolutive/TP_4_Structure_pop_humaines/Human1000G.2000xSubsampled.MAF0.05.recode.vcf")
 system("wget https://raw.githubusercontent.com/crolllab/teaching/master/TP_Génétique_évolutive/TP_4_Structure_pop_humaines/Human1000G.info.txt")
 
-# L'installation n'est pas nécessaire!
+# L'installation n'est pas nécessaire si vous utilisez notre serveur
 # install.packages(c("vcfR", "ggplot2", "adegenet"))
 
 # chargez les packages
