@@ -119,7 +119,7 @@ Q6: Expliquez le pattern observé sur la PCA colorée en fonction de la généal
 
 ### Analyses de la différenciation entre populations par F<sub>ST</sub>
 
-Ci-dessous, nous adoptons le même code que dans le TP 4.
+Ci-dessous, nous adoptons le même code qu'au TP 4.
 
 ```
 library(hierfstat)
