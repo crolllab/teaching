@@ -181,16 +181,20 @@ head(stats.allchr.df[order(-stats.allchr.df$Fst),])
 locus <- "rs10270859"
 
 SNP.freq.table <- as.data.frame(pop.stats$pop.freq[locus])
-names(SNP.freq.table) <- c("allele", "population", "frequency")
+names(SNP.freq.table) <- unique(pop(allchr.snps.genind))
 
-SNP.freq.recast <- dcast(SNP.freq.table, population ~ allele)
-names(SNP.freq.recast)[2:3] <- c("REF", "ALT")
+# conversion en tableau "melted"
+RefSNP.freq.table <- melt(SNP.freq.table[1,], variable.name = "population", value.name = "ref_allele_frequency")
+
+# Aperçu du tableau créé
+RefSNP.freq.table
+
 
 # rajoutez l'information sur les régions
-SNP.freq.recast$region <- info.df$Superpopulation.name[match(SNP.freq.recast$population, info.df$Population.name)]
+RefSNP.freq.table$region <- info.df$Superpopulation.name[match(RefSNP.freq.table$population, info.df$Population.name)]
 
 # visualisation des fréquences
-ggplot(SNP.freq.recast, aes(x = reorder(population, REF), y = REF, fill = region)) +
+ggplot(RefSNP.freq.table, aes(x = reorder(population, ref_allele_frequency), y = ref_allele_frequency, fill = region)) +
   geom_bar(stat = "identity") +
   labs(x = "Population", y = "Reference allele frequency") +
   ggtitle(paste(locus)) +
