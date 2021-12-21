@@ -8,7 +8,7 @@
 
 - Comprendre les signatures principales de sélection au sein d'une espèce
 - Réflection sur la distinction entre les processus neutres et sélectifs
- 
+
 ### Concepts importants
 
 Référez-vous aux slides du cours "Génétique évolutive" si besoin.
@@ -37,7 +37,7 @@ Uniquement des tests applicables au sein d'une espèce sont notés ici.
 
 
 ![](./images/vcf1.png)
-  
+
 ![](./images/vcf2.png)  
 
 - Pour ces TPs, nous avons généré un sous-échantillonnage des SNPs (1 sur 2000) pour ne pas alourdir trop les analyses. Le fichier complet serait d'environ 1 TB. Le fichier préparé pour les TPs s'appelle `Human1000G.2000xSubsampled.MAF0.05.recode.vcf` (format VCF). Ce fichier est aussi filtré pour une fréquence allélique mineure (MAF) >0.05. Donc, les allèles rares n'y figurent plus!
@@ -60,12 +60,15 @@ Nous reprenons d'abord la fin des exercises de la dernière semaine. Chargez le 
 (Revenez aux TP4 si le code ci-dessous ne paraît pas assez clair.)
 
 ```
-# à ajuster!
-setwd("/Users/......")
+# à ajuster si besoin!
+# setwd("/home/ge-daniel/some_folder")
 
-### installer les packages nécessaires
-# si l'installation de packages échoue, ouvrez le programme R (pas RStudio) et procédéz avec l'installation des packages. Puis, retournez en RStudio.
-# install.packages(c("vcfR", "ggplot2", "adegenet", "hierfstat", "gplots", "RColorBrewer", "pegas", "reshape2"))
+# obtenir les fichiers
+system("wget https://raw.githubusercontent.com/crolllab/teaching/master/TP_Génétique_évolutive/TP_6_Selection_pop_humaines/Human1000G.2000xSubsampled.MAF0.05.recode.vcf")
+system("wget https://raw.githubusercontent.com/crolllab/teaching/master/TP_Génétique_évolutive/TP_6_Selection_pop_humaines/Human1000G.MCM6.vcf")
+system("wget https://raw.githubusercontent.com/crolllab/teaching/master/TP_Génétique_évolutive/TP_6_Selection_pop_humaines/Human1000G.info.txt")
+
+# chargez les packages
 library(vcfR)
 library(adegenet)
 library(ggplot2)
@@ -84,7 +87,7 @@ allchr.snps <- vcfR2genlight(vcf)
 # en utilisant ces pièces d'information, créer un dataframe
 allchr.df <- data.frame(position = allchr.snps@position, chromosome = allchr.snps@chromosome, SNPid = allchr.snps@loc.names)
 # générer l'ordre correct des chromosomes
-allchr.df$chromosome <- factor(allchr.df$chromosome, levels = c(1:22, "X")) 
+allchr.df$chromosome <- factor(allchr.df$chromosome, levels = c(1:22, "X"))
 
 # lire le fichier résumant l'information sur les populations
 info.df <- read.table("Human1000G.info.txt", header=T, sep="\t")
@@ -123,14 +126,14 @@ pop.stats.df$Superpopulation.name <- info.df$Superpopulation.name[match(pop.stat
 head(pop.stats.df)
 
 # visualisation du Fis à travers les populations
-ggplot(pop.stats.df, aes(y = Fis, x = reorder(Population.name, Fis), fill = Superpopulation.name)) + 
+ggplot(pop.stats.df, aes(y = Fis, x = reorder(Population.name, Fis), fill = Superpopulation.name)) +
   geom_bar(stat = "identity") + labs(x = "Populations") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ggsave("Fis_populations.pdf", width = 8, height = 7)
 ```
 
-Q1: Quelles sont les causes probables d'un F<sub>IS</sub> élevés chez certaines populations humaines? 
+Q1: Quelles sont les causes probables d'un F<sub>IS</sub> élevés chez certaines populations humaines?
 
 Q2: Est-ce que le niveau de consanguinité d'une population a un impact sur l'efficacité de la sélection de favoriser un allèle avantageux? Expliquez pourquoi oui ou non.
 
@@ -152,18 +155,18 @@ head(stats.allchr.df)
 ### Visualisation des valeurs F<sub>ST</sub> le long des chromosomes
 
 ```
-ggplot(stats.allchr.df[stats.allchr.df$chromosome %in% 1:5,], aes(x=position/1000000, y=Fst)) + 
+ggplot(stats.allchr.df[stats.allchr.df$chromosome %in% 1:5,], aes(x=position/1000000, y=Fst)) +
   geom_point() + geom_smooth(size = 1, span = 0.05) +
   coord_cartesian(ylim=c(0, 0.6)) +
   labs(x = "Position in Mb", y = "FST per locus") +
   facet_grid(chromosome ~ .)
 ggsave("Fst.per-locus.pdf", width = 12, height = 8)
 ```
-Visualisez la distribution des valeurs F<sub>ST</sub> le long des chromosomes 1-5. 
+Visualisez la distribution des valeurs F<sub>ST</sub> le long des chromosomes 1-5.
 
 Q5 (optionnelle): Quelle est la raison probables des grandes régions chromosomales sans SNP?
 
-Q6: Identifiez à l'oeil une ou plusieurs régions potentiellement sous sélection divergente (F<sub>ST</sub> élevé). Expliquez votre choix.
+Q6: Identifiez à l'oeil une ou plusieurs régions potentiellement sous sélection divergente (F<sub>ST</sub> élevé). Expliquez brièvement votre choix.
 
 
 ### Visualisation des fréquences alléliques à des loci avec un F<sub>ST</sub> extrême
@@ -187,9 +190,9 @@ names(SNP.freq.recast)[2:3] <- c("REF", "ALT")
 SNP.freq.recast$region <- info.df$Superpopulation.name[match(SNP.freq.recast$population, info.df$Population.name)]
 
 # visualisation des fréquences
-ggplot(SNP.freq.recast, aes(x = reorder(population, REF), y = REF, fill = region)) + 
+ggplot(SNP.freq.recast, aes(x = reorder(population, REF), y = REF, fill = region)) +
   geom_bar(stat = "identity") +
-  labs(x = "Population", y = "Reference allele frequency") + 
+  labs(x = "Population", y = "Reference allele frequency") +
   ggtitle(paste(locus)) +
   theme(axis.text = element_text(colour = "black"), axis.text.x = element_text(angle = 45, hjust = 1))
 
@@ -261,7 +264,7 @@ MCM6.subset <- MCM6.DNAbin[grepl(paste(selected.samples,collapse = "|"), labels(
 # identifiez les positions des SNP effectivement variables au sein de la population
 seg.sites(MCM6.subset)
 
-# visualisation des SNP variables et constants au sein d'une population donnée
+# visualisation de l'alignement SNP variables et constants au sein d'une population donnée
 pdf("MCM6_alignment_view.pdf", width=10, height=8)
 image.DNAbin(MCM6.subset, show.labels = F, xlab = "Number of SNPs in MCM6", ylab = "Individuals in population")
 dev.off()
@@ -272,7 +275,7 @@ freq.spectrum <- site.spectrum(MCM6.subset)
 n.ind <- nrow(MCM6.subset)
 
 # visualisation du spectre de fréquences alléliques
-qplot(freq.spectrum[freq.spectrum > 0] / n.ind, binwidth = 0.05) + 
+qplot(freq.spectrum[freq.spectrum > 0] / n.ind, binwidth = 0.05) +
   labs(x = "Allele frequency", y = "Number of SNPs") +
   ggtitle(paste(pop))
 ggsave(paste0("MCM6_frequency_spectrum_",pop,".pdf"), width=4, height=3)
@@ -296,7 +299,7 @@ for (pop in unique(info.df$Population.name)) {
 
 taj.df <- taj.df[!is.na(taj.df$tajima),]
 
-ggplot(taj.df, aes(x=reorder(pop, tajima), y=tajima, fill=region)) + 
+ggplot(taj.df, aes(x=reorder(pop, tajima), y=tajima, fill=region)) +
   geom_bar(stat = "identity") +
   labs(x="Populations", y="Tajima's D", legend = "NA") +
   theme(axis.text.x = element_text(angle = 60, hjust = 1), axis.text = element_text(color = "black"))
@@ -309,5 +312,3 @@ Q15 (optionnelle): Visualisez l'alignement des positions SNP au sein du gène *M
 Q16 (optionnelle): Sélectionnez trois populations parmi lesquelles vous soupçonnez de trouver un contraste au niveau du Tajima *D*. Visualisez les spectres de fréquences alléliques et discutez ce que vous observez. Quel type de sélection (ou neutralité) vous prédisez?
 
 Q17: Faites l'analyses des Tajima *D*. Discutez l'évidence pour la sélection de digérer la lactose à travers le monde. Est-ce que les régions avec un fort signal de sélection correspondent avec l'emergence de l'agriculture laitière?
-
-
