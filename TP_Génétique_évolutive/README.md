@@ -16,6 +16,10 @@ Les travaux pratiques comprendront toujours une introduction au sujet, puis des 
 
 Notre laboratoire peut vous fournir un accès à ses machines de calculs y inclut l'utilisation de RStudio dans un navigateur web. Nous préférons de vous fournir RStudio dans un navigateur web avec une connexion à distance au lieu de vous demander d'installer RStudio sur votre ordinateur. Ceci peut éviter certains problèmes d'installations de packages R.
 
+**Marche à suivre pour suivre à l'Unimail:**  
+- Connectez-vous au réseau wifi "unine" ou branchez votre ordinateur à une prise réseau activée.
+- Utilisez un navigateur web pour vous rendre sur le site suivant: [http://130.125.25.239:8787](http://130.125.25.239:8787)  
+
 **Marche à suivre pour suivre le cours en-ligne:**  
 - Connectez-vous par [Webaccess UNINE](https://webaccess.unine.ch)  
 - Naviguez par la suite dans le dossier "Logiciels VPN" pour télécharger un client VPN qui vous permettra de vous connecter au réseau UNINE. Il y a des versions pour Mac, Windows et Linux.  
@@ -25,43 +29,18 @@ Notre laboratoire peut vous fournir un accès à ses machines de calculs y inclu
 
 ![](./images/image_1.png)
 
-**Marche à suivre pour suivre à l'Unimail:**  
-- Connectez-vous au réseau wifi "unine".
-- Utilisez un navigateur web pour vous rendre sur le site suivant: [http://130.125.25.239:8787](http://130.125.25.239:8787)  
 
-- Votre "Username" est: ge-prénom (alors e.g. ge-daniel). Sans accent, tout en minuscule.
-- Votre "Password" est: tpgenevol   
+- Votre "Password" est: gen-evol
+- Votre nom d'utilisateur se trouve en bas (sans accent, tout en minuscule)
 
 ```
 # les noms d'utilisateurs exacts sont
-ge-sara
-ge-leen
-ge-sarai
-ge-jessica
-ge-carla
-ge-quentin
-ge-armand
-ge-ihssane
-ge-roxane
-ge-antonio
-ge-samuel
-ge-christophe
-ge-vithuna
-ge-lalya
-ge-anais
-ge-regine
-ge-loic
-ge-alois
-ge-foaad
-ge-celeste
-ge-jeremy
-ge-nuria
-ge-amy
+...
 ```
 
 - L'utilisation de RStudio sur notre serveur est identique à RStudio installé sur votre ordinateur sauf:
   - le dossier de travail ne devrait pas être modifié
-  - ignorer toute demande d'installer des packages lors du cours (`install.packages(...)`), procédez directement au chargement du package (`library(...)`)
+  - ignorer toute demande d'installer des packages lors du cours (`install.packages(...)`), procédez directement au chargement du package (`library(...)`). Demandez à votre assistante si un package semble être manquant.
   - par défaut, tout document enregistré va se trouver sur notre serveur
   - pour **transférer un document de votre ordinateur au serveur**: Identifiez le tab "Files" (en bas à droite de RStudio), cliquez sur "Upload" et puis "Choose File". Le fichier sera placé alors sur le serveur. Vous le trouverez sous "Files".
 
