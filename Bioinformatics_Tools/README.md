@@ -5,7 +5,7 @@ Prof. Daniel Croll, PD Dr. Nikolai Ivanov, assistants
 The course aims to make all participating students proficient in all basic areas of bioinformatics. We particularly focus on the needs of modern biology to treat large amounts of data and automate analyses procedures. The course is structured into lectures that introduce some key areas of bioinformatics followed by practicals on the computer to provide first hand experience. Lecturers and students will be available for ample discussions of tools and approaches. The content of this course includes the following topics: 1- Introduction to Unix and scripting 2- Sequencing analysis 3- Genome assembly 4- Phenotype-genotype associations 5- Epigenetics
 
 
-## How to access the "shell" for the exercises
+## How to access the "shell" and RStudio for the exercises
 
 Our lab offers for you the possibility to access RStudio Server. This allows you to use RStudio from a web browser whether you are in a computer room at UniMail or connect from home. RStudio provides you with
 
