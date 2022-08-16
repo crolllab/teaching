@@ -9,7 +9,7 @@ The course aims to make all participating students proficient in all basic areas
 
 Our lab offers for you the possibility to access RStudio Server. This allows you to use RStudio from a web browser whether you are in a computer room at UniMail or connect from home. RStudio provides you with
 
-**Following from home:**  
+**Following from home [currently not possible!]**  
 - Connect using [Webaccess UNINE](https://webaccess.unine.ch)  
 - Navigate to "Logiciels VPN" to download a VPN client (there are also iOS/Android options for tablets) & install it.
 - Launch a VPN connection.  
@@ -24,37 +24,7 @@ Our lab offers for you the possibility to access RStudio Server. This allows you
 # already active usernames are
 bt-daniel
 bt-nikolai
-bt-sarai
-bt-sara
-bt-sabina
-bt-alexandre
-bt-anne-sophie
-bt-anouchka
-bt-baptiste
-bt-clemence
-bt-corentin
-bt-daniel
-bt-david
-bt-diane
-bt-elsa
-bt-erwan
-bt-esteban
-bt-frederic
-bt-gaston
-bt-genevieve
-bt-guido
-bt-henri
-bt-jordan
-bt-justin
-bt-louis
-bt-manon
-bt-marco
-bt-roxane
-bt-sabina
-bt-sara
-bt-sarai
-bt-sebastien
-bt-teo
+
 ```
 
   - Anything you save while using RStudio is on the server.
