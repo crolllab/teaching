@@ -262,7 +262,7 @@ A Mu variant from North America.
 `esearch -db nucleotide -query "MZ727692.1" | efetch -format fasta > MZ727692.fasta`  
 `cat MZ727692.fasta >> SARS-CoV2.genome.nucl.fasta`  
 
-And Omicron variants BA.1, 2, 4, 5 and 2.75 (the latest in Sep 2022)
+And Omicron variants BA.1, 2, 4, 5 and 2.75 (the latest in Sep 2022)  
 `esearch -db nucleotide -query "OX315743.1" | efetch -format fasta > OX315743.fasta`  
 `cat OX315743.fasta >> SARS-CoV2.genome.nucl.fasta`  
 
