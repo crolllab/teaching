@@ -16,11 +16,9 @@ Please compile brief answers to the questions for your report ("Q1", "Q2", etc.)
 You can work alone or in groups. Every student should submit their own report through Moodle though. No copy-pasting, please. Formulate answers in your own words.
 
 
-## How to install software (the easy way)
+## How to install software (the easy & hard way)
 
 The first step in a bioinformatics project often includes installing software. Here's a quick overview how software or programs are added in a command line environment.
-
-![](./images/conda.png)  
 
 ### Where are last week's programs located?
 
@@ -44,13 +42,13 @@ _Q1: Copy the output of `echo $PATH` and say how many different bin folders are 
 
 ## How to install new programs - two recipies
 
-### 1.) Add a program to a `bin` folder
+### 1.) Add a program to a `bin` folder (the "hard way")
 
 The most basic approach is to find a compatible program (or binary) online and place it in any of the above discovered `bin` folders. You typically do not have the permission though to place a program in e.g. `/usr/bin`, but you could create your own `bin` directory in your home folder like this:
 
 ```
 # this changes your location to your home directory (if necessary)
-cd
+cd $HOME
 
 # create your own bin directory
 mkdir bin
@@ -130,18 +128,19 @@ _Q3: What is the output of `which bowtie2`? What does this mean?_
 We will not go any further with this approach here. Just remember that this exists as an option.
 
 
-### 2.) Use a helper program to install other programs
+### 2.) Use a helper program to install other programs (the "easy way")
+
+![](./images/conda.png)  
 
 Here we will make use of a program called `conda`. `conda` works a bit like a book library where (if the book exists) you can very easily get access to. An alternative to `conda` is called `brew`.
 
 To get started, we need to set up correctly `conda`.
 
-- First use `conda create -p $HOME/conda-env` to initialize conda in your user account. You see that we define a new directory inside your home folder for this. You only need to do this step once!
-- To start using conda type `conda activate $HOME/conda-env`. This will "activate" conda for you. This step needs to repeated whenever you log in.
+- Make sure you start in your user folder: `cd $HOME`
+- Use `conda create -p $HOME/conda-env` to initialize conda in your user account. You see that we define a new directory inside your home folder for this. You only need to do this step once!
+- To start using conda type `conda activate $HOME/conda-env`. This will "activate" conda for you. This step needs to be repeated whenever you log in (i.e. start using RStudio again or re-open the "Terminal").
 
-Let's install our first program.
-
-To obtain our proper version of BLAST (see the end of Course 1 for the online version), use this `conda` command:
+Let's install our first program: To obtain our proper version of BLAST (see the end of Course 1 for the online version), use this `conda` command:
 
 `conda install -c bioconda blast`
 
@@ -153,28 +152,31 @@ Check that we actually have now BLAST installed by typing:
 
 `blastp` (this is the protein BLAST).
 
-You see that the output starts with `BLAST query/options error: ...`. So, we have obviously not yet properly started the program or defined the correct files.
+You see that the output starts with `BLAST query/options error: ...`. So, we have obviously not yet properly started the program or defined the correct files. But we are sure that blast is installed. If the program were _not_ installed, we'd see `command not found` as an error message!
 
 _Q4: Where is `blastp` located?_
 
 
 ## Searching and retrieving sequences from the NCBI database
 
-Last week, you have downloaded a single file containing a few sequences of a single SARS-CoV-2 genome. The tutorial below shows you how to do this independently and directly from the NCBI website instead of our Github site.
+Last week, you have downloaded a single file containing a few sequences of a single SARS-CoV-2 genome. The tutorial below shows you how to do this directly from the NCBI website instead of our Github site.
 
 ### Installing a helper program for NCBI
 
 We will use the tool [Entrez Direct](https://www.ncbi.nlm.nih.gov/books/NBK179288/) for this.
 
-Start by installing it using conda. Don't forget to activate `conda` if necessary (see above). The code below installs Entrez Direct but also some additional tools that are required.
+Start by installing it using `conda`. Don't forget to activate `conda` if necessary (see above). The code below installs Entrez Direct but also some additional tools that are required.
 
 `conda install -c bioconda perl-io-socket-ssl perl-net-ssleay perl-lwp-protocol-https entrez-direct`
 
 You can check that you have installed it properly by typing:
 
-`esearch` and the answer should be `ERROR: Missing -db argument`. If you have not installed the program correctly, the error should read `...command not found...`
+`esearch` and the answer should be `ERROR: Missing -db argument`.
+
+(If you have not installed the program correctly, the error should read `command not found`)
 
 ![](./images/ncbi.png)  
+
 
 ### Retrieving a sequence with a known accession number
 
@@ -204,7 +206,7 @@ We can further extend the code above to not only display the sequence in the Ter
 
 `esearch -db protein -query QTW58946.1 | efetch -format fasta > QTW58946.1_protein.fasta`
 
-Use `ls` and `cat` to verify that all worked as expected.
+Use `ls` and `cat` to verify that all worked as expected (checking the files produced and their content)
 
 
 ## Search the NCBI database for many SARS-Cov-2 genome sequences.
@@ -256,11 +258,28 @@ A Gamma variant from South America.
 `esearch -db nucleotide -query "OK252993.1" | efetch -format fasta > OK252993.fasta`  
 `cat OK252993.fasta >> SARS-CoV2.genome.nucl.fasta`  
 
-And finally a Mu variant from North America.  
+A Mu variant from North America.  
 `esearch -db nucleotide -query "MZ727692.1" | efetch -format fasta > MZ727692.fasta`  
 `cat MZ727692.fasta >> SARS-CoV2.genome.nucl.fasta`  
 
-Our `SARS-CoV2.genome.nucl.fasta` should now contain the 500 sequences retrieved initially and the 5 variant sequences.
+And Omicron variants BA.1, 2, 4, 5 and 2.75 (the latest in Sep 2022)
+`esearch -db nucleotide -query "OX315743.1" | efetch -format fasta > OX315743.fasta`  
+`cat OX315743.fasta >> SARS-CoV2.genome.nucl.fasta`  
+
+`esearch -db nucleotide -query "OX315675.1" | efetch -format fasta > OX315675.fasta`  
+`cat OX315675.fasta >> SARS-CoV2.genome.nucl.fasta`  
+
+`esearch -db nucleotide -query "OP093374.1" | efetch -format fasta > OP093374.fasta`  
+`cat OP093374.fasta >> SARS-CoV2.genome.nucl.fasta`  
+
+`esearch -db nucleotide -query "OP164778.1" | efetch -format fasta > OP164778.fasta`  
+`cat OP164778.fasta >> SARS-CoV2.genome.nucl.fasta`  
+
+`esearch -db nucleotide -query "OP457109.1" | efetch -format fasta > OP457109.fasta`  
+`cat OP457109.fasta >> SARS-CoV2.genome.nucl.fasta`  
+
+
+Our `SARS-CoV2.genome.nucl.fasta` should now contain the 500 sequences retrieved initially and the 10 variant sequences.
 
 
 ## Generate a multiple sequence alignment and phylogenetic tree
@@ -360,6 +379,11 @@ tree.df[grepl("MW931310", tree.df$label),"new_label"] <- "Delta variant"
 tree.df[grepl("OU297363", tree.df$label),"new_label"] <- "Alpha variant"
 tree.df[grepl("OK252993", tree.df$label),"new_label"] <- "Gamma variant"
 tree.df[grepl("MZ727692", tree.df$label),"new_label"] <- "Mu variant"
+tree.df[grepl("OX315743", tree.df$label),"new_label"] <- "Omicron BA.1 variant"
+tree.df[grepl("OX315675", tree.df$label),"new_label"] <- "Omicron BA.2 variant"
+tree.df[grepl("OP093374", tree.df$label),"new_label"] <- "Omicron BA.4 variant"
+tree.df[grepl("OP164778", tree.df$label),"new_label"] <- "Omicron BA.5 variant"
+tree.df[grepl("OP457109", tree.df$label),"new_label"] <- "Omicron BA.2.75 variant"
 
 # replace the labels in the tree
 final.tree <- rename_taxa(tree.rooted, tree.df, label, new_label)
@@ -377,7 +401,11 @@ ggsave("SARS-CoV2_genomes_tree.pdf", height = 40, width = 12)
 
 _Q10: Paste the tree in your report and briefly describe what you see. To what variant belong most of your sequences most likely?_
 
-For a much more thorough phylogenetic analysis, please head to the excellent [Nextstrain website](https://nextstrain.org/ncov/open/global).
+_Q11: [covariants.org](https://covariants.org) provides a great way to track waves of different SARS-CoV2 variants. What is the currently prevalent variant in Switzerland?_
+
+![](./images/covariants.png)  
+
+To explore much more data, you can head to the excellent [Nextstrain website](https://nextstrain.org/ncov/open/global).
 
 ![](./images/nextstrain.png)  
 
