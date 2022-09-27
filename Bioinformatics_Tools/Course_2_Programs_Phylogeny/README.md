@@ -440,7 +440,9 @@ Next, we use an online tool to help us visualize the different sequences.
 ![](./images/msa.png)  
 
 
-To explore much more data, you can head to the excellent [Nextstrain website](https://nextstrain.org/ncov/open/global).
+## To explore much more SARS-CoV2 data, you can head to Nextstrain
+
+[Nextstrain website](https://nextstrain.org/ncov/open/global).
 
 ![](./images/nextstrain.png)  
 
