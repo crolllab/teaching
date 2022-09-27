@@ -225,7 +225,7 @@ Let's make sure you work in your
 (you can obviously also choose to work in a different folder, but be aware that 1-2 lines of code below may need tweaking)
 
 We start with making sure conda is active.
-`conda activate $HOME/conda-env`
+`conda activate $HOME/conda-sars`
 
 Now we want to search not for a single sequence (or accession) but for all sequences of the SARS-CoV-2 virus.
 
