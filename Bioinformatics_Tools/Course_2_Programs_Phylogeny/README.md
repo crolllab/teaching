@@ -360,9 +360,6 @@ library("Biostrings")
 library("ggplot2")
 library("ggtree")
 library(treeio)
-library("ggmsa")
-
-
 
 # load the tree file
 tree <- read.tree("RAxML_bestTree.SARS-CoV2.genome")
@@ -404,6 +401,44 @@ _Q10: Paste the tree in your report and briefly describe what you see. To what v
 _Q11: [covariants.org](https://covariants.org) provides a great way to track waves of different SARS-CoV2 variants. What is the currently prevalent variant in Switzerland?_
 
 ![](./images/covariants.png)  
+
+_Q12 (optional): Provide an overview of the differences among different SARS-CoV2 variant sequences using a sequence alignment_
+
+Let's start by reworking our sequences from the different variants. We want to replace the lengthy sequence name with our much shorter name used above. For this, we use the command `sed` that can search for patterns. We search for the "name" of the sequence looking for the `>` sign and replace it with our own naming.
+
+```
+sed -i 's/>.*/>Wuhan_China/' LR757998.fasta
+sed -i 's/>.*/>Delta_variant/' MW931310.fasta
+sed -i 's/>.*/>Alpha_variant/' OU297363.fasta
+sed -i 's/>.*/>Gamma_variant/' OK252993.fasta
+sed -i 's/>.*/>Mu_variant/' MZ727692.fasta
+sed -i 's/>.*/>Omicron_BA.1_variant/' OX315743.fasta
+sed -i 's/>.*/>Omicron_BA.2_variant/' OX315675.fasta
+sed -i 's/>.*/>Omicron_BA.4_variant/' OP093374.fasta
+sed -i 's/>.*/>Omicron_BA.5_variant/' OP164778.fasta
+sed -i 's/>.*/>Omicron_BA.2.75_variant/' OP457109.fasta
+```
+
+We have to produce again the sequence alignment and clipping.
+
+```
+# Combine just the variant sequences
+cat LR757998.fasta MW931310.fasta  OU297363.fasta  OK252993.fasta  MZ727692.fasta  OX315743.fasta  OX315675.fasta  OP093374.fasta  OP164778.fasta  OP457109.fasta > SARS-CoV2.genome.nucl.variants.fasta
+
+# Perform the alignment and clipping
+mafft --auto --thread 10 SARS-CoV2.genome.nucl.variants.fasta > SARS-CoV2.genome.nucl.variants.mafft.fasta
+clipkit SARS-CoV2.genome.nucl.variants.mafft.fasta -m smart-gap
+```
+
+
+Next, we use an online tool to help us visualize the different sequences.
+
+- Download the `SARS-CoV2.genome.nucl.variants.mafft.fasta.clipkit` to your PC. Select the file in the "File" viewer and click on "More" -> "Export"
+- Open the website of the [alignment viewer](https://www.ebi.ac.uk/Tools/msa/mview/) from EMBL-EBI. Choose "DNA" as input and select your own sequence file.
+- After 1' or so, you should be able to explore the alignment of the different variant sequences.
+
+![](./images/msa.png)  
+
 
 To explore much more data, you can head to the excellent [Nextstrain website](https://nextstrain.org/ncov/open/global).
 
