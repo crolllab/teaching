@@ -165,9 +165,16 @@ Last week, you have downloaded a single file containing a few sequences of a sin
 
 We will use the tool [Entrez Direct](https://www.ncbi.nlm.nih.gov/books/NBK179288/) for this.
 
-Start by installing it using `conda`. Don't forget to activate `conda` if necessary (see above). The code below installs Entrez Direct but also some additional tools that are required.
+Start by installing it using `conda`.
 
-`conda install -c bioconda perl-io-socket-ssl perl-net-ssleay perl-lwp-protocol-https entrez-direct`
+_We will create and activate a clean environment to avoid errors!_
+
+```
+conda create -p $HOME/conda-sars
+conda activate $HOME/conda-sars
+
+conda install -c bioconda perl-io-socket-ssl perl-net-ssleay perl-lwp-protocol-https entrez-direct
+```
 
 You can check that you have installed it properly by typing:
 
