@@ -342,11 +342,11 @@ Have a look at this file using `head`. You see now how a tree is encoded in a si
 
 Note: If you decide to re-run RAxML, you must delete the output files first. As ours start with `RAxML...`, we can use `rm RAxML_*`
 
-## Use the R package `ggtree` to visualize our SARS-Cov2 tree
+## Use the R package `ggtree` to visualize our SARS-Cov2 dataset
 
 We need to now switch tabs from "Terminal" to "Console". With this we stay though on the server and can access all files.
 
-Here follows the R code to visualize the tree.
+Here follows the R code to visualize the sequence alignment and tree.
 
 ```
 ### R code
@@ -360,6 +360,9 @@ library("Biostrings")
 library("ggplot2")
 library("ggtree")
 library(treeio)
+library("ggmsa")
+
+
 
 # load the tree file
 tree <- read.tree("RAxML_bestTree.SARS-CoV2.genome")
