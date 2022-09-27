@@ -370,9 +370,6 @@ tree.rooted <- root(tree, outgroup = "LR757998.1")
 # modify tree tip labels to show only variant names
 tree.df <- data.frame(label = tree.rooted$tip.label)
 
-# start with an empty new label
-tree.df$new_label <- ""
-
 # for each specific variant sequence, set a label
 tree.df[grepl("LR757998", tree.df$label),"new_label"] <- "Wuhan, China"
 tree.df[grepl("MW931310", tree.df$label),"new_label"] <- "Delta variant"
