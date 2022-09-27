@@ -402,7 +402,7 @@ _Q11: [covariants.org](https://covariants.org) provides a great way to track wav
 
 ![](./images/covariants.png)  
 
-_Q12 (optional): Provide an overview of the differences among different SARS-CoV2 variant sequences using a sequence alignment_
+_Q12 (optional!): Get an overview of the differences among SARS-CoV2 variant sequences using a sequence alignment_
 
 Let's start by reworking our sequences from the different variants. We want to replace the lengthy sequence name with our much shorter name used above. For this, we use the command `sed` that can search for patterns. We search for the "name" of the sequence looking for the `>` sign and replace it with our own naming.
 
