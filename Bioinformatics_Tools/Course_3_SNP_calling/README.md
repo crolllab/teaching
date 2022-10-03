@@ -17,9 +17,9 @@ You can work alone or in groups. Every student should submit their own report th
 
 Conda helps you install bioinformatics software easily.
 
-1.) At first use, run `conda create -p $HOME/conda-env` to create an environment for conda to run in the folder `conda-env`. The folder name can be chosen freely.
+1.) At first use, run `conda create -p $HOME/conda-ibex` to create an environment for conda to run in the folder `conda-ibex`. The folder name can be chosen freely.
 
-2.) Every time you open a new terminal window: `conda activate $HOME/conda-env`
+2.) Every time you open a new terminal window: `conda activate $HOME/conda-ibex`
 
 3.) Install software like this `conda install -c bioconda vcftools` (`-c bioconda` helps conda to search in the right place but is not strictly necessary)
 
@@ -54,7 +54,7 @@ The first line below brings you to your home folder. You can choose a different 
 
 ```
 cd
-conda activate $HOME/conda-env
+conda activate $HOME/conda-ibex
 conda install -c bioconda sra-tools
 ```
 
