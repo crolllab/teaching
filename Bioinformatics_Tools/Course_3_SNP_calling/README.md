@@ -150,7 +150,7 @@ GTATTCTATCTTATGTATATCTATCTTCTAT
 ```
 
 Here's a glimpse at the `fastq` files:
-`zcat SRR6649845_1.fastq.gz|head`
+`zcat SRR6649845.subset.fastq.gz|head`
 
 _Q6: Explain the basic features of this format (using Google)_
 
