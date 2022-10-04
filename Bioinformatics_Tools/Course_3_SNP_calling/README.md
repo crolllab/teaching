@@ -64,6 +64,8 @@ We analyze 9 Alpine ibex individuals with each having a single dataset available
 
 To download the first dataset, we can use the the `sra-tools` command `fastq-dump`:
 
+# IMPORTANT `fastq-dump` does currently NOT work, please skip this.
+
 `fastq-dump --split-files --gzip SRR6649845`
 
 _Q3: What is the name of the ibex individual? Use the [NCBI SRA website](https://www.ncbi.nlm.nih.gov/sra) to search for the accession number. Hint: the individual name is under "Library" -> "Name"_
@@ -103,6 +105,8 @@ There are many more useful kinds of loops with either `for` or `while`.
 
 ### Download all Alpine ibex dataset in a loop
 
+# IMPORTANT `fastq-dump` does currently NOT work, please skip this.
+
 We specify all accession numbers to be downloaded in the loop. The code below will run for a few minutes.
 
 ```
@@ -113,6 +117,14 @@ done
 ```
 
 `fastq-dump` is our command to access and download the sequencing data. `split-files` means to create two files corresponding to the paired reads of the sequencing run.
+
+# ALTERNATIVE to `fastq-dump`
+
+Download the ready files from github
+```
+wget
+unzip
+```
 
 _Q4: What is paired-end versus single-end sequencing?_
 
@@ -165,7 +177,7 @@ REFGENOME=/home/genomes/fasta/Capra_hircus.ARS1.dna.toplevel
 for i in SRR6649845 SRR6649843 SRR6649850 SRR6649844 SRR6649848 SRR6649849 SRR6649851 SRR6649847 SRR6649846
 do
 # bowtie2 with all the required options
-bowtie2 -x $REFGENOME -p 16 --rg-id $i --rg SM:$i -1 ${i}_1.fastq.gz -2 ${i}_2.fastq.gz | samtools view -bS - | samtools sort -o $i.sorted.bam
+bowtie2 -x $REFGENOME -p 16 --rg-id $i --rg SM:$i -U ${i}.subset.fastq.gz | samtools view -bS - | samtools sort -o $i.sorted.bam
 # create an index of the bam file
 samtools index $i.sorted.bam
 done
