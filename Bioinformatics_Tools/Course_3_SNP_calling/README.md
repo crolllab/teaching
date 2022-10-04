@@ -174,7 +174,7 @@ Install the missing tools
 `conda install -c bioconda bowtie2 freebayes vcftools`
 
 
-The code below will run for a few minutes.
+The code below will run for a few minutes!
 
 ```
 # we define a variable to shorten the long path
@@ -204,7 +204,7 @@ _Q8: Use Google to have a look what the SAM alignment format contains. Mention t
 
 ### Calling SNPs based on the aligned reads
 
-Freebayes is a single step SNP caller to identify polymorphic sites. The code below will run for a few minutes.
+Freebayes is a single step SNP caller to identify polymorphic sites. The code below will run for a few minutes!
 
 ```
 REFGENOME=/home/genomes/fasta/Capra_hircus.ARS1.dna.toplevel
