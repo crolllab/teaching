@@ -286,7 +286,7 @@ ggplot(pca.data, aes(x = PC1, y = PC2, fill=pop, color=pop)) +
 ggsave("PCA_Alpine_ibex.pdf", width = 10, height = 8)
 ```
 
-_Q11: Include the PCA graph and briefly state whether the two populations in the Valais (Weisshorn) and Grisons (Albris) are clearly separated genetically._
+_Q11: Include the PCA graph and briefly state whether the two populations in the Valais (Weisshorn) and Grisons (Albris) appear separated genetically._
 
 ---
 
