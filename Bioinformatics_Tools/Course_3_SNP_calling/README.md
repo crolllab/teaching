@@ -122,8 +122,15 @@ done
 
 Download the ready files from github
 ```
-wget
-unzip
+wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_3_SNP_calling/dataset/SRR6649843.subset.fastq.gz
+wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_3_SNP_calling/dataset/SRR6649844.subset.fastq.gz
+wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_3_SNP_calling/dataset/SRR6649845.subset.fastq.gz
+wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_3_SNP_calling/dataset/SRR6649846.subset.fastq.gz
+wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_3_SNP_calling/dataset/SRR6649847.subset.fastq.gz
+wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_3_SNP_calling/dataset/SRR6649848.subset.fastq.gz
+wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_3_SNP_calling/dataset/SRR6649849.subset.fastq.gz
+wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_3_SNP_calling/dataset/SRR6649850.subset.fastq.gz
+wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_3_SNP_calling/dataset/SRR6649851.subset.fastq.gz
 ```
 
 _Q4: What is paired-end versus single-end sequencing?_
