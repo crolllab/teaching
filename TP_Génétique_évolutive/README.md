@@ -16,29 +16,14 @@ Les travaux pratiques comprendront toujours une introduction au sujet, puis des 
 
 Notre laboratoire peut vous fournir un accès à ses machines de calculs y inclut l'utilisation de RStudio dans un navigateur web. Nous préférons de vous fournir RStudio dans un navigateur web avec une connexion à distance au lieu de vous demander d'installer RStudio sur votre ordinateur. Ceci peut éviter certains problèmes d'installations de packages R.
 
-**août 2022: Suite aux attaques informatiques début 2022, seul l'accès par un PC dans les salles informatiques est possible**
+**Suite aux attaques informatiques début 2022, seul l'accès décrit sur Moodle "Introduction TP"
+ou par un PC dans les salles informatiques est possible**
 
-**Marche à suivre pour suivre à l'Unimail:**  
-- Connectez-vous au réseau wifi "unine" ou branchez votre ordinateur à une prise réseau activée.
-- Utilisez un navigateur web pour vous rendre sur le site suivant: [http://130.125.25.239:8787](http://130.125.25.239:8787)  
-
-**Marche à suivre pour suivre le cours en-ligne:**  
-- Connectez-vous par [Webaccess UNINE](https://webaccess.unine.ch)  
-- Naviguez par la suite dans le dossier "Logiciels VPN" pour télécharger un client VPN qui vous permettra de vous connecter au réseau UNINE. Il y a des versions pour Mac, Windows et Linux.  
-- Installez le logiciel VPN.  
-- Lancez le logiciel en fournissant votre login UNINE.  
-- Si la connexion est bien établie, utilisez un navigateur web pour vous rendre sur le site suivant: [http://130.125.25.239:8787](http://130.125.25.239:8787)  
+**Marche à suivre:**  
+- Suivez les instructions sur le Moodle "Introduction TP"
 
 ![](./images/image_1.png)
 
-
-- Votre "Password" est: gen-evol
-- Votre nom d'utilisateur se trouve en bas (sans accent, tout en minuscule)
-
-```
-# les noms d'utilisateurs exacts sont
-...
-```
 
 - L'utilisation de RStudio sur notre serveur est identique à RStudio installé sur votre ordinateur sauf:
   - le dossier de travail ne devrait pas être modifié
