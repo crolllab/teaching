@@ -39,20 +39,3 @@ ou par un PC dans les salles informatiques est possible**
 ![](./images/image_4.png)  
 
   - Cette méthode vous permettra aussi de récupérer votre script R enregistré sur le serveur.
-
-
-## Mode d'évaluation
-
-Référez-vous à IS-Academia pour plus de détails.
-
-### TP 1 Introduction à R
-
-Aucune évaluation
-
-### TP 2-6
-
-Document à rendre le jour par Moodle (ou selon l'accord avec l'enseignant) donnant les réponses aux questions (Q1...Qn). Merci de nommer votre document Nom_Prenom.
-
-Répondez à chaque question de manière succincte (1-3 phrases sont souvent suffisantes). Si vous êtes obligés d'écrire du code ou générer des graphiques, les deux devraient en principe figurer dans le document.
-
-Je m'attends à un effort correspondant aux heures des travaux pratiques et pas plus. Donc, si vous rencontrez des difficultés particulières sans résolution simple (installation des packages, etc.), il suffit de brièvement documenter les problèmes dans votre rapport.
