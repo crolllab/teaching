@@ -158,29 +158,28 @@ myGAPIT <- GAPIT(
 The GAPIT3 GWAS package produces a large number of output files. Here's the output for the phenotype "GDDAnthesis.SilkingInterval".
 
 ```
-GAPIT.Heterozygosity.pdf
-GAPIT.Kin.VanRaden.csv
-GAPIT.Kin.VanRaden.pdf
-GAPIT.Marker.Density.pdf
-GAPIT.Marker.LD.pdf
-GAPIT.MLM.GDDAnthesis.SilkingInterval.Df.tValue.StdErr.csv
-GAPIT.MLM.GDDAnthesis.SilkingInterval.GWAS.Results.csv
-GAPIT.MLM.GDDAnthesis.SilkingInterval.Log.csv
-GAPIT.MLM.GDDAnthesis.SilkingInterval.MAF.pdf
-GAPIT.MLM.GDDAnthesis.SilkingInterval.Manhattan.Plot.Chromosomewise.pdf
-GAPIT.MLM.GDDAnthesis.SilkingInterval.Manhattan.Plot.Genomewise.pdf
-GAPIT.MLM.GDDAnthesis.SilkingInterval.Optimum.pdf
-GAPIT.MLM.GDDAnthesis.SilkingInterval.phenotype_view.pdf
-GAPIT.MLM.GDDAnthesis.SilkingInterval.PRED.csv
-GAPIT.MLM.GDDAnthesis.SilkingInterval.QQ-Plot.pdf
-GAPIT.MLM.GDDAnthesis.SilkingInterval.ROC.csv
-GAPIT.MLM.GDDAnthesis.SilkingInterval.ROC.pdf
-GAPIT.PCA.2D.pdf
-GAPIT.PCA.3D.pdf
-GAPIT.PCA.csv
-GAPIT.PCA.eigenValue.pdf
-GAPIT.PCA.eigenvalues.csv
-GAPIT.PCA.loadings.csv
+GAPIT.Phenotype.View.GDDAnthesis.SilkingInterval.pdf
+GAPIT.Genotype.PCA.csv
+GAPIT.Genotype.PCA_eigenvalues.csv
+GAPIT.Genotype.PCA_eigenValue.pdf
+GAPIT.Genotype.PCA_3D.pdf
+GAPIT.Genotype.PCA_2D.pdf
+GAPIT.Genotype.MAF_Heterozosity.pdf
+GAPIT.Genotype.Kin_Zhang.pdf
+GAPIT.Genotype.Kin_Zhang.csv
+GAPIT.Genotype.Frequency.pdf
+GAPIT.Genotype.Density_R_sqaure.pdf
+GAPIT.Association.QQ.MLM.GDDAnthesis.SilkingInterval.pdf
+GAPIT.Association.Pred.MLM.GDDAnthesis.SilkingInterval.csv
+GAPIT.Association.Optimum.MLM.GDDAnthesis.SilkingInterval.pdf
+GAPIT.Association.Manhattans_Symphysic.pdf
+GAPIT.Association.Manhattans_Symphysic_Traitsnames.csv
+GAPIT.Association.Manhattans_Symphysic_Legend.pdf
+GAPIT.Association.Manhattan_Geno.MLM.GDDAnthesis.SilkingInterval.pdf
+GAPIT.Association.Manhattan_Chro.MLM.GDDAnthesis.SilkingInterval.pdf
+GAPIT.Association.GWAS_StdErr.MLM.GDDAnthesis.SilkingInterval.csv
+GAPIT.Association.GWAS_Results.MLM.GDDAnthesis.SilkingInterval.csv
+GAPIT.Association.Filter_GWAS_results.csv
 ```
 
 Some information about this trait:
@@ -191,24 +190,29 @@ Some information about this trait:
 
 Use the "Files" tab on the right to click on the following files.
 
-- `GAPIT.PCA.2D.pdf`
-- `GAPIT.Kin.VanRaden.pdf`
-- `GAPIT.MLM.GDDAnthesis.SilkingInterval.Manhattan.Plot.Genomewise.pdf`
+- `GAPIT.Genotype.PCA_2D.pdf`
+- `GAPIT.Genotype.Kin_Zhang.pdf`
+- `GAPIT.Association.Manhattan_Geno.MLM.GDDAnthesis.SilkingInterval.pdf`
 
 _Q5: Try to find out what each file represents and very briefly describe what you see. Hint: "Kin" stands for kinship._
 
-The full statistics outcome of the GWAS is in the file `GAPIT.MLM.GDDAnthesis.SilkingInterval.GWAS.Results.csv`. This file reports for every SNP in the dataset the association with the analyzed trait.
+The full statistics outcome of the GWAS is in the file `GAPIT.Association.GWAS_Results.MLM.GDDAnthesis.SilkingInterval.csv`. This file reports for every SNP in the dataset the association with the analyzed trait.
 
-Let's use R to identify the SNP showing the most significant association with the phenotype. You can graphically identify this SNP also by opening the file `GAPIT.MLM.GDDAnthesis.SilkingInterval.Manhattan.Plot.Genomewise.pdf` (see above).
+Let's use R to identify the SNP showing the most significant association with the phenotype. You can graphically identify this SNP also by opening the file `GAPIT.Association.Manhattan_Geno.MLM.GDDAnthesis.SilkingInterval.pdf` (see above).
 
 ```
 # In R "Console"
+library(dplyr)
 
-GWAS.df <- read.csv("GAPIT.MLM.GDDAnthesis.SilkingInterval.GWAS.Results.csv", header = T)
+GWAS.df <- read.csv("GAPIT.Association.GWAS_Results.MLM.GDDAnthesis.SilkingInterval.csv", header = T)
 
-# The file is already sorted by p-value. Let's check the most significant SNPs at the top of the file.
+# The file is sorted chromosome and position. Let's check the first SNPs at the top of the file.
 head(GWAS.df)
+
+# Check the most significant SNPs (e.g. top 20)
+GWAS.df %>% arrange(P.value) %>% head(20)
 ```
+
 
 _Q6: What's the the position (Chromosome + Position) of the most significant SNP?_
 
