@@ -123,7 +123,7 @@ Q5: Utilisez une boucle (voir TP 1) pour enchaîner les deux fonctions ci-dessus
 
 ## L'impact de la sélection sur les fréquences génotypiques (et alléliques)
 
-Ci-dessus, nous avons créé un petit modèle qui nous re-calcule les fréquences génotypiques et alléliques à chaque génération. La sélection peut être intégrée au niveau des génotypes produits à partir des fréquences alléliques. Le but est alors de modifier chaque fréquence génotypique en fonction de sa valeur sélective s (ou fitness).
+Ci-dessus, nous avons créé un petit modèle qui nous re-calcule les fréquences génotypiques et alléliques à chaque génération. La sélection peut être intégrée au niveau des génotypes produits à partir des fréquences alléliques. Le but est alors de modifier chaque fréquence génotypique en fonction de sa valeur sélective w (ou fitness).
 
 Q6 (optionnelle): Cherchez dans le cours de génétique évolutive les définitions de la valeur sélective s et le coefficient de dominance h.
 
