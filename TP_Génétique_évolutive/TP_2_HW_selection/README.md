@@ -78,7 +78,7 @@ genotypes.count <- c(3, 9, 50) # alors 3 génotypes d'AA, 9 Aa et 50 aa
 genotypes <- genotypes.count / sum(genotypes.count)
 ```
 
-### Fonction 1: calcul de fréquences alléliques
+### Fonction 1: Calcul des fréquences alléliques
 
 Cette fonction prend comme variable le vecteur des fréquences génotypiques et retourne les fréquences alléliques (p: A; q: a). Dans le contexte d'une population, nous pouvons estimer la fréquence des gamètes (haploïdes) A et a produits par la génération des parents ayant les génotypes spécifiés.
 
