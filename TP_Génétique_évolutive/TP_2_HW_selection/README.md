@@ -234,6 +234,6 @@ ggplot(results.m.df[results.m.df$type == "allele.A",], aes(x = generation, y = f
   labs(title = paste("Population size", n))
 ```
 
-Q10: Intégrez la collecte des données avec `results.df` dans votre boucle simulant l'impact de la sélection (Q8). Explorez l'impact du `s`, `h` et les fréquences génotypiques au départ sur l'évolution.
+Q10: Intégrez la collection des données avec `results.df` dans votre boucle simulant l'impact de la sélection (Q8). Explorez l'impact du `s`, `h` et les fréquences génotypiques au départ sur l'évolution.
 
 ![](./images/Simulating_selection.png)
