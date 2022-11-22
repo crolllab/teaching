@@ -74,7 +74,7 @@ Nous simplifions les calculs en représentant l'allèle A étant `1` et l'allèl
 `sample(0:1, 2, c(q, p), replace = T)`
 
 
-Q2: Générez 500 combinaisons d'allèles (= génotypes) sans utiliser une boucle (voir `replicate()` en haut). Résumez les génotypes en faisant la somme des codes utilisés pour les allèles. Allèle A étant `1` et l'allèle a étant `0`.
+Q2: Générez 500 combinaisons d'allèles (= génotypes) sans utiliser une boucle (voir `replicate()` en haut). Résumez les génotypes en faisant la somme des codes (0/1) utilisés pour les allèles. Allèle A étant `1` et l'allèle a étant `0`.
 
 
 Q3 (optionnelle): Résumez les génotypes produits ci-dessus sous la forme `genotypes <- c(40, 20, 10) # pour AA, Aa, aa` adoptée pour le TP 2.
@@ -82,9 +82,9 @@ Q3 (optionnelle): Résumez les génotypes produits ci-dessus sous la forme `geno
 Solution proposée pour Q3
 
 ```
-# définir les variables pour faire un exemple
+# définir les variable
 p <- 0.2    # allèle A
-q <- 1 - p  # allèle a
+q <- 1-p    # allèle a
 n <- 500
 
 # tirage au sort de combinaisons d'allèles (= génotypes)
@@ -108,10 +108,10 @@ Q4: Ecrivez une fonction analogue à `get.Progeny.GenoFreq(alleles)` (voir TP 2)
 Q5: Reprenez le code proposé dans le corrigé TP 2 pour Q10 (ou votre version code). Enlevez la partie du code qui intègre la sélection et rajoutez le code pour implémenter la dérive génétique. Enregistrez un `results.df` comme proposé la dernière fois.
 
 
-Q6: Réutilisez le code de la fin des TP 2 pour visualiser `results.df`. Etudiez l'impact d'une taille de population `n` variable dans des graphes séparés (ou conjoints). Essayez alternativement de visualiser uniquement les fréquences alléliques (e.g. pA) pour simplifier la présentation.
+Q6: Réutilisez le code servant à visualiser `results.df` (TP 2). Etudiez l'impact d'une taille de population `n` variable dans des graphes séparés (ou conjoints). Suggestion: visualisez uniquement une fréquence allélique (e.g. pA) pour simplifier la présentation.
 
 
-Q7: Intégrez votre modèle de sélection (TP2 et corrigé) et le modèle de dérive génétique (ce TP) dans une seule boucle. Faites une décision sur la séquence des trois étapes (e.g. production des gamètes, dérive génétique, sélection). Vérifiez bien que vous êtes consistent dans l'utilisation des variables (e.g. toujours `alleles` et `genotypes`).
+Q7: Intégrez votre modèle de sélection (TP2 ou corrigé) et le modèle de dérive génétique (ce TP) dans une seule boucle. Décidez sur la séquence des trois étapes (e.g. production des gamètes, dérive génétique, sélection). Vérifiez bien que vous êtes consistent dans l'utilisation des variables (e.g. toujours `alleles` et `genotypes`).
 
 
-Q8: Identifiez grossièrement des conditions limites (soit pour _n_ ou _s_) où la dérive génétique prend le dessus sur la sélection et domine l'évolution des fréquences alléliques.
+Q8 (optionnelle): Identifiez grossièrement des conditions limites (soit pour _n_ ou _s_) où la dérive génétique prend le dessus sur la sélection et domine fortement l'évolution des fréquences alléliques.
