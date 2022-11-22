@@ -62,9 +62,13 @@ Nous pouvons utiliser cette observation pour mieux comprendre l'impact de la dé
 
 Nous voulons maintenant introduire la dérive génétique au niveau de la production des zygotes. Au lieu de déterminer les fréquences génotypiques selon la loi de Hardy-Weinberg (voir TP 2), nous allons tirer au hasard des allèles `A` et `a` du pool des gamètes pour former des génotypes `AA`, `Aa` et `aa`.
 
-Définissons les fréquences alléliques
-`p <- 0.2`    # allèle A
-`q <- 1 - p`  # allèle a
+![](./images/cycle.png)
+
+Définissons les fréquences alléliques  
+```
+p <- 0.2    # allèle A
+q <- 1-p    # allèle a
+```
 
 Nous simplifions les calculs en représentant l'allèle A étant `1` et l'allèle a étant `0`. Tirons deux allèles du pool des gamètes (définit par p et q)
 `sample(0:1, 2, c(q, p), replace = T)`
