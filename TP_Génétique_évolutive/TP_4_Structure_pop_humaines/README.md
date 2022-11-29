@@ -291,20 +291,18 @@ pop(allchr.snps.genind) <- info.df$Population.name[match(indNames(allchr.snps.ge
 # Estimation des Fst pour toutes les paires de populations (étape lente! plusieurs minutes)
 allchr.snps.hs <- genind2hierfstat(allchr.snps.genind)
 
-# sélection de 100 loci (= rapide)
-fst <- pairwise.neifst(allchr.snps.hs[,1:100])
+# sélection de 300 loci (= rapide)
+fst <- pairwise.neifst(allchr.snps.hs[,1:300])
 # ALTERNATIVE: sélection de >1000 loci (plus précis mais plus lent)
-fst <- pairwise.neifst(allchr.snps.hs)
+# fst <- pairwise.neifst(allchr.snps.hs)
 
 rownames(fst) <- dimnames(fst)[[1]]
 colnames(fst) <- dimnames(fst)[[2]]
 
 # Optionnel: changer l'ordre d'apparition des populations pour la visualisation
-pop.order <- pop(allchr.snps.genind)
-unique(pop.order)
-
-# Définissez l'ordre souhaité ci-dessous (l'exemple est celui des régions)
-pop.order <- c("African", "European", "South Asian", "East Asian", "American")
+# pop.order <- unique(pop(allchr.snps.genind))
+# Définissez l'ordre souhaité ci-dessous (l'exemple est celui des régions! )
+pop.order <- c("Yoruba", "Gambian Mandinka", "Esan", "Mende", "Luhya", "African-Caribbean", "African-American SW", "British", "Finnish", "CEPH", "Tuscan", "Spanish", "Mexican-American", "Puerto Rican", "Colombian", "Peruvian", "Indian", "Punjabi", "Bengali", "Gujarati", "Sri Lankan", "Southern Han Chinese", "Dai Chinese", "Kinh Vietnamese", "Han Chinese", "Japanese")
 fst <- fst[pop.order, pop.order]
 
 # Visualisation des Fst
@@ -313,4 +311,4 @@ heatmap.2(fst, revC = F, Rowv = F, Colv = F, margins = c(10, 10), dendrogram = "
 dev.off()
 ```
 
-Q14: Faites l'analyse au niveau des régions. Décrivez brièvement le résultat obtenu et conciliez les valeurs relatives de F<sub>ST</sub> avec nos connaissances sur le peuplement de la terre par l'humain.
+Q14: Faites l'analyse au niveau des pays/populations comme indiquée ci-dessus. Décrivez brièvement le résultat obtenu et conciliez les valeurs relatives de F<sub>ST</sub> avec nos connaissances sur le peuplement de la terre par l'humain.
