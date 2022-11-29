@@ -285,8 +285,8 @@ head(info.df)
 # assignez les individus aux populations (Population)
 pop(allchr.snps.genind) <- info.df$Population.name[match(indNames(allchr.snps.genind), info.df$Sample.name)]
 
-# alternativement: par continent/région (Superpopulation)
-pop(allchr.snps.genind) <- info.df$Superpopulation.name[match(indNames(allchr.snps.genind), info.df$Sample.name)]
+# ALTERNATIVEMENT: par continent/région (Superpopulation)
+# pop(allchr.snps.genind) <- info.df$Superpopulation.name[match(indNames(allchr.snps.genind), info.df$Sample.name)]
 
 # Estimation des Fst pour toutes les paires de populations (étape lente! plusieurs minutes)
 allchr.snps.hs <- genind2hierfstat(allchr.snps.genind)
@@ -313,4 +313,4 @@ heatmap.2(fst, revC = F, Rowv = F, Colv = F, margins = c(10, 10), dendrogram = "
 dev.off()
 ```
 
-Q14: Faites l'analyse au niveau des régions. Décrivez brièvement le résultat obtenu et conciliez les valeurs relatives de F<sub>ST</sub> avec nos connaissances sur le peuplement de la terre par l'homme.
+Q14: Faites l'analyse au niveau des régions. Décrivez brièvement le résultat obtenu et conciliez les valeurs relatives de F<sub>ST</sub> avec nos connaissances sur le peuplement de la terre par l'humain.
