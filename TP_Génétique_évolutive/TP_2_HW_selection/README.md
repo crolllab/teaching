@@ -37,7 +37,7 @@ curve(x^2, from=0, to=1, ylab = "genotype frequency", xlab = "allele frequency A
 text(0.5, 1, labels = "pAA", col = "black")
 ```
 
-Q2 (optionnelle): Créez un graphe représentant à la fois pAA, pAa et paa.
+Q2 (optionnelle): Créez un graphe représentant à la fois pAA, pAa et paa. Astuce: l'option `curve(..., add = T)` vous permet de superposer des lignes dans un même graphique.
 
 ![](./images/H-W.plot.png)
 

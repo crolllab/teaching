@@ -45,7 +45,7 @@ Q1: Quelle était la motivation principale d'étudier la diversité génétique 
 
 ## Introduction à l'analyse de fichiers VCF
 
-- Ouvrez le fichier VCF à l'aide d'un éditeur de texte. Repérez la partie supérieure (`# ...`) qui résume de l'informations sur le contenu du fichier et les analyses faites ultérieurement. Puis, la partie inférieure identifiant chaque SNP (1 par ligne) avec sa position (`POS`) sur un chromosome spécifique (`CHROM`). Notez que `0` et `1` décrivent les allèles (0 correspond à l'allèle "REF" qui est connu du génome de réference, 1 correspond à l'allèle altérnatif "ALT"). Un génotype d'un individu est donc représenté par exemple comme "0|0" (homozygote) ou "0|1" (hétérozygote).
+- Ouvrez le fichier VCF à l'aide d'un éditeur de texte. Repérez la partie supérieure (`# ...`) qui résume de l'informations sur le contenu du fichier et les analyses faites ultérieurement. Puis, la partie inférieure identifiant chaque SNP (1 par ligne) avec sa position (`POS`) sur un chromosome spécifique (`CHROM`). Notez que `0` et `1` décrivent les allèles (0 correspond à l'allèle "REF" qui est connu du génome de référence, 1 correspond à l'allèle alternatif "ALT"). Un génotype d'un individu est donc représenté par exemple comme "0|0" (homozygote) ou "0|1" (hétérozygote).
 
 - Il existe de nombreux packages en R permettant la manipulation de fichiers VCF, mais la fonctionnalité offerte par ces packages est rarement cohérente. Il est donc important d'évaluer le potentiel du package avant d'entamer une analyse spécifique. Nous allons utilsé `vcfR` et `adegenet`.
 
@@ -93,11 +93,11 @@ table(info.df$Superpopulation.name)
 # assignez les individus aux populations (Population)
 pop(allchr.snps) <- info.df$Population.name[match(indNames(allchr.snps), info.df$Sample.name)]
 
-# alternativement: aux continents/régions (Superpopulation)
-pop(allchr.snps) <- info.df$Superpopulation.name[match(indNames(allchr.snps), info.df$Sample.name)]
+# ALTERNATIVEMENT: aux continents/régions (Superpopulation)
+# pop(allchr.snps) <- info.df$Superpopulation.name[match(indNames(allchr.snps), info.df$Sample.name)]
 
-# alternativement: aux sexes
-pop(allchr.snps) <- info.df$Sex[match(indNames(allchr.snps), info.df$Sample.name)]
+# ALTERNATIVEMENT: au sexe
+# pop(allchr.snps) <- info.df$Sex[match(indNames(allchr.snps), info.df$Sample.name)]
 ```
 
 Q3: Faites un graphique simple résumant d'abord les nombres d'échantillons par population et puis super-population (régions).
@@ -124,7 +124,7 @@ allchr.df$chromosome <- factor(allchr.df$chromosome, levels = c(1:22, "X"))
 
 # Nombre de SNP inclut par chromosome
 SNP.per.chr <- as.data.frame(table(allchr.df$chromosome))
-qplot(x = allchr.df$chromosome, geom = "bar")
+qplot(x = allchr.df$chromosome, geom = "bar", xlab = "Chromosomes", ylab = "Number of SNPs")
 ```
 
 Q4 (optionnelle): Calculez le nombre de SNP par megabases de chromosomes (i.e. densité). Est-ce que les chromosomes diffèrent en densité?  
@@ -159,7 +159,7 @@ population <- "Yoruba"
 
 alt.allele.freq.pop <- glMean(allchr.snps[pop(allchr.snps) == population,])
 
-qplot(alt.allele.freq.pop, binwidth = 0.05)
+qplot(alt.allele.freq.pop, geom = "density", xlab = "Minor allele frequency")
 ```
 
 Q7: Modifier le code pour visualiser les fréquences d'allèles mineurs (MAF).
@@ -195,7 +195,7 @@ heterozygosity.df <- data.frame(population = heterozygosity.perSNP.perPOP[,1], M
 ggplot(heterozygosity.df, aes(x = reorder(population, -MeanHeterozygosity), y = MeanHeterozygosity, fill = population)) +
   geom_bar(stat = "identity") +
   coord_cartesian(ylim = c(0.25, 0.33)) +
-  labs(x = "Population", y = "Hétérozygotie moyenne") +
+  labs(x = "Population", y = "Average heterozygosity") +
   theme(axis.text = element_text(colour = "black"), axis.text.x = element_text(angle = 45, hjust = 1), legend.position="none")
 
 ggsave("Population_heterozygosity.pdf", width = 6, height = 4)
@@ -205,19 +205,14 @@ Q9: Selon vos connaissances sur les voies de colonisation de l'humain, prédisez
 
 Q10 (optionnelle): En utilisant la procédure ci-dessus, calculez l'hétérozygotie pour la population "British" par chromosome.
 
-
-Une variante pour répondre à la question:
+Solution proposée:
 ```
-heterozygosity.perSNP.perPOP.t <- as.data.frame(t(heterozygosity.perSNP.perPOP[,-1
-]))
+heterozygosity.perSNP.perPOP.t <- as.data.frame(t(heterozygosity.perSNP.perPOP[,-1]))
 names(heterozygosity.perSNP.perPOP.t) <- heterozygosity.perSNP.perPOP[,1]
 heterozygosity.perSNP.perPOP.t$SNPid <- row.names(heterozygosity.perSNP.perPOP.t)
-heterozygosity.perSNP.perPOP.fullinfo <-  merge(heterozygosity.perSNP.perPOP.t, al
-lchr.df, by="SNPid")
-heterozygosity.perSNP.perPOP.fullinfo$chromosome <- factor(heterozygosity.perSNP.p
-erPOP.fullinfo$chromosome, levels = c(1:22, "X"))
-barplot(tapply(heterozygosity.perSNP.perPOP.fullinfo$British, INDEX = heterozygosi
-ty.perSNP.perPOP.fullinfo$chromosome, FUN = mean))
+heterozygosity.perSNP.perPOP.fullinfo <-  merge(heterozygosity.perSNP.perPOP.t, allchr.df, by="SNPid")
+heterozygosity.perSNP.perPOP.fullinfo$chromosome <- factor(heterozygosity.perSNP.perPOP.fullinfo$chromosome, levels = c(1:22, "X"))
+barplot(tapply(heterozygosity.perSNP.perPOP.fullinfo$British, INDEX = heterozygosity.perSNP.perPOP.fullinfo$chromosome, FUN = mean))
 ```
 
 ## Analyse en composantes principales
@@ -256,8 +251,7 @@ ggsave("PCA_structure_poptext.pdf", width = 12, height = 10)
 
 Q11: Qu'est-ce que signifie le barplot?
 
-Q12: En visualisant les "super-populations" (régions) et puis les "populations", expliquez la structuration observée dans la PCA. En s'appuyant sur les voies de colonisations majeures, quelles sont les raisons probables du regroupement? Est-ce que vous trouvez des contradictions selon vos prédictions?
-
+Q12: En visualisant les "super-populations" (continents/régions) et puis les "populations", interprétez la structuration observée dans la PCA. En s'appuyant sur les voies de colonisations majeures, quelles sont les raisons probables du regroupement? Est-ce que vous trouvez des contradictions selon vos prédictions?
 
 Q13: Un petit nombre d'individus non-africains se trouvent très proche du cluster africain. Explications probables selon votre avis?
 
