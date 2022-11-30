@@ -148,7 +148,7 @@ Q6: Discutez une explication possible du pic principal de densité des SNPs.
 
 ## Fréquences alléliques et allèles mineurs
 
-Une propriété importante d'une population est la distribution des fréquences alléliques. On peut extraire l'information de la fréquence de l'allèle atlernative comme ci-dessous:
+Une propriété importante d'une population est la distribution des fréquences alléliques. On peut extraire l'information de la fréquence de l'allèle alternatif comme ci-dessous:
 
 ```
 # extraction des fréquences de l'allèle alternatif (l'allèle ne figurant pas dans le génome de référence)
@@ -159,7 +159,7 @@ population <- "Yoruba"
 
 alt.allele.freq.pop <- glMean(allchr.snps[pop(allchr.snps) == population,])
 
-qplot(alt.allele.freq.pop, geom = "density", xlab = "Minor allele frequency")
+qplot(alt.allele.freq.pop, geom = "density", xlab = "Alternative allele frequency")
 ```
 
 Q7: Modifier le code pour visualiser les fréquences d'allèles mineurs (MAF).
