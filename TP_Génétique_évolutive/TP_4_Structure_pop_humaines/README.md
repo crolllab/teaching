@@ -175,7 +175,7 @@ minor.allele.freq[minor.allele.freq > 0.5] <- 1-minor.allele.freq[minor.allele.f
 NB: Ce jeux de données est filtré pour éliminer les SNP avec allèles très rares (MAF < 0.05) pour des raisons pratiques (données trop volumineuses)
 
 
-Q8: Générer les plots pour deux populations que vous supposez de montrer un constraste au niveau des spectres de fréquences d'allèles mineurs (MAF). Décrivez brièvement (et verbalement) les différences au niveaux des spectres.
+Q8: Générer les plots pour deux populations que vous supposez de montrer un contraste au niveau des spectres de fréquences d'allèles mineurs (MAF). Décrivez brièvement (et verbalement) les différences au niveaux des spectres.
 
 
 ## Fréquences génotypiques
