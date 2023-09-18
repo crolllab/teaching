@@ -1,6 +1,6 @@
 ### Bioinformatics Tools
 
-# Course 9
+# Course 5
 
 ### Major aims  
 - A basic understanding of phenotype-genotype association mapping (i.e. GWAS)
