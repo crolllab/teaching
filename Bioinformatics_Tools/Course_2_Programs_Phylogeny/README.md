@@ -132,17 +132,36 @@ We will not go any further with this approach here. Just remember that this exis
 
 ![](./images/conda.png)  
 
-Here we will make use of a program called `conda`. `conda` works a bit like a book library where (if the book exists) you can very easily get access to. An alternative to `conda` is called `brew`.
+Here we will make use of a program called `conda`. `conda` works a bit like a book library where (if the book exists) you can very easily get access to. An alternative to `conda` is called `brew`. You can google it to learn more.
 
-To get started, we need to set up correctly `conda`.
+To get started, we need to set up correctly `conda`. For the rest of the course, we will use a very fast version of `conda` called `micromamba`. For troubleshooting on the internet, search for the term `conda` rather than `micromamba`.
 
 - Make sure you start in your user folder: `cd $HOME`
-- Use `conda create -p $HOME/conda-env` to initialize conda in your user account. You see that we define a new directory inside your home folder for this. You only need to do this step once!
-- To start using conda type `conda activate $HOME/conda-env`. This will "activate" conda for you. This step needs to be repeated whenever you log in (i.e. start using RStudio again or re-open the "Terminal").
+- Download & activate micromamba with this command. This is only needed once.
 
-Let's install our first program: To obtain our proper version of BLAST (see the end of Course 1 for the online version), use this `conda` command:
+```
+# download and decompress
+curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj bin/micromamba
 
-`conda install -c bioconda blast`
+# configure micromamba
+./bin/micromamba shell init -s bash -p ~/micromamba
+
+# make sure that the configuration is loaded
+source ~/.bashrc
+
+# tell micromamba where to search for programs
+micromamba config append channels defaults
+micromamba config append channels bioconda
+micromamba config append channels conda-forge
+```
+
+- Use `micromamba create -n conda-env` to create an environment (a "niche") where you can install programs in. If a program depends on other code to work, it will be installed in your environment as well.
+
+- To start using conda type `micromamba activate conda-env`. This will "activate" conda for you. This step needs to be repeated whenever you log in (i.e. start using RStudio again or re-open the "Terminal").
+
+Let's install our first program: To obtain our proper version of BLAST (see the end of Course 1 for the online version), use this `micromamba` command:
+
+`micromamba install blast`
 
 After a short moment, you will be presented with a lot of lines of text. This is the "recipe" that conda will use to install blast. You see that it's a fairly complex process given all the different ingredients (or dependencies) that are required. Luckily, conda will take care of this.
 
@@ -165,15 +184,15 @@ Last week, you have downloaded a single file containing a few sequences of a sin
 
 We will use the tool [Entrez Direct](https://www.ncbi.nlm.nih.gov/books/NBK179288/) for this.
 
-Start by installing it using `conda`.
+Start by installing it using `micromamba`.
 
 _We will create and activate a clean environment to avoid errors!_
 
 ```
-conda create -p $HOME/conda-sars
-conda activate $HOME/conda-sars
+micromamba create -n conda-sars
+micromamba activate conda-sars
 
-conda install -c bioconda perl-io-socket-ssl perl-net-ssleay perl-lwp-protocol-https entrez-direct
+micromamba install perl-io-socket-ssl perl-net-ssleay perl-lwp-protocol-https entrez-direct
 ```
 
 You can check that you have installed it properly by typing:
@@ -225,7 +244,7 @@ Let's make sure you work in your
 (you can obviously also choose to work in a different folder, but be aware that 1-2 lines of code below may need tweaking)
 
 We start with making sure conda is active.
-`conda activate $HOME/conda-sars`
+`micromamba activate $HOME/conda-sars`
 
 Now we want to search not for a single sequence (or accession) but for all sequences of the SARS-CoV-2 virus.
 
@@ -317,7 +336,7 @@ Only an aligned set of sequences can be used for building a phylogenetic tree.
 
 Let's install all needed tools for the remainder of the exercise.
 
-`conda install -c bioconda mafft clipkit raxml`
+`micromamba install mafft clipkit raxml`
 
 We will use the program [mafft](https://mafft.cbrc.jp/alignment/software/) to generate an aligned set of sequences.
 
