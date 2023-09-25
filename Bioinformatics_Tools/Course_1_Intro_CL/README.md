@@ -189,13 +189,17 @@ The first step is find the correct link to a file. The link should typically end
 
 Here's the link to an image from the UNINE MSc Biology page:
 
-`https://www.unine.ch/files/live/sites/systemsite/files/bandeaux/FS/UNINE_FS_MA.jpg`
+```
+https://www.unine.ch/files/live/sites/systemsite/files/bandeaux/FS/UNINE_FS_MA.jpg
+```
 
 You can paste the link in a web browser to check that it works.
 
 To download the image, use `wget` before the link.
 
-`wget https://www.unine.ch/files/live/sites/systemsite/files/bandeaux/FS/UNINE_FS_MA.jpg`
+```
+wget https://www.unine.ch/files/live/sites/systemsite/files/bandeaux/FS/UNINE_FS_MA.jpg
+```
 
 Check with `ls -lhs` whether you've actually saved the file.
 
@@ -205,7 +209,9 @@ In the folder `datasets` of Course 1, you find a file called `QTW58944_protein.f
 
 But with our `wget` command it's much simpler actually:
 
-`wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_1_Intro_CL/datasets/QTW58944_protein.fasta`
+```
+wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_1_Intro_CL/datasets/QTW58944_protein.fasta
+```
 
 As a little exercise, find another file on the internet and try to download it with `wget`.
 
