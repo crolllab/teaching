@@ -2,7 +2,12 @@
 
 Prof. Daniel Croll, PD Dr. Nikolai Ivanov, Hanna Glad, Aloïs Tschanz
 
-The course aims to introduce students to diverse areas of bioinformatics. We particularly focus on the needs of modern biology to treat large amounts of data and automate analyses procedures. The course is structured into lectures that introduce some key areas of bioinformatics followed by practicals on the computer to provide hands-on experience. Lecturers and students will be available for discussions of tools and approaches. The content of this course includes the following topics: 1- Introduction to Unix and scripting 2- Sequencing analysis 3- Genome assembly 4- Phenotype-genotype associations 5- Epigenetics
+The course aims to introduce students to diverse areas of bioinformatics. We particularly focus on the needs of modern biology to treat large amounts of data and automate analyses procedures. The course is structured into lectures that introduce some key areas of bioinformatics followed by practicals on the computer to provide hands-on experience. Lecturers and students will be available for discussions of tools and approaches. The content of this course includes the following topics:
+- Introduction to Unix and scripting
+- Sequencing analysis
+- Genome assembly
+- Phenotype-genotype associations
+- Epigenetics
 
 
 ## How to access the "shell" and RStudio for the exercises
@@ -16,9 +21,9 @@ Our lab offers you the possibility to access RStudio Server. This allows you to 
 ![](./images/image_1.png)
 
 - Please request your username by adding your first name [here in this sheet](https://docs.google.com/spreadsheets/d/1mE2cfUr14qA17YftYb2O4ualr3K9wKWXXtxEknLZuU0/edit?usp=sharing). Wait until your account was created ("OK" mark).  
-- Your password will be: `bioinfo23`   
+- Your password is: `bioinfo23`   
 - Anything you save while using RStudio is on the server.
-- To **to transfer a file to the server**: Find the "Files" tab (typically bottom right of the RStudio screen), click on "Upload" and select "Choose File". The file will upload and you can spot it now under "Files".  
+- **To transfer a file to the server**: Find the "Files" tab (typically bottom right of the RStudio screen), click on "Upload" and select "Choose File". The file will upload and you can spot it now under "Files".  
 
 ![](./images/image_2.png)  
 ![](./images/image_3.png)  
@@ -44,4 +49,4 @@ A tutorial will be provided on Moodle / here.
 
 ### Courses on genome sequencing, assembly and epigenetics
 
-Please refer yourself to the Moodle for the course documents.
+Please refer to the Moodle for the course documents.

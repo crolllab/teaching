@@ -18,9 +18,9 @@
 ## What is a shell good for?  
 
 - Put simply, a shell helps you to interact with a computer/server without a graphical interface (where you could click on icons, move things around, etc.)
-- A shell requires you to type commands. If you are familiar with R, you know exactly how this can look like. Our shell here simply uses a different language to interact with the computer compared to R.
+- A shell requires you to type commands. If you are familiar with R, you know exactly how this looks like. Our shell here simply uses a different language to interact with the computer compared to the R language.
 - A shell helps you also navigate files and folders. We'll need to tell the shell though to move "up" or "down" the hierarchy of folders to get around.
-- Finally, for bioinformatics a shell helps you to repeat analyses, run these in loops, download and copy large files automatically, summarize information, etc. In other words, if you have code that works, running analyses becomes nearly effortless. Writing the code in the first place is often a different matter! :-)
+- Finally, for bioinformatics applications, a shell helps you to repeat analyses, run these in loops, download and copy large files automatically, summarize information, etc. In other words, if you have code that works, running analyses becomes nearly effortless. Writing the code in the first place is often the big challenge!
 
 ## First steps in a shell
 
@@ -42,7 +42,7 @@ Type the command shown above and press Enter. You see that the code above is act
 
 ## Simple programs to use in a shell
 
-- You are now connected to a computer running a specific operating system called [CentOS](https://en.wikipedia.org/wiki/CentOS). This is a variant of Linux just as Ubuntu, Fedora, etc. Most commands you'd find for any Linux operating system should work here too. Hence, it should be easy to google things!
+- You are now connected to a computer running a specific operating system called [Ubuntu](https://en.wikipedia.org/wiki/Ubuntu). This is a variant of Linux just as CentOS, Fedora, etc. Most commands you'd find for any Linux operating system should work here too. Hence, it should be easy to google things!
 
 We will now explore a series of simple commands.
 
@@ -273,6 +273,7 @@ Try to accomplish the following tasks
 
 
 ### General troubleshooting tips
+
 - We will look at a command called `cp`. Googling for "Linux cp" tells you fairly well what to do.
 - Read the (error) message that you get in the Terminal following your commands. You may not understand these, but it's a good sign that you should expect something strange (a missing file, etc.).
 - Google the error message. Copy the error message and search for it. Helpful? Try to improve your code googling skills during the course.
