@@ -3,7 +3,7 @@
 # Course 2
 
 ### Major aims  
-- Know how to install bioinformatics software using conda
+- Know how to install bioinformatics software using conda (or rather the micromamba variant)
 - Access the NCBI sequence database to retrieve data
 - Build a phylogenetic tree and visualize it
 
@@ -360,7 +360,7 @@ We proceed now to build a phylogenetic tree using [RAxML](https://cme.h-its.org/
 
 The code above allows `RAxML` to use 10 CPU to make the analyses faster. But it will still take a couple of minutes.
 
-_Q9: How many output files did RAxML produce?_
+_Q9 (optional!): How many output files did RAxML produce?_
 
 Our most important file is `RAxML_bestTree.SARS-CoV2.genome` containing the phylogenetic tree.
 
@@ -424,11 +424,11 @@ ggsave("SARS-CoV2_genomes_tree.pdf", height = 40, width = 12)
 
 _Q10: Paste the tree in your report and briefly describe what you see. To what variant belong most of your sequences most likely?_
 
-_Q11: [covariants.org](https://covariants.org) provides a great way to track waves of different SARS-CoV2 variants. What is the currently prevalent variant in Switzerland?_
+_Q11 (optional!): [covariants.org](https://covariants.org) provides a great way to track waves of different SARS-CoV2 variants. What is the currently prevalent variant in Switzerland?_
 
 ![](./images/covariants.png)  
 
-_Q12 (optional!): Get an overview of the differences among SARS-CoV2 variant sequences using a sequence alignment_
+_Q12: Get an overview of the differences among SARS-CoV2 variant sequences using a sequence alignment_
 
 Let's start by reworking our sequences from the different variants. We want to replace the lengthy sequence name with our much shorter name used above. For this, we use the command `sed` that can search for patterns. We search for the "name" of the sequence looking for the `>` sign and replace it with our own naming.
 
@@ -465,6 +465,7 @@ Next, we use an online tool to help us visualize the different sequences.
 
 ![](./images/msa.png)  
 
+_Q13: Briefly summarize three things that you have learnt today. Summarize also what aspect is still the most challenging/confusing.
 
 ## To explore much more SARS-CoV2 data, you can head to Nextstrain
 
