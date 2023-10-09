@@ -64,8 +64,6 @@ We analyze 9 Alpine ibex individuals with each having a single dataset available
 
 To download the first dataset, we can use the the `sra-tools` command `fastq-dump`:
 
-# IMPORTANT `fastq-dump` does currently NOT work, please skip this.
-
 `fastq-dump --split-files --gzip SRR6649845`
 
 _Q3 (optional): What is the name of the ibex individual? Use the [NCBI SRA website](https://www.ncbi.nlm.nih.gov/sra) to search for the accession number. Hint: the individual name is under "Library" -> "Name"_
@@ -105,7 +103,6 @@ There are many more useful kinds of loops with either `for` or `while`.
 
 ### Download all Alpine ibex dataset in a loop
 
-# IMPORTANT `fastq-dump` does currently NOT work, please skip this.
 
 We specify all accession numbers to be downloaded in the loop. The code below will run for a few minutes.
 
@@ -117,21 +114,6 @@ done
 ```
 
 `fastq-dump` is our command to access and download the sequencing data. `split-files` means to create two files corresponding to the paired reads of the sequencing run.
-
-# ALTERNATIVE to `fastq-dump`
-
-Download the ready files from github
-```
-wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_3_SNP_calling/dataset/SRR6649843.subset.fastq.gz
-wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_3_SNP_calling/dataset/SRR6649844.subset.fastq.gz
-wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_3_SNP_calling/dataset/SRR6649845.subset.fastq.gz
-wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_3_SNP_calling/dataset/SRR6649846.subset.fastq.gz
-wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_3_SNP_calling/dataset/SRR6649847.subset.fastq.gz
-wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_3_SNP_calling/dataset/SRR6649848.subset.fastq.gz
-wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_3_SNP_calling/dataset/SRR6649849.subset.fastq.gz
-wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_3_SNP_calling/dataset/SRR6649850.subset.fastq.gz
-wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_3_SNP_calling/dataset/SRR6649851.subset.fastq.gz
-```
 
 _Q4 (optional): What is paired-end versus single-end sequencing?_
 
