@@ -209,6 +209,7 @@ _Q9: Describe the basic features of a line reporting a SNP (what you see with `t
 VCFtools is a very common tool to filter our low quality SNPs or make selections of specific sets of SNPs.
 
 ```
+micromamba activate conda-ibex
 vcftools --vcf Alpine_ibex.vcf --max-missing 0.8 --minQ 100 --mac 1 --recode --out Alpine_ibex.filtered
 ```
 
