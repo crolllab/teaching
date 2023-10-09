@@ -17,11 +17,11 @@ You can work alone or in groups. Every student should submit their own report th
 
 Conda helps you install bioinformatics software easily.
 
-1.) At first use, run `conda create -p $HOME/conda-ibex` to create an environment for conda to run in the folder `conda-ibex`. The folder name can be chosen freely.
+1.) At first use, run `micromamba create -n conda-ibex` to create an environment for conda to run in the folder `conda-ibex`. The folder name can be chosen freely.
 
-2.) Every time you open a new terminal window: `conda activate $HOME/conda-ibex`
+2.) Every time you open a new terminal window: `micromamba activate conda-ibex`
 
-3.) Install software like this `conda install -c bioconda vcftools` (`-c bioconda` helps conda to search in the right place but is not strictly necessary)
+3.) Install software like this `micromamba install vcftools`
 
 
 ## Accessing Illumina (short read) sequencing data
@@ -54,8 +54,8 @@ The first line below brings you to your home folder. You can choose a different 
 
 ```
 cd
-conda activate $HOME/conda-ibex
-conda install -c bioconda sra-tools
+micromamba activate conda-ibex
+micromamba install sra-tools
 ```
 
 ### Download datasets from the NCBI SRA
@@ -68,7 +68,7 @@ To download the first dataset, we can use the the `sra-tools` command `fastq-dum
 
 `fastq-dump --split-files --gzip SRR6649845`
 
-_Q3: What is the name of the ibex individual? Use the [NCBI SRA website](https://www.ncbi.nlm.nih.gov/sra) to search for the accession number. Hint: the individual name is under "Library" -> "Name"_
+_Q3 (optional): What is the name of the ibex individual? Use the [NCBI SRA website](https://www.ncbi.nlm.nih.gov/sra) to search for the accession number. Hint: the individual name is under "Library" -> "Name"_
 
 For our little project, we want to analyze the following individuals:
 
@@ -137,7 +137,7 @@ _Q4: What is paired-end versus single-end sequencing?_
 
 `gzip` means to compress the output. `-N` and `-X` options are helping us in the course to download only a snapshot of the actual dataset to speed up analyses. For a research project, we would always access the entire dataset.
 
-_Q5: How many files did you produce with the loop above?_
+_Q5 (optional): How many files did you produce with the loop above?_
 
 ### The sequence format fastq
 
@@ -166,12 +166,12 @@ To save time, the genome exists already on our server. The location is here:
 ls -lhs /home/genomes/fasta/Capra_hircus.ARS1.dna.toplevel.*
 ```
 
-_Q7: Use `head` to read the name of the very first sequence._
+_Q7 (optional): Use `head` to read the name of the very first sequence._
 
 We will now use a loop to align each set of sequences to the domestic goat genome. The tool is called `bowtie2` (see also Course 2).
 
 Install the missing tools
-`conda install -c bioconda bowtie2 freebayes vcftools`
+`micromamba install bowtie2 freebayes vcftools`
 
 
 The code below will run for a few minutes!
