@@ -189,6 +189,8 @@ _Q8: Use Google to have a look what the SAM alignment format contains. Mention t
 Freebayes is a single step SNP caller to identify polymorphic sites. The code below will run for a few minutes!
 
 ```
+micromamba deactivate
+
 REFGENOME=/home/genomes/fasta/Capra_hircus.ARS1.dna.toplevel
 
 freebayes -f $REFGENOME.fa -r 1 *.bam -v Alpine_ibex.vcf
