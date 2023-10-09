@@ -132,7 +132,7 @@ GTATTCTATCTTATGTATATCTATCTTCTAT
 ```
 
 Here's a glimpse at the `fastq` files:
-`zcat SRR6649845.subset.fastq.gz|head`
+`zcat SRR6649845_1.fastq.gz|head`
 
 _Q6: Explain the basic features of this format (using Google)_
 
@@ -166,7 +166,7 @@ REFGENOME=/home/genomes/fasta/Capra_hircus.ARS1.dna.toplevel
 for i in SRR6649845 SRR6649843 SRR6649850 SRR6649844 SRR6649848 SRR6649849 SRR6649851 SRR6649847 SRR6649846
 do
 # bowtie2 with all the required options
-bowtie2 -x $REFGENOME -p 16 --rg-id $i --rg SM:$i -U ${i}.subset.fastq.gz | samtools view -bS - | samtools sort -o $i.sorted.bam
+bowtie2 -x $REFGENOME -p 16 --rg-id $i --rg SM:$i -1 ${i}_1.fastq.gz -2 ${i}_2.fastq.gz | samtools view -bS - | samtools sort -o $i.sorted.bam
 # create an index of the bam file
 samtools index $i.sorted.bam
 done
