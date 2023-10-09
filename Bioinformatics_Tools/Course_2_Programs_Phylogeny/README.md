@@ -26,7 +26,7 @@ The command `which` tells you the location of a program.
 
 `which pwd`  
 `which ls`  
-`which cd`  
+`which mkdir`  
 
 What do you notice? You see that all these basic programs from last week's course are located here `/usr/bin`. This is a shared space among all users and is typically a protected space so that not any user could add or remove a program from there.
 
@@ -56,7 +56,7 @@ mkdir bin
 
 Now we need to tell the computer that you have a new `bin` directory. This works like this:
 
-`export PATH=$PATH:$HOME/bin`
+`export PATH=$PATH`
 
 `export` is a command that defines a variable. Here it is `PATH`, the variable containing all `bin` folders.
 
@@ -254,9 +254,9 @@ We will use the following search term. Note also that we will now look for the n
 
 _Q6: How many such sequences exist on NCBI?_
 
-We now proceed to downloading these sequences. There are far too many, so we need to limit ourselves. Let's analyze 500 random sequences using the `-stop` option like this. [If you are brave, you can try more than 500]
+We now proceed to downloading these sequences. There are far too many, so we need to limit ourselves. Let's analyze 200 random sequences using the `-stop` option like this. [If you are brave, you can try more than 200]
 
-`esearch -db nucleotide -query "Severe acute respiratory syndrome coronavirus 2 isolate SARS-CoV-2" | efetch -format fasta -stop 500 > SARS-CoV2.genome.nucl.fasta`
+`esearch -db nucleotide -query "Severe acute respiratory syndrome coronavirus 2 isolate SARS-CoV-2" | efetch -format fasta -stop 200 > SARS-CoV2.genome.nucl.fasta`
 
 _Q7: Use `head` to check the accession number of the very first sequence in the newly created file. Is it actually a SARS sequence?_
 
@@ -269,44 +269,48 @@ _Q8: Where and when was the virus sample collected?_
 Let's retrieve also this specific genome.  
 `esearch -db nucleotide -query "LR757998.1" | efetch -format fasta > LR757998.fasta`  
 
-Let's append the sequence to our existing file with the 500 sequences using the `>>` sign (see Course 1 for `>>`).  
+Let's append the sequence to our existing file with the 200 sequences using the `>>` sign (see Course 1 for `>>`).  
 `cat LR757998.fasta >> SARS-CoV2.genome.nucl.fasta`
 
-We will now repeat it for our Delta variant genome of last week.  
-`esearch -db nucleotide -query "MW931310.1" | efetch -format fasta > MW931310.fasta`  
-`cat MW931310.fasta >> SARS-CoV2.genome.nucl.fasta`
+In the following lines, we will repeat the same process for multiple additional variants.
 
-And an Alpha variant from the UK.  
-`esearch -db nucleotide -query "OU297363.1" | efetch -format fasta > OU297363.fasta`  
-`cat OU297363.fasta >> SARS-CoV2.genome.nucl.fasta`  
+```
+# Repeat it for our Delta variant genome of last week.  
+esearch -db nucleotide -query "MW931310.1" | efetch -format fasta > MW931310.fasta
+cat MW931310.fasta >> SARS-CoV2.genome.nucl.fasta
 
-A Gamma variant from South America.  
-`esearch -db nucleotide -query "OK252993.1" | efetch -format fasta > OK252993.fasta`  
-`cat OK252993.fasta >> SARS-CoV2.genome.nucl.fasta`  
+# And an Alpha variant from the UK.  
+esearch -db nucleotide -query "OU297363.1" | efetch -format fasta > OU297363.fasta
+cat OU297363.fasta >> SARS-CoV2.genome.nucl.fasta
 
-A Mu variant from North America.  
-`esearch -db nucleotide -query "MZ727692.1" | efetch -format fasta > MZ727692.fasta`  
-`cat MZ727692.fasta >> SARS-CoV2.genome.nucl.fasta`  
+# A Gamma variant from South America.  
+esearch -db nucleotide -query "OK252993.1" | efetch -format fasta > OK252993.fasta
+cat OK252993.fasta >> SARS-CoV2.genome.nucl.fasta
 
-And Omicron variants BA.1, 2, 4, 5 and 2.75 (the latest in Sep 2022)  
-`esearch -db nucleotide -query "OX315743.1" | efetch -format fasta > OX315743.fasta`  
-`cat OX315743.fasta >> SARS-CoV2.genome.nucl.fasta`  
+# A Mu variant from North America.  
+esearch -db nucleotide -query "MZ727692.1" | efetch -format fasta > MZ727692.fasta
+cat MZ727692.fasta >> SARS-CoV2.genome.nucl.fasta
 
-`esearch -db nucleotide -query "OX315675.1" | efetch -format fasta > OX315675.fasta`  
-`cat OX315675.fasta >> SARS-CoV2.genome.nucl.fasta`  
+# And Omicron variants BA.1, 2, 4, 5 and 2.75  
+esearch -db nucleotide -query "OX315743.1" | efetch -format fasta > OX315743.fasta
+cat OX315743.fasta >> SARS-CoV2.genome.nucl.fasta
 
-`esearch -db nucleotide -query "OP093374.1" | efetch -format fasta > OP093374.fasta`  
-`cat OP093374.fasta >> SARS-CoV2.genome.nucl.fasta`  
+esearch -db nucleotide -query "OX315675.1" | efetch -format fasta > OX315675.fasta
+cat OX315675.fasta >> SARS-CoV2.genome.nucl.fasta
 
-`esearch -db nucleotide -query "OP164778.1" | efetch -format fasta > OP164778.fasta`  
-`cat OP164778.fasta >> SARS-CoV2.genome.nucl.fasta`  
+esearch -db nucleotide -query "OP093374.1" | efetch -format fasta > OP093374.fasta
+cat OP093374.fasta >> SARS-CoV2.genome.nucl.fasta
 
-`esearch -db nucleotide -query "OP457109.1" | efetch -format fasta > OP457109.fasta`  
-`cat OP457109.fasta >> SARS-CoV2.genome.nucl.fasta`  
+esearch -db nucleotide -query "OP164778.1" | efetch -format fasta > OP164778.fasta
+cat OP164778.fasta >> SARS-CoV2.genome.nucl.fasta
 
+esearch -db nucleotide -query "OP457109.1" | efetch -format fasta > OP457109.fasta
+cat OP457109.fasta >> SARS-CoV2.genome.nucl.fasta
+```
 
-Our `SARS-CoV2.genome.nucl.fasta` should now contain the 500 sequences retrieved initially and the 10 variant sequences.
+Our `SARS-CoV2.genome.nucl.fasta` should now contain the 200 sequences retrieved initially and the 10 variant sequences. You can check this by counting the number of `>`
 
+`grep ">" SARS-CoV2.genome.nucl.fasta|wc -l`
 
 ## Generate a multiple sequence alignment and phylogenetic tree
 
@@ -428,7 +432,7 @@ _Q11 (optional!): [covariants.org](https://covariants.org) provides a great way 
 
 ![](./images/covariants.png)  
 
-_Q12: Get an overview of the differences among SARS-CoV2 variant sequences using a sequence alignment_
+_Q12 (optional!): Get an overview of the differences among SARS-CoV2 variant sequences using a sequence alignment_
 
 Let's start by reworking our sequences from the different variants. We want to replace the lengthy sequence name with our much shorter name used above. For this, we use the command `sed` that can search for patterns. We search for the "name" of the sequence looking for the `>` sign and replace it with our own naming.
 
