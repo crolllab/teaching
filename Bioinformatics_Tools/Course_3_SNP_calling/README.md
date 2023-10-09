@@ -133,7 +133,7 @@ wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_T
 wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_3_SNP_calling/dataset/SRR6649851.subset.fastq.gz
 ```
 
-_Q4: What is paired-end versus single-end sequencing?_
+_Q4 (optional): What is paired-end versus single-end sequencing?_
 
 `gzip` means to compress the output. `-N` and `-X` options are helping us in the course to download only a snapshot of the actual dataset to speed up analyses. For a research project, we would always access the entire dataset.
 
