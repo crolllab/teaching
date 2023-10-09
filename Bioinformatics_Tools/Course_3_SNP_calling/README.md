@@ -107,10 +107,16 @@ There are many more useful kinds of loops with either `for` or `while`.
 We specify all accession numbers to be downloaded in the loop. The code below will run for a few minutes.
 
 ```
+# run fastq-dump in a loop
 for i in SRR6649845 SRR6649843 SRR6649850 SRR6649844 SRR6649848 SRR6649849 SRR6649851 SRR6649847 SRR6649846
 do
 fastq-dump --split-files --gzip -N 10000 -X 310000 $i
 done
+
+# quick check to see if the loop has completed successfully
+ls *fastq.gz|wc -l
+
+# your output should be "18", if you get a lower number, re-run it
 ```
 
 `fastq-dump` is our command to access and download the sequencing data. `split-files` means to create two files corresponding to the paired reads of the sequencing run.
@@ -170,6 +176,12 @@ bowtie2 -x $REFGENOME -p 16 --rg-id $i --rg SM:$i -1 ${i}_1.fastq.gz -2 ${i}_2.f
 # create an index of the bam file
 samtools index $i.sorted.bam
 done
+
+
+# quick check to see if the loop has completed successfully
+ls *sorted.bam.bai|wc -l
+
+# your output should be "9", if you get a lower number, re-run it
 ```
 
 The bowtie option `-x` defines the reference genome. `-p` defines how many processors should be used. `rg` and `rg-id` are "labels" that will help us later identify again the individual. `-1` and `-2` define the downloaded sequences. You see that we use the `$i` variable to create the correct filename.
@@ -189,8 +201,6 @@ _Q8: Use Google to have a look what the SAM alignment format contains. Mention t
 Freebayes is a single step SNP caller to identify polymorphic sites. The code below will run for a few minutes!
 
 ```
-micromamba deactivate
-
 REFGENOME=/home/genomes/fasta/Capra_hircus.ARS1.dna.toplevel
 
 freebayes -f $REFGENOME.fa -r 1 *.bam -v Alpine_ibex.vcf
@@ -209,7 +219,6 @@ _Q9: Describe the basic features of a line reporting a SNP (what you see with `t
 VCFtools is a very common tool to filter our low quality SNPs or make selections of specific sets of SNPs.
 
 ```
-micromamba activate conda-ibex
 vcftools --vcf Alpine_ibex.vcf --max-missing 0.8 --minQ 100 --mac 1 --recode --out Alpine_ibex.filtered
 ```
 
@@ -219,7 +228,7 @@ _Q10: How many SNPs (or sites) did vcftools retain after filtering?_
 
 ## R code to visualize SNP data
 
-We will switch now to R ("Console", not "Terminal"). Before you start, create a text file containing exactly what is below. Name the file `Alpine_ibex.info.txt`
+We will switch now to R ("Console", not "Terminal"). Before you start, create a text file containing exactly what is below. Name the file `Alpine_ibex.info.txt`. Hint: use `nano` (see Course 1)
 
 ```
 SRA_ID  population  individual
