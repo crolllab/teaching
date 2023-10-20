@@ -48,16 +48,16 @@ This ensure that we all start the analyses in the same place (our home folder). 
 ### Download links from the github site
 
 # Genotype dataset
-wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_9_GWAS/datasets/MaizeDivPanel_282_genotypes_GBS.hmp.txt
+wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_5_GWAS/datasets/MaizeDivPanel_282_genotypes_GBS.hmp.txt
 
 # Principal component analysis
-wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_9_GWAS/datasets/MaizeDivPanel_282_genotypes_PCs.txt
+wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_5_GWAS/datasets/MaizeDivPanel_282_genotypes_PCs.txt
 
 # Information about the accessions (individuals)
-wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_9_GWAS/datasets/MaizeDivPanel_282_genotypes_INFO.txt
+wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_5_GWAS/datasets/MaizeDivPanel_282_genotypes_INFO.txt
 
 # Phenotypic trait dataset
-wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_9_GWAS/datasets/MaizeDivPanel_282_phenotypes_33traits.txt
+wget https://raw.githubusercontent.com/crolllab/teaching/master/Bioinformatics_Tools/Course_5_GWAS/datasets/MaizeDivPanel_282_phenotypes_33traits.txt
 ```
 
 _Q1: Use `head` to briefly check out each of the four files. What kind of information is recorded here?_
@@ -123,9 +123,9 @@ ggplot(joint.m.df, aes(x = Trait_value)) +
 ggsave("Traits.MaizeAccessions.pdf", width=12, height=8)
 ```
 
-_Q3: What kind of distribution describes best the majority of the traits? (no proper analysis required - just a general appreciation)_
+_Q3 (optional): What kind of distribution describes best the majority of the traits? (no proper analysis required - just a general appreciation)_
 
-_Q4: Do you expect only one or many loci (i.e. genes) contributing to each of these traits? Briefly explain why._
+_Q4: Given the observed trait distributions: Do you expect only one or many loci (i.e. genes) contributing to each of these traits? Briefly explain why._
 
 
 ## Performing the association mapping (GWAS)
@@ -135,7 +135,9 @@ We will now use the R package GAPIT3 to perform the GWAS analyses for individual
 ```
 # In R "Console"
 
-library(GAPIT3)
+# loading required functions
+source("http://zzlab.net/GAPIT/gapit_functions.txt")
+
 traits.data  <- read.table("MaizeDivPanel_282_phenotypes_33traits.txt", head = TRUE)
 genotypes.data <- read.table("MaizeDivPanel_282_genotypes_GBS.hmp.txt", head = FALSE)
 
@@ -198,12 +200,13 @@ _Q5: Try to find out what each file represents and very briefly describe what yo
 
 The full statistics outcome of the GWAS is in the file `GAPIT.Association.GWAS_Results.MLM.GDDAnthesis.SilkingInterval.csv`. This file reports for every SNP in the dataset the association with the analyzed trait.
 
-Let's use R to identify the SNP showing the most significant association with the phenotype. You can graphically identify this SNP also by opening the file `GAPIT.Association.Manhattan_Geno.MLM.GDDAnthesis.SilkingInterval.pdf` (see above).
+Let's use R to identify the SNP showing the most significant association with the phenotype. You can graphically identify this SNP also by opening the file `GAPIT.Association.Manhattan_Geno.MLM.GDDAnthesis.SilkingInterval.pdf` (adjust to your trait).
 
 ```
 # In R "Console"
 library(dplyr)
 
+# adjust to your trait
 GWAS.df <- read.csv("GAPIT.Association.GWAS_Results.MLM.GDDAnthesis.SilkingInterval.csv", header = T)
 
 # The file is sorted chromosome and position. Let's check the first SNPs at the top of the file.
