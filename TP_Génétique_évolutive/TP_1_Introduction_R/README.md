@@ -177,7 +177,7 @@ Alternativement, on peut ignorer certaines colonnes: `colClasses = c(”integer�
 **Attention**: faites bien attention à correctement définir `setwd("/...")` (voir ci-dessus) ou de spécifier l'emplacement de manière explicite e.g. `"/Users/dcroll/.../.../fichier.xlsx")`
 
 ```
-install.packages("openxlsx")
+# install.packages("openxlsx")
 library("openxlsx")
 
 # lire la première feuille dans le fichier Excel
@@ -269,7 +269,7 @@ Consultez aussi le [cheatsheet](./cheatsheets/dplyr-cheatsheet.pdf).
 - combiner toutes ces opérations en une commande (pipe)
 
 ```
-install.packages("dplyr")
+#install.packages("dplyr")
 
 library(dplyr)
 
@@ -383,7 +383,7 @@ Nous allons analyser des fichiers VCF représentant des génotypes de grandes po
 On utilisera le fichier [fasta de FOXP2](./fasta/FOXP2_nucl.aligned.fasta) (cf. cours 2 Génétique évolutive). Utilisez impérativement le fichier lié ci-dessus et pas le fichier fourni lors du cours. Ce fichier là ne contient pas encore des séquences alignées.
 
 ```
-install.packages(c("pegas", "seqinr"))
+# install.packages(c("pegas", "seqinr"))
 
 # les packages les plus utiles
 library(ape)
