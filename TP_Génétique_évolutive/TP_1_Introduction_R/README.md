@@ -12,24 +12,17 @@
 - Remanier des données avec `dplyr`
 - Visualiser des données avec `ggplot2`
 
-### Installations requises
+### Accès à RStudio
 
-**NB: pour ces TPs, nous préférons d'utiliser [RStudio en ligne](http://130.125.25.239:8787)!**
+**NB: pour ces TPs, nous recommendaons fortement [RStudio en ligne](http://legcompute2.unine.ch:8787) au lieu d'une installation propre sur votre ordinateur!**
 
-- Télécharger R sur [CRAN](https://stat.ethz.ch/CRAN/)
-- Télécharger la version gratuite de [RStudio](https://rstudio.com)
-- Très important pour éviter des problèmes plus tard: Vérifiez si vous avez les versions les plus récentes avant de continuer. Sinon, répétez l'installation svp.
+L'accès se fait uniquement par le Wifi `unine`.
 
 ## Travailler avec RStudio  
 
-- Commencez par lancer RStudio. Si `R` n'est pas encore installé correctement, il y aura un message d'erreur.
 - Créez un nouveau fichier `R Script`. Utilisez toujours un tel fichier pour enregistrer votre code.
 
 ![](./images/basic_layout.png)
-
-- Pour RStudio installé sur votre ordinateur uniquement, déterminer le `working directory` soit dans les préférences ou en rajoutant la ligne de code tel que `setwd("/Users/dcroll/Desktop/")`. Ajustez l'emplacement. **NB: pour ces TPs, nous préférons d'utiliser [RStudio en ligne](http://130.125.25.239:8787), donc l'ajustement se fait dans le menu "Session" => "Set Working Directory" => "Choose Directory"**.
-
-![](./images/workingdir.png)
 
 - Utilisez la touche `tab` pour auto-compléter du code, des liens, des options, etc.
 
