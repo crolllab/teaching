@@ -142,7 +142,7 @@ genotypes <- get.Progeny.GenoFreq(alleles)
 
 Ci-dessus, nous avons créé un petit modèle qui nous re-calcule les fréquences génotypiques et alléliques à chaque génération. La sélection peut être intégrée au niveau des génotypes produits à partir des fréquences alléliques. Le but est alors de modifier chaque fréquence génotypique en fonction de sa valeur sélective w (ou fitness).
 
-Q6 (optionnelle): Cherchez dans le cours de génétique évolutive les définitions de la valeur sélective s et le coefficient de dominance h.
+Q6 (optionnelle): Cherchez dans le cours de génétique évolutive les définitions du coéfficient de sélection s et le coefficient de dominance h.
 
 Reprenons la fonction suivante:
 
@@ -162,7 +162,7 @@ get.Progeny.GenoFreq <- function(alleles) {
 Le but est d'ajuster la fréquence génotypique par la valeur sélective du génotype. Donc, assumons que le génotype `AA` a le fitness maximum:
 
 ```
-# valeur sélective
+# coéfficient de sélection
 s <- 0.05
 # coéfficient de dominance
 h <- 0.5 # donc, co-dominance
