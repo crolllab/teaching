@@ -207,7 +207,7 @@ results.df <- data.frame(generation=numeric(),
                           genotype.aa=numeric())
 ```
 
-Le principe pour introduire des données (les fréquences a, A, aa, ...) au cours de la simulation:
+Le principe pour introduire des données (les fréquences pA, pa, pAA, pAa et paa) au cours de la simulation:
 
 ```
 # à la génération "i" dans la boucle
