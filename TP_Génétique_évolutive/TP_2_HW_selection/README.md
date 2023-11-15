@@ -186,11 +186,7 @@ Q7: La procédure ci-dessus produit des fréquences génotypiques qui ne corresp
 
 Q8: Modifiez votre boucle pour tester la validité de la Loi Hardy-Weinberg ci-dessus en intégrant une épisode de sélection sur les génotypes à chaque génération. La sélection sera alors l'étape finale de la boucle.
 
-
-Q9: Testez pour des h entre 0, 0.5 et 1 si vous pouvez vérifier les analyses faites au cours (voir ci-dessous).
-
-![](./images/fixation.png)
-
+Q9: Evaluez si des s et h différents ont un impact notable sur la vitesse des changements en fréquences alléliques.
 
 ## Visualisations graphiques
 
@@ -255,3 +251,6 @@ ggplot(results.m.df[results.m.df$type == "allele.A",], aes(x = generation, y = f
 Q10: Intégrez la collection des données avec `results.df` dans votre boucle simulant l'impact de la sélection (Q8). Explorez l'impact du `s`, `h` et les fréquences génotypiques au départ sur l'évolution.
 
 ![](./images/Simulating_selection.png)
+
+![](./images/fixation.png)
+
