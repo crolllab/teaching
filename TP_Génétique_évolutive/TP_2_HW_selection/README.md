@@ -1,14 +1,14 @@
 ### TP Génétique évolutive 2
 
 
-# Loi de Hardy-Weinberg et sélection
+# Loi de Hardy-Weinberg et l'effet de la sélection
 
 
 ### Buts de ces travaux pratiques  
 - Pouvoir visualiser la relation entre fréquences alléliques et génotypiques
 - En ajoutant la sélection, calculer le changement en fréquences alléliques d'une génération à l'autre
 - Intégrer ces changements en fréquences alléliques dans un modèle à plusieurs générations
-- Comprendre l'impact de la valeur sélective s et le coefficient de dominance h
+- Comprendre l'impact de la coefficient de sélection s et le coefficient de dominance h
 
 ![](./images/cycle.png)
 
@@ -88,14 +88,17 @@ get.Allele.Freq <- function(genotypes) {
   q <- genotypes[3] + 0.5*genotypes[2]
   p <- p/(p+q)
   q <- 1 - p
-  return(c(p,q))
+  alleles <- c(p,q)
+  return(alleles)
   }
 ```
 
-Q4: Testez la fonction ci-dessus et calculez les fréquences alléliques p et q pour les génotypes suivants AA: 39, Aa: 10, aa: 3.
+NB: Votre fonction ci-dessus ne prend pas en compte le nombre de génotypes AA, Aa et aa mais les fréquences génotypiques. Donc une conversion en fréquences sera toujours nécessaire.
+
+Q4: Testez la fonction ci-dessus et calculez les fréquences alléliques p et q pour les génotypes suivants AA: 39, Aa: 10, aa: 3. 
 
 
-### Fonction 2: Calculez les génotypes produits à partir d'un pool de gamètes
+### Fonction 2: Calculez les fréquences génotypiques produits à partir d'un pool de gamètes
 
 Nous supposons que les gamètes vont produire des zygotes selon un appariement aléatoire (pour respecter une condition de la Loi H-W).
 
@@ -109,17 +112,31 @@ get.Progeny.GenoFreq <- function(alleles) {
   newAa <- 2 * alleles[1] * alleles[2]
   newaa <- alleles[2]^2
 
-  return(c(newAA, newAa, newaa))
+  genotypes <- c(newAA, newAa, newaa)
+  return(genotypes)
 
 }
 
 get.Progeny.GenoFreq(alleles)
 ```
 
-Nous avons maintenant utilisé ces deux fonctions pour simuler l'évolution des fréquences alléliques dans une population. Notamment, le passage des parents aux gamètes et puis à la formation de zygotes.
+Nous allons maintenant utiliser ces deux fonctions pour simuler l'évolution des fréquences alléliques dans une population. Notamment, le passage des parents aux gamètes et puis à la formation de zygotes.
 
 Q5: Utilisez une boucle (voir TP 1) pour enchaîner les deux fonctions ci-dessus. Notamment, assurez que vous passez les valeurs produites par une fonction à l'autre. Choisissez des fréquences génotypiques pour démarrer la boucle et faites tourner la boucle une série de fois (e.g. 10x). Comparez les fréquences alléliques/génotypiques initiales et finales pour valider votre code.
 
+Astuces: 
+
+```
+for (i in 1:10) {
+  # votre code
+}
+```
+
+```
+#Les fonctions à enchainer
+alleles <- get.Allele.Freq(genotypes)
+genotypes <- get.Progeny.GenoFreq(alleles)
+```
 
 ## L'impact de la sélection sur les fréquences génotypiques (et alléliques)
 
@@ -136,7 +153,8 @@ get.Progeny.GenoFreq <- function(alleles) {
   newAa <- 2 * alleles[1] * alleles[2]
   newaa <- alleles[2]^2
 
-  return(c(newAA, newAa, newaa))
+  genotypes <- c(newAA, newAa, newaa)
+  return(genotypes)
 
 }
 ```
@@ -155,7 +173,7 @@ wAa <- 1 - h*s
 waa <- 1 - s
 ```
 
-Pour simplifier l'analyse, regroupons les valeurs de fitness:
+Pour simplifier l'analyse, regroupons les valeurs de fitness dans un vecteur:
 `geno.fitness <- c(wAA, wAa, waa)`
 
 Nous avons alors la possibilité de modifier les fréquences génotypiques en appliquant `geno.fitness` sur un vecteur de `genotypes` comme ci-dessus
