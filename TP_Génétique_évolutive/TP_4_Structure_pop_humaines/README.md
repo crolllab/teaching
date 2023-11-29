@@ -124,7 +124,9 @@ allchr.df$chromosome <- factor(allchr.df$chromosome, levels = c(1:22, "X"))
 
 # Nombre de SNP inclut par chromosome
 SNP.per.chr <- as.data.frame(table(allchr.df$chromosome))
-qplot(x = allchr.df$chromosome, geom = "bar", xlab = "Chromosomes", ylab = "Number of SNPs")
+names(SNP.per.chr)[1] <- "chromosome"
+ggplot(SNP.per.chr, aes(x = as.factor(chromosome), y = Freq)) + geom_bar(stat = "identity") + 
+ labs(x = "Chromosomes", y = "Number of SNPs")
 ```
 
 Q4 (optionnelle): Calculez le nombre de SNP par megabases de chromosomes (i.e. densité). Est-ce que les chromosomes diffèrent en densité?  
@@ -134,9 +136,9 @@ Q5 (optionnelle): Quel est le génotype de l'individu "HG02334" à la première 
 
 
 ```
-# visualiser la densité des SNP
+# visualisation de la densité des SNP
 ggplot(allchr.df, aes(x = position/1000000)) + geom_histogram(binwidth = 10) +
-  labs(x = "Position sur le chromosome (en Mb)", y = "Densité SNP") +
+  labs(x = "Position on chromosome (in Mb)", y = "SNP density") +
   scale_x_continuous(breaks = seq(0,1000,50)) +
   theme(panel.background = element_blank()) +
   facet_grid(. ~ chromosome, space = "free", scales = "free")
@@ -144,14 +146,14 @@ ggplot(allchr.df, aes(x = position/1000000)) + geom_histogram(binwidth = 10) +
 ggsave("SNPdensity.pdf", width = 20, height = 4)
 ```
 
-Q6: Discutez une explication possible du pic principal de densité des SNPs.
+Q6 (optionnelle): Discutez une explication possible du pic principal de densité des SNPs.
 
 ## Fréquences alléliques et allèles mineurs
 
-Une propriété importante d'une population est la distribution des fréquences alléliques. On peut extraire l'information de la fréquence de l'allèle alternatif comme ci-dessous:
+Une propriété importante d'une population est la distribution des fréquences alléliques. Nous focalison sur l'allèle alternatif (l'allèle ne figurant pas dans le génome de référence) dans un premier temps. On peut extraire l'information de la fréquence de l'allèle alternatif comme ci-dessous:
 
 ```
-# extraction des fréquences de l'allèle alternatif (l'allèle ne figurant pas dans le génome de référence)
+# extraction des fréquences de l'allèle alternatif 
 alt.allele.freq <- glMean(allchr.snps)
 
 # pour une population seulement
@@ -166,17 +168,23 @@ Q7 (optionnelle): Modifier le code pour visualiser les fréquences d'allèles mi
 
 Proposition de solution:
 ```
+# principe de base
+minor.allele.freq <- glMean(allchr.snps)
 minor.allele.freq[minor.allele.freq > 0.5] <- 1-minor.allele.freq[minor.allele.freq > 0.5]
 
+# pour une population spécifique
 population <- "Bengali"
 
 alt.allele.freq.pop <- glMean(allchr.snps[pop(allchr.snps) == population,])
-
 minor.allele.freq.pop <- alt.allele.freq.pop
-
 minor.allele.freq.pop[minor.allele.freq.pop > 0.5] <- 1-minor.allele.freq.pop[minor.allele.freq.pop > 0.5]
 
-qplot(minor.allele.freq.pop, geom = "density", xlab = "Minor allele frequency")
+minor.allele.freq.pop <- as.data.frame(minor.allele.freq.pop)
+names(minor.allele.freq.pop) <- "MAF"
+
+ggplot(minor.allele.freq.pop, aes(x = MAF)) + 
+  geom_density() +
+  labs(x = "Minor allele frequency")
 ```
 
 NB: Ce jeux de données est filtré pour éliminer les SNP avec allèles très rares (MAF < 0.05) pour des raisons pratiques (données trop volumineuses)
@@ -209,7 +217,7 @@ ggplot(heterozygosity.df, aes(x = reorder(population, -MeanHeterozygosity), y = 
 ggsave("Population_heterozygosity.pdf", width = 6, height = 4)
 ```
 
-Q9: Selon vos connaissances sur les voies de colonisation de l'humain, prédisez grossièrement les différences en taux d'hétérozygotie entre populations (1-2 phrases). Puis, comparez votre prédiction avec le graphique généré ci-dessus.
+Q9: Selon vos connaissances des voies de colonisation de l'humain, prédisez grossièrement les différences en taux d'hétérozygotie entre populations (1-2 phrases). Puis, comparez votre prédiction avec le graphique généré ci-dessus.
 
 Q10 (optionnelle): En utilisant la procédure ci-dessus, calculez l'hétérozygotie pour la population "British" par chromosome.
 
