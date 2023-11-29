@@ -162,14 +162,21 @@ alt.allele.freq.pop <- glMean(allchr.snps[pop(allchr.snps) == population,])
 qplot(alt.allele.freq.pop, geom = "density", xlab = "Alternative allele frequency")
 ```
 
-Q7: Modifier le code pour visualiser les fréquences d'allèles mineurs (MAF).
+Q7 (optionnelle): Modifier le code pour visualiser les fréquences d'allèles mineurs (MAF).
 
-Proposition de solution (partielle):
+Proposition de solution:
 ```
-alt.allele.freq <- glMean(allchr.snps)
-minor.allele.freq <- alt.allele.freq
-
 minor.allele.freq[minor.allele.freq > 0.5] <- 1-minor.allele.freq[minor.allele.freq > 0.5]
+
+population <- "Bengali"
+
+alt.allele.freq.pop <- glMean(allchr.snps[pop(allchr.snps) == population,])
+
+minor.allele.freq.pop <- alt.allele.freq.pop
+
+minor.allele.freq.pop[minor.allele.freq.pop > 0.5] <- 1-minor.allele.freq.pop[minor.allele.freq.pop > 0.5]
+
+qplot(minor.allele.freq.pop, geom = "density", xlab = "Minor allele frequency")
 ```
 
 NB: Ce jeux de données est filtré pour éliminer les SNP avec allèles très rares (MAF < 0.05) pour des raisons pratiques (données trop volumineuses)
@@ -177,6 +184,7 @@ NB: Ce jeux de données est filtré pour éliminer les SNP avec allèles très r
 
 Q8: Générer les plots pour deux populations que vous supposez de montrer un contraste au niveau des spectres de fréquences d'allèles mineurs (MAF). Décrivez brièvement (et verbalement) les différences au niveaux des spectres.
 
+NB: ajustez `population <- "Bengali"` pour sélectionner une autre population.
 
 ## Fréquences génotypiques
 
@@ -205,7 +213,7 @@ Q9: Selon vos connaissances sur les voies de colonisation de l'humain, prédisez
 
 Q10 (optionnelle): En utilisant la procédure ci-dessus, calculez l'hétérozygotie pour la population "British" par chromosome.
 
-Solution proposée:
+Proposition de solution:
 ```
 heterozygosity.perSNP.perPOP.t <- as.data.frame(t(heterozygosity.perSNP.perPOP[,-1]))
 names(heterozygosity.perSNP.perPOP.t) <- heterozygosity.perSNP.perPOP[,1]
@@ -249,11 +257,11 @@ ggplot(pca.data, aes(x = PC1, y = PC2, fill=region, color=region)) +
 ggsave("PCA_structure_poptext.pdf", width = 12, height = 10)
 ```
 
-Q11: Qu'est-ce que signifie le barplot?
+Q11: Qu'est-ce que signifie le barplot? Cherchez pour "eigenvector" en lien avec "PCA" si besoin.
 
-Q12: En visualisant les "super-populations" (continents/régions) et puis les "populations", interprétez la structuration observée dans la PCA. En s'appuyant sur les voies de colonisations majeures, quelles sont les raisons probables du regroupement? Est-ce que vous trouvez des contradictions selon vos prédictions?
+Q12: En visualisant les "super-populations" (continents/régions) et puis les "populations", interprétez la structuration observée dans la PCA. En s'appuyant sur les voies de colonisations majeures, quelles sont les raisons probables du regroupement? Est-ce que vous trouvez des contradictions à vos prédictions?
 
-Q13: Un petit nombre d'individus non-africains se trouvent très proche du cluster africain. Explications probables selon votre avis?
+Q13: Un petit nombre d'individus non-africains se trouvent très proche du cluster africain. Explications possibles à votre avis?
 
 
 ## Analyse de F<sub>ST</sub> par paires de populations
