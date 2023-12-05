@@ -314,6 +314,6 @@ ggplot(REF.freq.m.full_data.df[REF.freq.m.full_data.df$locus %in% ten.random.loc
 ggsave("Allele_Freq.Ten_random_loci.pdf", width = 7, height = 4.5)
 ```
 
-Q15: Essayez une série de loci aléatoirement choisis (relancer la sélection de 10 loci ci-dessus). Sélectionnez un graphique qui vous paraît explicative et puis interprétez l'évolution des fréquences alléliques en fonction de l'histoire évolutive des  populations (introductions primaires, secondaires, admixture, etc.)
+Q15 (optionnelle): Essayez une série de loci aléatoirement choisis (relancer la sélection de 10 loci ci-dessus). Sélectionnez un graphique qui vous paraît explicative et puis interprétez l'évolution des fréquences alléliques en fonction de l'histoire évolutive des  populations (introductions primaires, secondaires, admixture, etc.)
 
 Q16: Après avoir fait toutes ces analyses: Est-ce qu'il vous semble que les bouquetins des Alpes sont en danger? Et puis, si vous étiez en charge de planifier des translocations d'invidus, vous les feriez entre quelles populations? Argumentez en s'appuyant sur les résultats que vous avez obtenus.
