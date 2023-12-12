@@ -235,7 +235,7 @@ La région du gène *MCM6* comprend les mutations qui régulent l'expression du 
 
 Q12 (optionnelle): Quelle est la distance physique entre les exons les plus proche de *LCT* et *MCM6*?
 
-Q13: Quelles signatures de sélection correspondent à un Tajima's D positif et négatif?
+Q13 (optionnelle): Quelles signatures de sélection correspondent à un Tajima's D positif et négatif?
 
 Q14: Expliquez vos attentes en ce qui concerne les populations qui auraient subi une forte sélection pour la capacité de digérer la lactose. Attentes pour l'Afrique et l'Inde?
 
