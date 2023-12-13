@@ -133,13 +133,11 @@ ggplot(pop.stats.df, aes(y = Fis, x = reorder(Population.name, Fis), fill = Supe
 ggsave("Fis_populations.pdf", width = 8, height = 7)
 ```
 
-Q1: Quelles sont les causes probables d'un F<sub>IS</sub> élevés chez certaines populations humaines?
+Q1: Quelles sont les causes probables d'un F<sub>IS</sub> élevés dans certaines populations humaines?
 
-Q2: Est-ce que le niveau de consanguinité d'une population a un impact sur l'efficacité de la sélection de favoriser un allèle avantageux? Expliquez pourquoi oui ou non.
+Q2 (optionnelle): Est-ce que le niveau de consanguinité d'une population a un impact sur l'efficacité de la sélection de fixer un allèle avantageux? Expliquez pourquoi oui ou non.
 
-Q3: Visualisez la distribution des valeurs F<sub>ST</sub> à travers tous les loci à l'aide d'un histogramme. Rajoutez une ligne verticale pour la valeur F<sub>ST</sub> moyenne.
-
-Q4 (optionnelle): Quel type de distribution statistique observez-vous probablement? Est-ce que toute déviation de valeur F<sub>ST</sub> à un locus par rapport au F<sub>ST</sub> moyen indiquerait un locus sous sélection? Quelle approche plus robuste pourrait-on imaginer pour identifier les loci réellement sous sélection?
+Q3: Visualisez la distribution des valeurs F<sub>ST</sub> à travers tous les loci à l'aide d'un histogramme. Rajoutez une ligne verticale pour la valeur F<sub>ST</sub> moyenne. Astuce: `+ geom_vline(xintercept = ...)`
 
 ### Création d'un data.frame comprenant les positions chromosomales et statistiques par locus (Hs, Fst, etc.)
 
@@ -164,9 +162,7 @@ ggsave("Fst.per-locus.pdf", width = 12, height = 8)
 ```
 Visualisez la distribution des valeurs F<sub>ST</sub> le long des chromosomes 1-5.
 
-Q5 (optionnelle): Quelle est la raison probables des grandes régions chromosomales sans SNP?
-
-Q6: Identifiez à l'oeil une ou plusieurs régions potentiellement sous sélection divergente (F<sub>ST</sub> élevé). Expliquez brièvement votre choix.
+Q4: Identifiez à l'oeil une région potentiellement sous sélection divergente (= F<sub>ST</sub> élevé).
 
 
 ### Visualisation des fréquences alléliques à des loci avec un F<sub>ST</sub> extrême
@@ -203,15 +199,13 @@ ggplot(RefSNP.freq.table, aes(x = reorder(population, ref_allele_frequency), y =
 ggsave(paste0("Allele_freq-",locus,".pdf"), width = 7, height = 4.5)
 ```
 
-Q7: Décrivez le pattern des fréquences à travers les populations. Essayez d'expliquer le pattern par un processus neutre. Alternativement, quel scénario de sélection aurait pu générer ce pattern?
+Q5: Décrivez le pattern des fréquences alléliques à travers les populations. Est-ce que vous pouvez expliquer le pattern par un processus neutre? Alternativement, quel scénario de sélection aurait pu générer ce pattern?
 
-Q8 (optionnelle): Explorez la région comprenant le SNP rs10270859 à l'aide du site [Ensembl](http://www.ensembl.org/Homo_sapiens/Info/Index). Quel est l'allèle ancestral (partagé avec d'autres primates)? Dans quelle région au monde est l'allèle ancestral le plus fréquent? Est-ce que ceci correspond à votre prédiction?
+Q6 (optionnelle): Explorez la région comprenant le SNP rs10270859 à l'aide du site [Ensembl](http://www.ensembl.org/Homo_sapiens/Info/Index). Quel est l'allèle ancestral (partagé avec d'autres primates)? Dans quelle région au monde est l'allèle ancestral le plus fréquent? Est-ce que ceci correspond à votre prédiction?
 
-Q9 (optionnelle): Dans quel gène se trouve le SNP rs10270859. Trouvez l'information à l'aide d'[Ensembl](http://www.ensembl.org/Homo_sapiens/Info/Index). Quelle est la fonction prédite du gène qui se trouve au même locus?
+Q7 (optionnelle): Dans quel gène se trouve le SNP rs10270859. Trouvez l'information à l'aide d'[Ensembl](http://www.ensembl.org/Homo_sapiens/Info/Index). Quelle est la fonction prédite du gène qui se trouve au même locus?
 
-Q10 (optionnelle): Choisissez trois autres SNP parmi les 10 avec un F<sub>ST</sub> extrême et visualisez les fréquences alléliques. Décrivez le pattern général observé à travers les loci.
-
-Q11 (optionnelle): Avec vos connaissances sur la distribution des fréquences alléliques aux SNP avec un F<sub>ST</sub> extrême, postulez des limites de l'analyse de sélection basée sur les F<sub>ST</sub> pour cette espèce.
+Q8: Choisissez trois autres SNP parmi les 10 avec un F<sub>ST</sub> extrême et visualisez les fréquences alléliques. Est-ce qu'il y a un pattern partagé à travers ces loci?
 
 
 ## L'analyse du Tajima *D* au locus codant pour la lactase
@@ -233,11 +227,9 @@ Visualisation sur [Ensembl](http://www.ensembl.org/Homo_sapiens/Gene/Summary?db=
 
 La région du gène *MCM6* comprend les mutations qui régulent l'expression du gène *LCT* (lactase). Pour identifier une signature de sélection sur l'expression du gène LCT, il faut alors bien analyser la région du gène *MCM6* au lieu du *LCT* en soi.
 
-Q12 (optionnelle): Quelle est la distance physique entre les exons les plus proche de *LCT* et *MCM6*?
+Q9 (optionnelle): Quelle est grossièrement la distance physique entre les exons les plus proche de *LCT* et *MCM6*?
 
-Q13 (optionnelle): Quelles signatures de sélection correspondent à un Tajima's D positif et négatif?
-
-Q14: Expliquez vos attentes en ce qui concerne les populations qui auraient subi une forte sélection pour la capacité de digérer la lactose. Attentes pour l'Afrique et l'Inde?
+Q10 (optionnelle): Quelles signatures de sélection correspondent à un Tajima's D positif et négatif?
 
 ### Préparation des données de la région *MCM6*
 ```
@@ -311,8 +303,4 @@ ggplot(taj.df, aes(x=reorder(pop, tajima), y=tajima, fill=region)) +
 ggsave("TajimaD.lactase.pdf", width = 6, height = 4)
 ```
 
-Q15 (optionnelle): Visualisez l'alignement des positions SNP au sein du gène *MCM6*. Est-ce que vous êtes surpris par la proportion des SNP qui sont effectivement variables par population?
-
-Q16 (optionnelle): Sélectionnez trois populations parmi lesquelles vous soupçonnez de trouver un contraste au niveau du Tajima *D*. Visualisez les spectres de fréquences alléliques et discutez ce que vous observez. Quel type de sélection (ou neutralité) vous prédisez?
-
-Q17: Faites l'analyses des Tajima *D*. Discutez l'évidence pour la sélection de digérer la lactose à travers le monde. Est-ce que les régions avec un fort signal de sélection correspondent avec l'emergence de l'agriculture laitière?
+Q11: Faites l'analyses des Tajima *D*. Discutez l'évidence pour la sélection de digérer la lactose à travers le monde. Est-ce que les régions avec un fort signal de sélection correspondent avec l'emergence de l'agriculture laitière?
