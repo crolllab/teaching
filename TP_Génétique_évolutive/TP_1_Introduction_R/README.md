@@ -181,11 +181,11 @@ Alternativement, on peut ignorer certaines colonnes: `colClasses = c(”integer�
 library("openxlsx")
 
 # lire la première feuille dans le fichier Excel
-df <- read.xlsx("fichier_excel.xlsx)
+df <- read.xlsx("fichier_excel.xlsx")
 ```
 
-Alternativement, on peut exporter le fichier Excel sous format `.csv`
-`df <- read.csv("fichier_excel.csv", header = T`
+Alternativement, on peut exporter le fichier Excel sous format `.csv`  
+`df <- read.csv("fichier_excel.csv", header = T)`
 
 ### Contrôler l'importation d'un fichier lu dans `R`
 

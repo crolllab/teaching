@@ -170,9 +170,7 @@ You can also delete many files at once using a "wild card". To delete all files 
 
 `rm *.sh`
 
-
-
-### A very simple text editor called `nano`
+### A very simple text editor called `nano`  
 
 `nano` is a miniature text editor that is accessible in the Terminal. You can create a new text file called `my_code.sh` like this:
 
