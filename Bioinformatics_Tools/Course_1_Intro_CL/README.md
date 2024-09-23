@@ -185,10 +185,10 @@ Try out some of the other options offered by `nano`. Exercise `nano` a bit so th
 
 The first step is find the correct link to a file. The link should typically end in a recognizable format (.txt, .html, .jpeg, .pdf, etc.).
 
-Here's the link to an image from the UNINE MSc Biology page:
+Here's the link to a well-known image:
 
 ```
-https://www.unine.ch/files/live/sites/systemsite/files/bandeaux/FS/UNINE_FS_MA.jpg
+https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png
 ```
 
 You can paste the link in a web browser to check that it works.
@@ -196,7 +196,7 @@ You can paste the link in a web browser to check that it works.
 To download the image, use `wget` before the link.
 
 ```
-wget https://www.unine.ch/files/live/sites/systemsite/files/bandeaux/FS/UNINE_FS_MA.jpg
+wget https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png
 ```
 
 Check with `ls -lhs` whether you've actually saved the file.
