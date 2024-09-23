@@ -6,9 +6,8 @@ The course aims to introduce students to diverse areas of bioinformatics. We par
 - Introduction to Unix and scripting
 - Sequencing analysis
 - Genome assembly
-- Phenotype-genotype associations
 - Epigenetics
-
+(Not offered: Phenotype-genotype associations)
 
 ## How to access the "shell" and RStudio for the exercises
 
@@ -21,7 +20,7 @@ Our lab offers you the possibility to access RStudio Server. This allows you to 
 ![](./images/image_1.png)
 
 - Please request your username by adding your first name [here in this sheet](https://docs.google.com/spreadsheets/d/1mE2cfUr14qA17YftYb2O4ualr3K9wKWXXtxEknLZuU0/edit?usp=sharing). Wait until your account was created ("OK" mark).  
-- Your password is: `bioinfo23`   
+- Your password is: `bioinfo24`   
 - Anything you save while using RStudio is on the server.
 - **To transfer a file to the server**: Find the "Files" tab (typically bottom right of the RStudio screen), click on "Upload" and select "Choose File". The file will upload and you can spot it now under "Files".  
 
@@ -39,13 +38,9 @@ Our lab offers you the possibility to access RStudio Server. This allows you to 
 
 Please refer to IS-Academia for details.
 
-### Courses 1-3
+### Command line introduction 1-3
 
 Practical introduction to basic commands using a "shell", introduction to bioinformatics tools, basic exercises.
-
-### Course on phenotype-genotype associations
-
-A tutorial will be provided on Moodle / here.
 
 ### Courses on genome sequencing, assembly and epigenetics
 
