@@ -259,7 +259,7 @@ We will use the following search term. Note also that we will now look for the n
 
 NB: The NCBI API key is to authenticate us with the NCBI server. In principle, we'd all individually create a key. But for this exercise, we use a shared key. This is not a problem for our purposes, but in a real-world scenario, you'd want to have your own key.
 
-`NCBI_API_KEY=f6f94d428527aae6c5e31f36e1f270cbf608`
+`NCBI_API_KEY=f6f94d428527aae6c5e31f36e1f270cbf608`  
 `esearch -db nucleotide -query "Severe acute respiratory syndrome coronavirus 2 isolate SARS-CoV-2"`
 
 _Q6: How many such sequences exist on NCBI?_
