@@ -301,7 +301,7 @@ cat OK252993.fasta >> SARS-CoV2.genome.nucl.fasta
 esearch -db nucleotide -query "MZ727692.1" | efetch -format fasta > MZ727692.fasta
 cat MZ727692.fasta >> SARS-CoV2.genome.nucl.fasta
 
-# And Omicron variants BA.1, 2, 4, 5 and 2.75  
+# And Omicron variants BA.1, 2, 4, 5, 2.75, 24A, 24B, 24C
 esearch -db nucleotide -query "OX315743.1" | efetch -format fasta > OX315743.fasta
 cat OX315743.fasta >> SARS-CoV2.genome.nucl.fasta
 
@@ -327,9 +327,14 @@ esearch -db nucleotide -query "PQ356432.1" | efetch -format fasta > PQ356432.fas
 cat PQ356432.fasta >> SARS-CoV2.genome.nucl.fasta
 ```
 
-Our `SARS-CoV2.genome.nucl.fasta` should now contain the 100 sequences retrieved initially and the 13 variant sequences. You can check this by counting the number of `>`
+Our `SARS-CoV2.genome.nucl.fasta` should now contain the 100 sequences retrieved initially and the 13 variant sequences. 
+
+`grep ">" SARS-CoV2.genome.nucl.fasta`
+
+You can count the number of `>`'s to see how many sequences you have in total.
 
 `grep ">" SARS-CoV2.genome.nucl.fasta|wc -l`
+
 
 ## Generate a multiple sequence alignment and phylogenetic tree
 
