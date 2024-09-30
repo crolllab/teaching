@@ -15,6 +15,15 @@ Please compile brief answers to the questions for your report ("Q1", "Q2", etc.)
 
 You can work alone or in groups. Every student should submit their own report through Moodle though. No copy-pasting, please. Formulate answers in your own words.
 
+### General troubleshooting tips
+
+- Ask yourself whether you are in the correct folder / location. Try to be consistent and make some notes in your script file. Use `pwd` to check where you are and `cd` if necessary.
+- If you want to check out e.g. the command `cp`. Googling for "Linux cp" tells you fairly well what to do. Try for yourself how to best Google/chatGPT/etc. your answers.
+- Read the (error) message that you get in the Terminal following your commands. You may not understand these in full, but it's a good sign that you should expect something strange (a missing file, etc.).
+- Google/chatGPT the error message. Copy the error message and search for it. Helpful? Try to improve your code googling skills during the course.
+- If you can't find a file that you have downloaded or created, start by checking with `pwd` where you are. Then check whether you might have saved the file in a different folder? Was there any error message about a location or file not found?
+- Ask chatGPT (or similar) to write code for you. Does it work? For fairly simple tasks, it gets it often right. However, where chatGPT will fail is if it does not know everything about e.g. your files or folders. Tell it specifically what to do then.
+
 
 ## How to install software (the easy & hard way)
 
@@ -140,11 +149,9 @@ To get started, we need to set up correctly `conda`. For the rest of the course,
 - Download & activate micromamba with this command. This is only needed once.
 
 ```
-# download and decompress
-curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj bin/micromamba
-
-# configure micromamba
-./bin/micromamba shell init -s bash -p ~/micromamba
+# download and launch the setup
+"${SHELL}" <(curl -L https://micro.mamba.pm/install.sh)
+# you need to "answer" any question by pressing "ENTER"
 
 # make sure that the configuration is loaded
 source ~/.bashrc
@@ -254,9 +261,9 @@ We will use the following search term. Note also that we will now look for the n
 
 _Q6: How many such sequences exist on NCBI?_
 
-We now proceed to downloading these sequences. There are far too many, so we need to limit ourselves. Let's analyze 200 random sequences using the `-stop` option like this. [If you are brave, you can try more than 200]
+We now proceed to downloading these sequences. There are far too many, so we need to limit ourselves. Let's analyze 100 random sequences using the `-stop` option like this. [If you are brave, you can try more than 100]
 
-`esearch -db nucleotide -query "Severe acute respiratory syndrome coronavirus 2 isolate SARS-CoV-2" | efetch -format fasta -stop 200 > SARS-CoV2.genome.nucl.fasta`
+`esearch -db nucleotide -query "Severe acute respiratory syndrome coronavirus 2 isolate SARS-CoV-2" | efetch -format fasta -stop 100 > SARS-CoV2.genome.nucl.fasta`
 
 _Q7: Use `head` to check the accession number of the very first sequence in the newly created file. Is it actually a SARS sequence?_
 
@@ -269,7 +276,7 @@ _Q8: Where and when was the virus sample collected?_
 Let's retrieve also this specific genome.  
 `esearch -db nucleotide -query "LR757998.1" | efetch -format fasta > LR757998.fasta`  
 
-Let's append the sequence to our existing file with the 200 sequences using the `>>` sign (see Course 1 for `>>`).  
+Let's append the sequence to our existing file with the 100 sequences using the `>>` sign (see Course 1 for `>>`).  
 `cat LR757998.fasta >> SARS-CoV2.genome.nucl.fasta`
 
 In the following lines, we will repeat the same process for multiple additional variants.
@@ -306,9 +313,18 @@ cat OP164778.fasta >> SARS-CoV2.genome.nucl.fasta
 
 esearch -db nucleotide -query "OP457109.1" | efetch -format fasta > OP457109.fasta
 cat OP457109.fasta >> SARS-CoV2.genome.nucl.fasta
+
+esearch -db nucleotide -query "PP997352.1" | efetch -format fasta > PP997352.fasta
+cat PP997352.fasta >> SARS-CoV2.genome.nucl.fasta
+
+esearch -db nucleotide -query "PQ325441.1" | efetch -format fasta > PQ325441.fasta
+cat PQ325441.fasta >> SARS-CoV2.genome.nucl.fasta
+
+esearch -db nucleotide -query "PQ356432.1" | efetch -format fasta > PQ356432.fasta
+cat PQ356432.fasta >> SARS-CoV2.genome.nucl.fasta
 ```
 
-Our `SARS-CoV2.genome.nucl.fasta` should now contain the 200 sequences retrieved initially and the 10 variant sequences. You can check this by counting the number of `>`
+Our `SARS-CoV2.genome.nucl.fasta` should now contain the 100 sequences retrieved initially and the 13 variant sequences. You can check this by counting the number of `>`
 
 `grep ">" SARS-CoV2.genome.nucl.fasta|wc -l`
 
@@ -411,6 +427,10 @@ tree.df[grepl("OX315675", tree.df$label),"new_label"] <- "Omicron BA.2 variant"
 tree.df[grepl("OP093374", tree.df$label),"new_label"] <- "Omicron BA.4 variant"
 tree.df[grepl("OP164778", tree.df$label),"new_label"] <- "Omicron BA.5 variant"
 tree.df[grepl("OP457109", tree.df$label),"new_label"] <- "Omicron BA.2.75 variant"
+tree.df[grepl("PP997352", tree.df$label),"new_label"] <- "Omicron 24A variant"
+tree.df[grepl("PQ325441", tree.df$label),"new_label"] <- "Omicron 24B variant"
+tree.df[grepl("PQ356432", tree.df$label),"new_label"] <- "Omicron 24C variant"
+
 
 # replace the labels in the tree
 final.tree <- rename_taxa(tree.rooted, tree.df, label, new_label)
@@ -426,7 +446,7 @@ ggsave("SARS-CoV2_genomes_tree.pdf", height = 40, width = 12)
 
 ```
 
-_Q10: Paste the tree in your report and briefly describe what you see. To what variant belong most of your sequences most likely?_
+_Q10: Paste the tree PDF in your report and briefly describe what you see. To what variant belong most of your sequences most likely?_
 
 _Q11 (optional!): [covariants.org](https://covariants.org) provides a great way to track waves of different SARS-CoV2 variants. What is the currently prevalent variant in Switzerland?_
 
@@ -447,13 +467,16 @@ sed -i 's/>.*/>Omicron_BA.2_variant/' OX315675.fasta
 sed -i 's/>.*/>Omicron_BA.4_variant/' OP093374.fasta
 sed -i 's/>.*/>Omicron_BA.5_variant/' OP164778.fasta
 sed -i 's/>.*/>Omicron_BA.2.75_variant/' OP457109.fasta
+sed -i 's/>.*/>Omicron_24A_variant/' PP997352.fasta
+sed -i 's/>.*/>Omicron_24B_variant/' PQ325441.fasta
+sed -i 's/>.*/>Omicron_24C_variant/' PQ356432.fasta
 ```
 
 We have to produce again the sequence alignment and clipping.
 
 ```
 # Combine just the variant sequences
-cat LR757998.fasta MW931310.fasta  OU297363.fasta  OK252993.fasta  MZ727692.fasta  OX315743.fasta  OX315675.fasta  OP093374.fasta  OP164778.fasta  OP457109.fasta > SARS-CoV2.genome.nucl.variants.fasta
+cat LR757998.fasta MW931310.fasta  OU297363.fasta  OK252993.fasta  MZ727692.fasta  OX315743.fasta  OX315675.fasta  OP093374.fasta  OP164778.fasta  OP457109.fasta PP997352.fasta PQ325441.fasta PQ356432.fasta > SARS-CoV2.genome.nucl.variants.fasta
 
 # Perform the alignment and clipping
 mafft --auto --thread 10 SARS-CoV2.genome.nucl.variants.fasta > SARS-CoV2.genome.nucl.variants.mafft.fasta
@@ -464,7 +487,7 @@ clipkit SARS-CoV2.genome.nucl.variants.mafft.fasta -m smart-gap
 Next, we use an online tool to help us visualize the different sequences.
 
 - Download the `SARS-CoV2.genome.nucl.variants.mafft.fasta.clipkit` to your PC. Select the file in the "File" viewer and click on "More" -> "Export"
-- Open the website of the [alignment viewer](https://www.ebi.ac.uk/Tools/msa/mview/) from EMBL-EBI. Choose "DNA" as input and select your own sequence file.
+- Open the website of the [alignment viewer](https://www.ebi.ac.uk/jdispatcher/msa/mview?stype=dna) from EMBL-EBI. Choose "DNA" as input and select your own sequence file.
 - After 1' or so, you should be able to explore the alignment of the different variant sequences.
 
 ![](./images/msa.png)  

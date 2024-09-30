@@ -278,7 +278,9 @@ Try to accomplish the following tasks
 
 ### General troubleshooting tips
 
-- We will look at a command called `cp`. Googling for "Linux cp" tells you fairly well what to do.
-- Read the (error) message that you get in the Terminal following your commands. You may not understand these, but it's a good sign that you should expect something strange (a missing file, etc.).
-- Google the error message. Copy the error message and search for it. Helpful? Try to improve your code googling skills during the course.
+- Ask yourself whether you are in the correct folder / location. Try to be consistent and make some notes in your script file. Use `pwd` to check where you are and `cd` if necessary.
+- If you want to check out e.g. the command `cp`. Googling for "Linux cp" tells you fairly well what to do. Try for yourself how to best Google/chatGPT/etc. your answers.
+- Read the (error) message that you get in the Terminal following your commands. You may not understand these in full, but it's a good sign that you should expect something strange (a missing file, etc.).
+- Google/chatGPT the error message. Copy the error message and search for it. Helpful? Try to improve your code googling skills during the course.
 - If you can't find a file that you have downloaded or created, start by checking with `pwd` where you are. Then check whether you might have saved the file in a different folder? Was there any error message about a location or file not found?
+- Ask chatGPT (or similar) to write code for you. Does it work? For fairly simple tasks, it gets it often right. However, where chatGPT will fail is if it does not know everything about e.g. your files or folders. Tell it specifically what to do then.
