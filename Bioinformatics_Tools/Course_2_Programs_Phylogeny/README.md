@@ -257,6 +257,9 @@ Now we want to search not for a single sequence (or accession) but for all seque
 
 We will use the following search term. Note also that we will now look for the nucleotide (or genome) sequence, not the protein sequence.
 
+NB: The NCBI API key is to authenticate us with the NCBI server. In principle, we'd all individually create a key. But for this exercise, we use a shared key. This is not a problem for our purposes, but in a real-world scenario, you'd want to have your own key.
+
+`NCBI_API_KEY=f6f94d428527aae6c5e31f36e1f270cbf608`
 `esearch -db nucleotide -query "Severe acute respiratory syndrome coronavirus 2 isolate SARS-CoV-2"`
 
 _Q6: How many such sequences exist on NCBI?_
@@ -269,15 +272,15 @@ _Q7: Use `head` to check the accession number of the very first sequence in the 
 
 We will now add one more very specific genome sequence from a virus sampled almost at near the origin of the pandemic. This will help us define the root of the phylogenetic tree later.
 
-Check the accession here on [NCBI](https://www.ncbi.nlm.nih.gov/nuccore/LR757998.1?report=genbank).
+Check the accession here on [NCBI](https://www.ncbi.nlm.nih.gov/nuccore/MN908947.1?report=genbank).
 
 _Q8: Where and when was the virus sample collected?_
 
 Let's retrieve also this specific genome.  
-`esearch -db nucleotide -query "LR757998.1" | efetch -format fasta > LR757998.fasta`  
+`esearch -db nucleotide -query "MN908947.1" | efetch -format fasta > MN908947.fasta`  
 
 Let's append the sequence to our existing file with the 100 sequences using the `>>` sign (see Course 1 for `>>`).  
-`cat LR757998.fasta >> SARS-CoV2.genome.nucl.fasta`
+`cat MN908947.fasta >> SARS-CoV2.genome.nucl.fasta`
 
 In the following lines, we will repeat the same process for multiple additional variants.
 
@@ -411,13 +414,13 @@ library(treeio)
 tree <- read.tree("RAxML_bestTree.SARS-CoV2.genome")
 
 # define the root with the very early viral genome sequence
-tree.rooted <- root(tree, outgroup = "LR757998.1")
+tree.rooted <- root(tree, outgroup = "MN908947.1")
 
 # modify tree tip labels to show only variant names
 tree.df <- data.frame(label = tree.rooted$tip.label)
 
 # for each specific variant sequence, set a label
-tree.df[grepl("LR757998", tree.df$label),"new_label"] <- "Wuhan, China"
+tree.df[grepl("MN908947", tree.df$label),"new_label"] <- "Wuhan, China"
 tree.df[grepl("MW931310", tree.df$label),"new_label"] <- "Delta variant"
 tree.df[grepl("OU297363", tree.df$label),"new_label"] <- "Alpha variant"
 tree.df[grepl("OK252993", tree.df$label),"new_label"] <- "Gamma variant"
@@ -457,7 +460,7 @@ _Q12 (optional!): Get an overview of the differences among SARS-CoV2 variant seq
 Let's start by reworking our sequences from the different variants. We want to replace the lengthy sequence name with our much shorter name used above. For this, we use the command `sed` that can search for patterns. We search for the "name" of the sequence looking for the `>` sign and replace it with our own naming.
 
 ```
-sed -i 's/>.*/>Wuhan_China/' LR757998.fasta
+sed -i 's/>.*/>Wuhan_China/' MN908947.fasta
 sed -i 's/>.*/>Delta_variant/' MW931310.fasta
 sed -i 's/>.*/>Alpha_variant/' OU297363.fasta
 sed -i 's/>.*/>Gamma_variant/' OK252993.fasta
@@ -476,7 +479,7 @@ We have to produce again the sequence alignment and clipping.
 
 ```
 # Combine just the variant sequences
-cat LR757998.fasta MW931310.fasta  OU297363.fasta  OK252993.fasta  MZ727692.fasta  OX315743.fasta  OX315675.fasta  OP093374.fasta  OP164778.fasta  OP457109.fasta PP997352.fasta PQ325441.fasta PQ356432.fasta > SARS-CoV2.genome.nucl.variants.fasta
+cat MN908947.fasta MW931310.fasta  OU297363.fasta  OK252993.fasta  MZ727692.fasta  OX315743.fasta  OX315675.fasta  OP093374.fasta  OP164778.fasta  OP457109.fasta PP997352.fasta PQ325441.fasta PQ356432.fasta > SARS-CoV2.genome.nucl.variants.fasta
 
 # Perform the alignment and clipping
 mafft --auto --thread 10 SARS-CoV2.genome.nucl.variants.fasta > SARS-CoV2.genome.nucl.variants.mafft.fasta
