@@ -450,7 +450,7 @@ ggtree(final.tree) +
   geom_tippoint(size=2, fill="white", color="black")
 
 # save it to PDF (it will be a very tall figure)
-ggsave("SARS-CoV2_genomes_tree.pdf", height = 24, width = 12)
+ggsave("SARS-CoV2_genomes_tree.pdf", height = 30, width = 30)
 
 ```
 
