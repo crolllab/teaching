@@ -69,7 +69,7 @@ We analyze 9 Alpine ibex individuals with each having a single dataset available
 
 To download the first dataset, we can use the the `sra-tools` command `fastq-dump`:
 
-`prefetch SRR6649845`
+`prefetch SRR6649845`  
 `fastq-dump --split-files --gzip SRR6649845`
 
 _Q3 (optional): What is the name of the ibex individual? Use the [NCBI SRA website](https://www.ncbi.nlm.nih.gov/sra) to search for the accession number. Hint: the individual name is under "Library" -> "Name"_
