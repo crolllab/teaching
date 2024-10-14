@@ -107,8 +107,8 @@ Between `do` and `done` are all the commands that should be included in the loop
 
 There are many more useful kinds of loops with either `for` or `while`.
 
-### Download all Alpine ibex dataset in a loop
 
+### Download all Alpine ibex dataset in a loop
 
 We specify all accession numbers to be downloaded in the loop. The code below will run for 5-10 minutes.
 
