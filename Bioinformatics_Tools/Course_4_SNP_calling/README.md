@@ -1,9 +1,9 @@
 ### Bioinformatics Tools
 
-# Course 3
+# Course 4
 
 ### Major aims  
-- Apply the tools/command line knowledge from Course 1+2
+- Apply the tools/command line knowledge from the introductory courses 1+2
 - Know about using a basic loop
 - Use read mapping and SNP identification to analyze the genetic structure of Alpine ibex
 
@@ -13,7 +13,7 @@ Please compile brief answers to the questions for your report ("Q1", "Q2", etc.)
 
 You can work alone or in groups. Every student should submit their own report through Moodle though. No copy-pasting, please. Formulate answers in your own words.
 
-## Reminder: How to activate and use conda
+## Reminder: How to create an environment, activate and use it
 
 Conda helps you install bioinformatics software easily.
 
@@ -64,6 +64,7 @@ We analyze 9 Alpine ibex individuals with each having a single dataset available
 
 To download the first dataset, we can use the the `sra-tools` command `fastq-dump`:
 
+`prefetch SRR6649845`
 `fastq-dump --split-files --gzip SRR6649845`
 
 _Q3 (optional): What is the name of the ibex individual? Use the [NCBI SRA website](https://www.ncbi.nlm.nih.gov/sra) to search for the accession number. Hint: the individual name is under "Library" -> "Name"_
@@ -104,13 +105,17 @@ There are many more useful kinds of loops with either `for` or `while`.
 ### Download all Alpine ibex dataset in a loop
 
 
-We specify all accession numbers to be downloaded in the loop. The code below will run for a few minutes.
+We specify all accession numbers to be downloaded in the loop. The code below will run for 5-10 minutes.
+
+(Note: the `rm -rf $i` command is to remove the downloaded files after the fastq-dump. This is optional but saves disk space)
 
 ```
 # run fastq-dump in a loop
 for i in SRR6649845 SRR6649843 SRR6649850 SRR6649844 SRR6649848 SRR6649849 SRR6649851 SRR6649847 SRR6649846
 do
+prefetch $i
 fastq-dump --split-files --gzip -N 10000 -X 310000 $i
+rm -rf $i
 done
 
 # quick check to see if the loop has completed successfully
@@ -123,9 +128,7 @@ ls *fastq.gz|wc -l
 
 _Q4 (optional): What is paired-end versus single-end sequencing?_
 
-`gzip` means to compress the output. `-N` and `-X` options are helping us in the course to download only a snapshot of the actual dataset to speed up analyses. For a research project, we would always access the entire dataset.
-
-_Q5 (optional): How many files did you produce with the loop above?_
+`gzip` means to compress the output. `-N` and `-X` options are helping us for this course to retain only a snapshot of the actual dataset to speed up analyses. For a research project, we would always access the entire dataset.
 
 ### The sequence format fastq
 
@@ -140,7 +143,7 @@ GTATTCTATCTTATGTATATCTATCTTCTAT
 Here's a glimpse at the `fastq` files:
 `zcat SRR6649845_1.fastq.gz|head`
 
-_Q6: Explain the basic features of this format (using Google)_
+_Q5: Explain the basic features of this format (using Google)_
 
 ### Aligning sequencing reads to a genome
 
@@ -154,15 +157,15 @@ To save time, the genome exists already on our server. The location is here:
 ls -lhs /home/genomes/fasta/Capra_hircus.ARS1.dna.toplevel.*
 ```
 
-_Q7 (optional): Use `head` to read the name of the very first sequence._
+_Q6 (optional): Use `head` to read the name of the very first sequence._
 
 We will now use a loop to align each set of sequences to the domestic goat genome. The tool is called `bowtie2` (see also Course 2).
 
 Install the missing tools
-`micromamba install bowtie2 freebayes vcftools`
+`micromamba install samtools bowtie2 freebayes vcftools`
 
 
-The code below will run for a few minutes!
+The code below will run for a few minutes - be patient.
 
 ```
 # we define a variable to shorten the long path
@@ -194,7 +197,7 @@ Our final file is called e.g. `SRR6649848.sorted.bam`. You can view the first li
 
 `samtools view SRR6649848.sorted.bam|head -n 1`
 
-_Q8: Use Google to have a look what the SAM alignment format contains. Mention three elements (or columns)._
+_Q7: Use Google/chatGPT to have a look what the SAM/BAM alignment format contains. Mention three elements (i.e. different columns)._
 
 ### Calling SNPs based on the aligned reads
 
@@ -212,7 +215,7 @@ The `Alpine_ibex.vcf` is a "variant call format", which is a standard way to rep
 
 You can explore the beginning and end of the file using `head` and `tail`, respectively.
 
-_Q9: Describe the basic features of a line reporting a SNP (what you see with `tail -n 1 Alpine_ibex.vcf`). Use Google for help._
+_Q8: Describe the basic features of a line reporting a SNP (what you see with `tail -n 1 Alpine_ibex.vcf`). Use Google for help._
 
 ### Apply basic filtering steps to the SNPs
 
@@ -224,11 +227,11 @@ vcftools --vcf Alpine_ibex.vcf --max-missing 0.8 --minQ 100 --mac 1 --recode --o
 
 With the above code, we defined that a SNP should be genotyped in at least 80% of the individuals, that the minimum quality should be of 100 and that we want at least two alleles present among the analyzed Alpine ibex (`--mac 1`). The `mac` is the minor allele count, so the number of times, we have found the more rare allele. Our filter requires at least 1.
 
-_Q10: How many SNPs (or sites) did vcftools retain after filtering?_
+_Q9: How many SNPs (or sites) did vcftools retain after filtering?_
 
 ## R code to visualize SNP data
 
-We will switch now to R ("Console", not "Terminal"). Before you start, create a text file containing exactly what is below. Name the file `Alpine_ibex.info.txt`. Hint: use `nano` (see Course 1)
+We will switch now to R ("Console", not "Terminal"). Before you start, create a text file containing exactly what is below. Name the file `Alpine_ibex.info.txt`. Hint: use `nano` (see Course 1) or the RStudio interface to create a new file (File -> New File).
 
 ```
 SRA_ID  population  individual
@@ -280,7 +283,7 @@ ggplot(pca.data, aes(x = PC1, y = PC2, fill=pop, color=pop)) +
 ggsave("PCA_Alpine_ibex.pdf", width = 10, height = 8)
 ```
 
-_Q11: Include the PCA graph and briefly state whether the two populations in the Valais (Weisshorn) and Grisons (Albris) appear separated genetically._
+_Q10: Include the PCA graph and briefly state whether the two populations in the Valais (Weisshorn) and Grisons (Albris) appear as genetically distinct._
 
 ---
 
