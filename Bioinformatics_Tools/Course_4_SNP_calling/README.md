@@ -54,6 +54,11 @@ The first line below brings you to your home folder. You can choose a different 
 
 ```
 cd
+
+# create a new environment (if not done yet)
+micromamba create -n conda-ibex
+
+# activate the environment and install the first tool
 micromamba activate conda-ibex
 micromamba install sra-tools
 ```
