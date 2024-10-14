@@ -232,7 +232,7 @@ vcftools --vcf Alpine_ibex.vcf --max-missing 0.8 --minQ 100 --mac 1 --recode --o
 
 With the above code, we defined that a SNP should be genotyped in at least 80% of the individuals, that the minimum quality should be of 100 and that we want at least two alleles present among the analyzed Alpine ibex (`--mac 1`). The `mac` is the minor allele count, so the number of times, we have found the more rare allele. Our filter requires at least 1.
 
-_Q9: How many SNPs (or sites) did vcftools retain after filtering?_
+_Q9: How many SNPs (or sites) were originally genotyped and how many did vcftools retain after filtering?_
 
 ## R code to visualize SNP data
 
