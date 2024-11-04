@@ -133,95 +133,6 @@ df[df$weekday == "lundi",]
 df[df$hours > 7,]
 ```
 
-## Lecture et enregistrement de fichiers  
-
-La plupart des analyses `R` demandent l'importation de données. La source des données est soit
-- vous même (et vous décidez du format)
-- un collaborateur
-- téléchargement d'une banque de données en ligne
-
-Les petits jeux de données sont souvent stockés sous format text (.txt) ou Excel (.xlsx).
-
-Les problèmes les plus fréquents lors du chargement d'un fichier sont:
-- on ne comprend pas la structure des données
-- on ne comprend pas le format (e.g. JSON, VCF, GFF, POPGEN, FASTA, etc.)
-
-### Quelques termes techniques pour mieux gérer les erreurs lors de l'importation:  
-- "Field delimiters" séparent les colonnes dans un fichier. Ceci peut être sous forme de tabulation, espace, virgule, etc.  
-- "Special characters" (`\`, `"`, etc.)  
-- "Text encoding" (UTF-8, etc.)  
-- `class` et `colClasses`: la classe caractérise un type de données (e.g. `numeric`, `character`, `factor`). Une `colClass` définie le type de données dans une colonne.  
-- `header`: la première ligne d'un fichier qui peut optionnellement spécifier le nom de la colonne ("weight", "number of observations", etc.)  
-
-Si tout fonctionne correctement, vous ne receverez aucun message d'erreur:
-
-`data <- read.table("textfile.txt", header = T)`
-
-[Attention: il faut que le fichier `textfile.txt` existe réellement dans le dossier spécifié]
-
-Une erreur potentielle:
-
-`data <- read.table("textfile.txt", header = T)`
-`Error in scan(file = file, what = what, sep = sep, quote = quote, dec = dec, : line 1 did not have 3 elements`
-
-Là, le problème est que le fichier ne contient pas un tableau "parfait" où chaque ligne contient le même nombre de données (ou colonnes). Il faut re-vérifier le fichier d'entrée ou spécifier correctement l'option `sep=`. Séparation par des espaces/tab/virgules? `sep=" "`, `sep="\t"`, `sep=","`?
-
-Ajustez `header=T` ou `header=F`. Voir ci-dessus.
-
-On peut faire sauter la lecture des premières lignes avec `skip = 2` (deux lignes)
-
-Alternativement, on peut ignorer certaines colonnes: `colClasses = c(”integer”, ”NULL”, ”character”)` (après une colonne de chiffres, la deuxième colonne est ignorée, puis la troisième est lue comme des caractères)
-
-### La lecture de fichiers Excel ou csv
-
-**Attention**: faites bien attention à correctement définir `setwd("/...")` (voir ci-dessus) ou de spécifier l'emplacement de manière explicite e.g. `"/Users/dcroll/.../.../fichier.xlsx")`
-
-```
-# install.packages("openxlsx")
-library("openxlsx")
-
-# lire la première feuille dans le fichier Excel
-df <- read.xlsx("fichier_excel.xlsx")
-```
-
-Alternativement, on peut exporter le fichier Excel sous format `.csv`  
-`df <- read.csv("fichier_excel.csv", header = T)`
-
-### Contrôler l'importation d'un fichier lu dans `R`
-
-Il est très important de bien vérifier que le fichier est correctement importé.
-
-```
-data <- read.table("textfile.txt", header = T)
-head(data)
-```
-
-Est-ce que les colonnes sont proprement identifiées? Sinon, on peut facilement renommer les colonnes:
-
-`names(data) <- c("Location", "Population", "Number of individuals")`
-
-Contrôler le format des données par colonne:
-
-`str(data)`
-
-On peut résoudre certains problèmes (caractères convertis en facteur)
-
-`read.table(..., stringsAsFactors = F)`
-
-Le format des données peut être changé sous certaines conditions
-
-```
-as.character(df$column1)
-as.factor(df$column1)
-as.numeric(df$column1)
-```
-Faites extrêmement attention quand vous essayez de convertir une colonne sous forme de `factor` en `character` ou `numeric`!
-
-### Quelques exemples pour s'exercer
-
-Vous trouvez dans le dossier [datasets](./datasets) une série d'exemples. La difficulté de réussir la lecture est bien variable. Essayez d'importer ou manipuler à l'avance
-
-
 ## Les boucles `for`
 
 R vous permet d'exécuter des tâches en série ou boucle
@@ -375,6 +286,96 @@ ggsave("Plot.pdf")
 # contrôler la mise en page en spécifiant les dimensions
 ggsave("Plot.pdf", height = 6, width = 11)
 ```
+
+
+## Lecture et enregistrement de fichiers  
+
+La plupart des analyses `R` demandent l'importation de données. La source des données est soit
+- vous même (et vous décidez du format)
+- un collaborateur
+- téléchargement d'une banque de données en ligne
+
+Les petits jeux de données sont souvent stockés sous format text (.txt) ou Excel (.xlsx).
+
+Les problèmes les plus fréquents lors du chargement d'un fichier sont:
+- on ne comprend pas la structure des données
+- on ne comprend pas le format (e.g. JSON, VCF, GFF, POPGEN, FASTA, etc.)
+
+### Quelques termes techniques pour mieux gérer les erreurs lors de l'importation:  
+- "Field delimiters" séparent les colonnes dans un fichier. Ceci peut être sous forme de tabulation, espace, virgule, etc.  
+- "Special characters" (`\`, `"`, etc.)  
+- "Text encoding" (UTF-8, etc.)  
+- `class` et `colClasses`: la classe caractérise un type de données (e.g. `numeric`, `character`, `factor`). Une `colClass` définie le type de données dans une colonne.  
+- `header`: la première ligne d'un fichier qui peut optionnellement spécifier le nom de la colonne ("weight", "number of observations", etc.)  
+
+Si tout fonctionne correctement, vous ne receverez aucun message d'erreur:
+
+`data <- read.table("textfile.txt", header = T)`
+
+[Attention: il faut que le fichier `textfile.txt` existe réellement dans le dossier spécifié]
+
+Une erreur potentielle:
+
+`data <- read.table("textfile.txt", header = T)`
+`Error in scan(file = file, what = what, sep = sep, quote = quote, dec = dec, : line 1 did not have 3 elements`
+
+Là, le problème est que le fichier ne contient pas un tableau "parfait" où chaque ligne contient le même nombre de données (ou colonnes). Il faut re-vérifier le fichier d'entrée ou spécifier correctement l'option `sep=`. Séparation par des espaces/tab/virgules? `sep=" "`, `sep="\t"`, `sep=","`?
+
+Ajustez `header=T` ou `header=F`. Voir ci-dessus.
+
+On peut faire sauter la lecture des premières lignes avec `skip = 2` (deux lignes)
+
+Alternativement, on peut ignorer certaines colonnes: `colClasses = c(”integer”, ”NULL”, ”character”)` (après une colonne de chiffres, la deuxième colonne est ignorée, puis la troisième est lue comme des caractères)
+
+### La lecture de fichiers Excel ou csv
+
+**Attention**: faites bien attention à correctement définir `setwd("/...")` (voir ci-dessus) ou de spécifier l'emplacement de manière explicite e.g. `"/Users/dcroll/.../.../fichier.xlsx")`
+
+```
+# install.packages("openxlsx")
+library("openxlsx")
+
+# lire la première feuille dans le fichier Excel
+df <- read.xlsx("fichier_excel.xlsx")
+```
+
+Alternativement, on peut exporter le fichier Excel sous format `.csv`  
+`df <- read.csv("fichier_excel.csv", header = T)`
+
+### Contrôler l'importation d'un fichier lu dans `R`
+
+Il est très important de bien vérifier que le fichier est correctement importé.
+
+```
+data <- read.table("textfile.txt", header = T)
+head(data)
+```
+
+Est-ce que les colonnes sont proprement identifiées? Sinon, on peut facilement renommer les colonnes:
+
+`names(data) <- c("Location", "Population", "Number of individuals")`
+
+Contrôler le format des données par colonne:
+
+`str(data)`
+
+On peut résoudre certains problèmes (caractères convertis en facteur)
+
+`read.table(..., stringsAsFactors = F)`
+
+Le format des données peut être changé sous certaines conditions
+
+```
+as.character(df$column1)
+as.factor(df$column1)
+as.numeric(df$column1)
+```
+Faites extrêmement attention quand vous essayez de convertir une colonne sous forme de `factor` en `character` ou `numeric`!
+
+### Quelques exemples pour s'exercer
+
+Vous trouvez dans le dossier [datasets](./datasets) une série d'exemples. La difficulté de réussir la lecture est bien variable. Essayez soit d'importer directement ou de manipuler le fichier à l'avance
+
 
 ## Traiter des séquences d'ADN
 
