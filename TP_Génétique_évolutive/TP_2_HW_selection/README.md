@@ -102,7 +102,7 @@ NB: Votre fonction ci-dessus ne prend pas en compte le nombre de génotypes AA, 
 
 Q4: Testez la fonction ci-dessus et calculez les fréquences alléliques p et q pour les génotypes suivants AA: 39, Aa: 10, aa: 3. 
 
-### Fonction 2: Calculez les fréquences génotypiques produits à partir d'un pool de gamètes
+### Fonction 2: Calculez les fréquences génotypiques produites à partir d'un pool de gamètes
 
 Nous supposons que les gamètes vont produire des zygotes selon un appariement aléatoire (pour respecter une condition de la Loi H-W).
 
