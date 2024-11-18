@@ -109,6 +109,9 @@ AA <- sum(sampled.genotypes.012 == 2)
 
 # remplir un vecteur avec le résultat du comptage
 genotypes.count <- c(AA, Aa, aa)
+
+# inspection des génotypes enregistrés
+genotypes.count
 ```
 
 Ecrivons une fonction analogue à `get.Progeny.GenoFreq(alleles)` (voir TP 2) qui prend comme valeurs des fréquences alléliques et un nombre de génotypes à échantillonner `n`. La fonction devrait produire des fréquences génotypiques soumises à la dérive génétique. Appelez la fonction `Progeny.GenoFreq.withDrift(alleles, n)`. Vous voyez qu'on doit pouvoir spécifier la taille de la population à la fonction (n). 
@@ -136,19 +139,19 @@ Progeny.GenoFreq.withDrift <- function(alleles, n) {
   return(genotypes)
   }
 
-# test de l'effet de la dérive
+# visualisation des fréquences génotypiques pour trois simulations indépendantes
 Progeny.GenoFreq.withDrift(alleles, n)
 Progeny.GenoFreq.withDrift(alleles, n)
 Progeny.GenoFreq.withDrift(alleles, n)
 ```
 
-Q2: Reprenez le code proposé dans le code complet pour la tâche finale du TP 2 (ou votre version du code). Enlevez la partie du code qui intègre la sélection et rajoutez la fonction qui implémente la dérive génétique. Enregistrez un `results.df` comme proposé au TP 2.
+Q2: Reprenez le code proposé dans le code complet pour la tâche finale du TP 2 (ou votre version du code). Enlevez la partie du code qui intègre la sélection et rajoutez la fonction qui implémente la dérive génétique. Enregistrez un `results.df` comme proposé au TP 2. 
 
 
-Q3: Réutilisez le code servant à visualiser `results.df` (TP 2). Etudiez l'impact d'une taille de population `n` variable dans des graphes séparés (ou conjoints). Suggestion: visualisez uniquement une fréquence allélique (e.g. pA) pour simplifier la présentation.
+Q3: Réutilisez le code servant à visualiser `results.df` (TP 2 ou votre version). Etudiez l'impact d'une taille de population `n` variable dans des graphes séparés (ou conjoints). Suggestion: visualisez uniquement une fréquence allélique (e.g. pA) pour simplifier la représentation.
 
 
-Q4: Intégrez votre modèle de sélection (TP2 ou corrigé) et le modèle de dérive génétique (ce TP) dans une seule boucle. Décidez sur la séquence des trois étapes (e.g. production des gamètes, dérive génétique, sélection). Vérifiez bien que vous êtes consistent dans l'utilisation des variables (e.g. toujours `alleles` et `genotypes`).
+Q4: Intégrez votre modèle de sélection (TP2 ou votre version) et le modèle de dérive génétique (ce TP) dans une seule boucle. Décidez sur la séquence des trois étapes (e.g. production des gamètes, dérive génétique, sélection). Vérifiez bien que vous êtes consistent dans l'utilisation des variables (e.g. toujours `alleles` et `genotypes`).
 
 Voici une proposition de code pour intégrer les deux modèles. Vous pouvez bien sûr adapter le code à votre propre version.
 
