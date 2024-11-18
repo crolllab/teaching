@@ -153,7 +153,105 @@ Q4: Intégrez votre modèle de sélection (TP2 ou corrigé) et le modèle de dé
 Voici une proposition de code pour intégrer les deux modèles. Vous pouvez bien sûr adapter le code à votre propre version.
 
 ```
+### packages nécessaires
+library(reshape2)
+library(ggplot2)
 
+
+### Définir les fonctions importantes
+get.Allele.Freq <- function(genotypes) {
+  p <- genotypes[1] + 0.5*genotypes[2]
+  q <- genotypes[3] + 0.5*genotypes[2]
+  p <- p/(p+q)
+  q <- 1 - p
+  return(c(p,q))
+  }
+
+Progeny.GenoFreq.withDrift <- function(alleles, n) {
+  
+  p <- alleles[1]
+  q <- alleles[2]
+
+  sampled.genotypes <- replicate(n, sample(0:1, 2, c(q, p), replace = T))
+  sampled.genotypes.012 <- colSums(sampled.genotypes)
+
+  newaa <- sum(sampled.genotypes.012 == 0)
+  newAa <- sum(sampled.genotypes.012 == 1)
+  newAA <- sum(sampled.genotypes.012 == 2)
+
+  genotypes <- c(newAA, newAa, newaa)
+  genotypes <- genotypes / sum(genotypes)
+
+  return(genotypes)
+  }
+
+# valeur sélective et coéfficient de dominance
+s <- 0.1
+h <- 0.5
+
+# Donc, nous pouvons définir la fitness de chaque
+# génotype de la manière suivante:
+wAA <- 1
+wAa <- 1 - h*s
+waa <- 1 - s
+
+geno.fitness <- c(wAA, wAa, waa)
+
+
+### définir les génotypes de la génération t
+genotypes.count <- c(20,40,20)
+genotypes <- genotypes.count / sum(genotypes.count)
+
+# définir le nombre de générations
+n.generations <- 100
+
+# définir la taille de la population (n pour l'échantillonnage)
+n <- 200
+
+results.df <- data.frame(generation=numeric(),
+                          allele.A=numeric(),
+                          allele.a=numeric(),
+                          genotype.AA=numeric(),
+                          genotype.Aa=numeric(),
+                          genotype.aa=numeric()) 
+
+for (i in 1:n.generations) {
+  # enregistrer la génération en cours
+  results.df[i,"generation"] <- i
+
+  alleles <- get.Allele.Freq(genotypes)
+  # enregistrer les fréquences alléliques
+  results.df[i, c("allele.A", "allele.a")] <- alleles
+
+  genotypes <- Progeny.GenoFreq.withDrift(alleles, n)
+  
+  # épisode de sélection et ajustement 
+  # des fréquences à une somme de 1
+  genotypes <- genotypes * geno.fitness
+  genotypes <- genotypes / sum(genotypes)
+  
+  # enregistrer les fréquences génotypiques
+  results.df[i, c("genotype.AA", "genotype.Aa", "genotype.aa")] <- genotypes
+  }
+  
+# remanier les données
+results.m.df <- melt(results.df, id.vars = "generation", value.name = "frequency", variable.name = "type")
+
+# visualisation
+ggplot(results.m.df, aes(x = generation, y = frequency, color = type)) + 
+  geom_line() + 
+  scale_y_continuous(limits = c(0,1)) +
+  labs(title = paste("Population size", n))
+
+ggsave("Simulating_drift_selection.pdf", width = 8, height = 5)
+
+# Alternative: visualisation uniquement de pA
+ggplot(results.m.df[results.m.df$type == "allele.A",], aes(x = generation, y = frequency, color = type)) + 
+  geom_line() + 
+  scale_y_continuous(limits = c(0,1)) +
+  labs(title = paste("Population size", n))
+
+ggsave("Simulating_drift_selection.pdf", width = 8, height = 5)
 ```
 
 
