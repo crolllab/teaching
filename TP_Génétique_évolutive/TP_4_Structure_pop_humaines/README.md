@@ -23,7 +23,7 @@ Référez-vous aux slides du cours "Génétique évolutive" si besoin.
 - 2504 individus de 26 populations à travers le monde
 - 84.7 millions SNP identifiés
 
-Q1: Quelle était la motivation principale d'étudier la diversité génétique globale de l'homme (selon les auteurs)?
+Q1: Quelle était la motivation principale d'étudier la diversité génétique globale de notre espèce (selon les auteurs)?
 
 ![](./images/map.png)
 
@@ -54,9 +54,6 @@ Q1: Quelle était la motivation principale d'étudier la diversité génétique 
 Le point de départ: Définissez votre espace de travail, téléchargez le fichier `Human1000G.2000xSubsampled.MAF0.05.recode.vcf` dans le même dossier  
 
 ```
-# à ajuster si besoin!
-# setwd("/home/ge-daniel/some_folder")
-
 # obtenir les fichiers
 system("wget https://raw.githubusercontent.com/crolllab/teaching/master/TP_Génétique_évolutive/TP_4_Structure_pop_humaines/Human1000G.2000xSubsampled.MAF0.05.recode.vcf")
 system("wget https://raw.githubusercontent.com/crolllab/teaching/master/TP_Génétique_évolutive/TP_4_Structure_pop_humaines/Human1000G.info.txt")
@@ -74,7 +71,7 @@ vcf <- read.vcfR("Human1000G.2000xSubsampled.MAF0.05.recode.vcf")
 allchr.snps <- vcfR2genlight(vcf)
 ```
 
-Q2: Combien d'individus et de variants (SNPs) sont compris dans ce fichier réduit?
+Q2: Combien d'individus et de variants (SNPs) sont compris dans ce fichier réduit? Faites attention aux messages dans la console.
 
 ## Assigner les individus aux populations et régions d'origine
 
@@ -93,14 +90,20 @@ table(info.df$Superpopulation.name)
 # assignez les individus aux populations (Population)
 pop(allchr.snps) <- info.df$Population.name[match(indNames(allchr.snps), info.df$Sample.name)]
 
-# ALTERNATIVEMENT: aux continents/régions (Superpopulation)
+# Alternative: aux continents/régions (Superpopulation)
 # pop(allchr.snps) <- info.df$Superpopulation.name[match(indNames(allchr.snps), info.df$Sample.name)]
 
-# ALTERNATIVEMENT: au sexe
+# Alternative: au sexe
 # pop(allchr.snps) <- info.df$Sex[match(indNames(allchr.snps), info.df$Sample.name)]
 ```
 
 Q3: Faites un graphique simple résumant d'abord les nombres d'échantillons par population et puis super-population (régions).
+
+Astuce:
+```
+library(ggplot2)
+ggplot(info.df, aes(x = Population.name)) ...
+```
 
 ## Sélection de positions, chromosomes ou individus
 
@@ -129,14 +132,21 @@ ggplot(SNP.per.chr, aes(x = as.factor(chromosome), y = Freq)) + geom_bar(stat = 
  labs(x = "Chromosomes", y = "Number of SNPs")
 ```
 
-Q4 (optionnelle): Calculez le nombre de SNP par megabases de chromosomes (i.e. densité). Est-ce que les chromosomes diffèrent en densité?  
-[NB: l'information sur la taille des chromosomes humains est facilement accessible en ligne.]
-
-Q5 (optionnelle): Quel est le génotype de l'individu "HG02334" à la première position du chromosome 2?
-
+Est-ce qu'on peut extraire un génotype particulier d'un individu? Voici uns solution pour l'individu "HG02334" à la première position du chromosome 2.
 
 ```
-# visualisation de la densité des SNP
+# Visualisez les premières positions du chromosome 2, trouvez le bon SNPid
+head(allchr.df[allchr.df$chromosome ==2,],3)
+# Entrez les informations pour récupérer le SNP
+as.matrix(allchr.snps)["HG02334", "rs300751"]
+```
+
+`2` signifie un individu homozygote pour l'allèle alternatif. `0` serait un homozygote pour l'allèle de réference, puis `1` serait un hétérozygote.
+
+
+### Visualisation de la densité des SNP
+
+```
 ggplot(allchr.df, aes(x = position/1000000)) + geom_histogram(binwidth = 10) +
   labs(x = "Position on chromosome (in Mb)", y = "SNP density") +
   scale_x_continuous(breaks = seq(0,1000,50)) +
@@ -146,7 +156,7 @@ ggplot(allchr.df, aes(x = position/1000000)) + geom_histogram(binwidth = 10) +
 ggsave("SNPdensity.pdf", width = 20, height = 4)
 ```
 
-Q6 (optionnelle): Discutez une explication possible du pic principal de densité des SNPs.
+Q4: Discutez une explication possible du pic principal de densité des SNPs. Est-ce que vous avez une idée de la région du génome humain qui pourrait correspondre à ce pic?
 
 ## Fréquences alléliques et allèles mineurs
 
@@ -164,9 +174,8 @@ alt.allele.freq.pop <- glMean(allchr.snps[pop(allchr.snps) == population,])
 qplot(alt.allele.freq.pop, geom = "density", xlab = "Alternative allele frequency")
 ```
 
-Q7 (optionnelle): Modifier le code pour visualiser les fréquences d'allèles mineurs (MAF).
+Modifiez le code pour visualiser les fréquences d'allèles mineurs (MAF):
 
-Proposition de solution:
 ```
 # principe de base
 minor.allele.freq <- glMean(allchr.snps)
@@ -190,7 +199,7 @@ ggplot(minor.allele.freq.pop, aes(x = MAF)) +
 NB: Ce jeux de données est filtré pour éliminer les SNP avec allèles très rares (MAF < 0.05) pour des raisons pratiques (données trop volumineuses)
 
 
-Q8: Générer les plots pour deux populations que vous supposez de montrer un contraste au niveau des spectres de fréquences d'allèles mineurs (MAF). Décrivez brièvement (et verbalement) les différences au niveaux des spectres.
+Q6: Générer les plots pour deux populations que vous soupçonnez de présenter un contraste au niveau des spectres de fréquences d'allèles mineurs (MAF). Décrivez brièvement les différences au niveaux des spectres.
 
 NB: ajustez `population <- "Bengali"` pour sélectionner une autre population.
 
@@ -217,19 +226,8 @@ ggplot(heterozygosity.df, aes(x = reorder(population, -MeanHeterozygosity), y = 
 ggsave("Population_heterozygosity.pdf", width = 6, height = 4)
 ```
 
-Q9: Selon vos connaissances des voies de colonisation de l'humain, prédisez grossièrement les différences en taux d'hétérozygotie entre populations (1-2 phrases). Puis, comparez votre prédiction avec le graphique généré ci-dessus.
+Q7: Selon vos connaissances des voies de colonisation de l'humain, prédisez grossièrement les différences en taux d'hétérozygotie entre populations (1-2 phrases). Puis, comparez votre prédiction avec le graphique généré ci-dessus.
 
-Q10 (optionnelle): En utilisant la procédure ci-dessus, calculez l'hétérozygotie pour la population "British" par chromosome.
-
-Proposition de solution:
-```
-heterozygosity.perSNP.perPOP.t <- as.data.frame(t(heterozygosity.perSNP.perPOP[,-1]))
-names(heterozygosity.perSNP.perPOP.t) <- heterozygosity.perSNP.perPOP[,1]
-heterozygosity.perSNP.perPOP.t$SNPid <- row.names(heterozygosity.perSNP.perPOP.t)
-heterozygosity.perSNP.perPOP.fullinfo <-  merge(heterozygosity.perSNP.perPOP.t, allchr.df, by="SNPid")
-heterozygosity.perSNP.perPOP.fullinfo$chromosome <- factor(heterozygosity.perSNP.perPOP.fullinfo$chromosome, levels = c(1:22, "X"))
-barplot(tapply(heterozygosity.perSNP.perPOP.fullinfo$British, INDEX = heterozygosity.perSNP.perPOP.fullinfo$chromosome, FUN = mean))
-```
 
 ## Analyse en composantes principales
 
@@ -239,8 +237,8 @@ Voici le code pour visualiser le produit d'une analyse en composantes principale
 # étape longue (~5 minutes!)
 allchr.pc <- glPca(allchr.snps, nf = 2)
 
-# accélération: sélection des premiers 300 SNP mais vous perdez significativement en résolution!
-# allchr.pc <- glPca(allchr.snps[,1:300], nf = 2)
+# accélération: sélection des premiers 1000 SNP mais vous perdez en résolution.
+# allchr.pc <- glPca(allchr.snps[,1:1000], nf = 2)
 
 
 barplot(allchr.pc$eig[1:10])
@@ -265,11 +263,11 @@ ggplot(pca.data, aes(x = PC1, y = PC2, fill=region, color=region)) +
 ggsave("PCA_structure_poptext.pdf", width = 12, height = 10)
 ```
 
-Q11: Qu'est-ce que signifie le barplot? Cherchez pour "eigenvector" en lien avec "PCA" si besoin.
+Q8: Qu'est-ce que signifie le barplot? Cherchez le terme "eigenvalues" en lien avec "PCA" si besoin.
 
-Q12: En visualisant les "super-populations" (continents/régions) et puis les "populations", interprétez la structuration observée dans la PCA. En s'appuyant sur les voies de colonisations majeures, quelles sont les raisons probables du regroupement? Est-ce que vous trouvez des contradictions à vos prédictions?
+Q9: En visualisant les "super-populations" (continents/régions) et puis les "populations", interprétez la structuration observée dans la PCA. En s'appuyant sur les voies de colonisations majeures, quelles sont les raisons probables du regroupement? Est-ce que vous trouvez des contradictions à vos prédictions?
 
-Q13: Un petit nombre d'individus non-africains se trouvent très proche du cluster africain. Explications possibles à votre avis?
+Q10: Un petit nombre d'individus non-africains se trouvent très proche du cluster africain. Explications possibles?
 
 
 ## Analyse de F<sub>ST</sub> par paires de populations
@@ -301,15 +299,15 @@ head(info.df)
 # assignez les individus aux populations (Population)
 pop(allchr.snps.genind) <- info.df$Population.name[match(indNames(allchr.snps.genind), info.df$Sample.name)]
 
-# ALTERNATIVEMENT: par continent/région (Superpopulation)
+# Alternative: par continent/région (Superpopulation)
 # pop(allchr.snps.genind) <- info.df$Superpopulation.name[match(indNames(allchr.snps.genind), info.df$Sample.name)]
 
 # Estimation des Fst pour toutes les paires de populations (étape lente! plusieurs minutes)
 allchr.snps.hs <- genind2hierfstat(allchr.snps.genind)
 
-# sélection de 300 loci (= rapide)
-fst <- pairwise.neifst(allchr.snps.hs[,1:300])
-# ALTERNATIVE: sélection de >1000 loci (plus précis mais plus lent)
+# sélection de 1000 loci (plus rapide)
+fst <- pairwise.neifst(allchr.snps.hs[,1:1000])
+# Alternative: sélection de tous les loci (plus précis mais plus lent)
 # fst <- pairwise.neifst(allchr.snps.hs)
 
 rownames(fst) <- dimnames(fst)[[1]]
@@ -327,4 +325,4 @@ heatmap.2(fst, revC = F, Rowv = F, Colv = F, margins = c(10, 10), dendrogram = "
 dev.off()
 ```
 
-Q14: Faites l'analyse au niveau des pays/populations comme indiquée ci-dessus. Décrivez brièvement le résultat obtenu et conciliez les valeurs relatives de F<sub>ST</sub> avec nos connaissances sur le peuplement de la terre par l'humain.
+Q11: Faites l'analyse au niveau des pays/populations comme indiquée ci-dessus. Décrivez brièvement le résultat obtenu et conciliez les valeurs relatives de F<sub>ST</sub> avec nos connaissances sur le peuplement de la terre par l'humain.
