@@ -99,11 +99,18 @@ pop(allchr.snps) <- info.df$Population.name[match(indNames(allchr.snps), info.df
 
 Q3: Faites un graphique simple résumant d'abord les nombres d'échantillons par population et puis super-population (régions).
 
-Astuce:
+Astuce 1:
 ```
 library(ggplot2)
 ggplot(info.df, aes(x = Population.name)) ...
 ```
+
+Astuce 2:
+```
+# ajuster l'orientation des noms des populations
++ theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
 
 ## Sélection de positions, chromosomes ou individus
 
