@@ -7,7 +7,7 @@
 
 ### Buts de ces travaux pratiques
 
-- Analyser la structure des populations des bouquetins (Capra ibex)
+- Analyser la structure des populations des bouquetins (_Capra ibex_)
 - Comprendre l'impact des goulots d'étranglement sur la diversité et différenciation des populations
 
 ### Concepts importants
@@ -35,9 +35,6 @@ Q1: Est-ce que les bouquetins ibériques ont aussi souffert d'une quasi-extincti
 Nous allons suivre une procédure très similaire qu'aux TP4. Référez-vous au code des TP4 si les explications ci-dessous vous paraissent incomplètes ou s'il vous faut plus d'explications.
 
 ```
-
-# à ajuster si besoin!
-# setwd("/home/ge-daniel/some_folder")
 
 # obtenir les fichiers
 system("wget https://raw.githubusercontent.com/crolllab/teaching/master/TP_Génétique_évolutive/TP_5_Goulots_bouquetins/Alpine_Ibex_1361SNPs_RADseq.vcf")
@@ -99,7 +96,7 @@ pca.data$Reintroduction_History <- info.df$Reintroduction_History[match(indNames
 # "Reintroduction_Genealogy"
 pca.data$Reintroduction_Genealogy <- info.df$Reintroduction_Genealogy[match(indNames(allchr.snps), info.df$Individual)]
 
-## visualisation de la structure avec "Population"
+## Exemple: visualisation de la structure au niveau "Population"
 ggplot(pca.data, aes(x = PC1, y = PC2, fill=Population, color=Population)) +
   geom_point(size = 3, alpha = 0.5) +
   stat_ellipse(aes(group = Population, fill = Population), geom="polygon",level=0.8, alpha = 0.2)
@@ -110,11 +107,9 @@ ggsave("PCA_ibex_Population.pdf", width = 12, height = 10)
 # Enlevez la ligne "stat_ellipse..." si vous visualisez un facteur autre que "Population" (et le + qui précède la ligne)
 ```
 
-Q4: Expliquez la séparation des populations sur la PCA et surtout la position de la population Gran Paradiso.
+Q4: Expliquez le pattern observé sur la PCA colorée en fonction de l'histoire de la population (source, introductions primaires et secondaires - "Reintroduction_History").
 
-Q5: Expliquez le pattern observé sur la PCA colorée en fonction de l'histoire de la population (source, introductions primaires et secondaires - "Reintroduction_History").
-
-Q6: Expliquez le pattern observé sur la PCA colorée en fonction de la généalogie (séquences des réintroductions - "Reintroduction_Genealogy"). Quelle est l'origine des populations dites "admixture"?
+Q5: Expliquez le pattern observé sur la PCA colorée en fonction de la généalogie (séquences des réintroductions - "Reintroduction_Genealogy"). Quelle est l'origine des populations dites "admixture"?
 
 
 ### Analyses de la différenciation entre populations par F<sub>ST</sub>
@@ -159,11 +154,11 @@ heatmap.2(fst, revC = F, Rowv = F, Colv = F, margins = c(10, 10), dendrogram = "
 dev.off()
 ```
 
-Q7: Faites l'analyse et la visualisation des F<sub>ST</sub> par paires. Interprétez pourquoi la population du Weisshorn forme à la fois la paire la plus proche avec la population du Pleureur et la paire la plus distante avec la population du Rheinwaldhorn.
+Q6: Faites l'analyse et la visualisation des F<sub>ST</sub> par paires. Interprétez pourquoi la population du Weisshorn forme à la fois la paire la plus proche avec la population du Pleureur et la paire la plus distante avec la population du Rheinwaldhorn.
 
 ## Evolution de l'hétérozygotie au cours des réintroductions
 
-Q8: Quelle est l'impact d'un goulot d'étranglement sur le niveau de l'hétérozygotie (en général)?
+Q7: Quelle est l'impact d'un goulot d'étranglement sur le niveau de l'hétérozygotie (en général)?
 
 Génération d'un graphique résumant l'hétérozygotie par population.
 ```
@@ -189,11 +184,9 @@ ggplot(heterozygosity.history.df, aes(x = reorder(Population, -MeanHeterozygosit
 ggsave("Population_heterozygosity.pdf", width = 6, height = 4)
 ```
 
-Q9: Visualisez l'évolution de l'hétérozygotie au cours des réintroductions à l'aide du code ci-dessus. Est-ce que les différences en hétérozygotie correspondent à vos attentes? Explications possibles des résultats inattendus?
+Q8: Visualisez l'évolution de l'hétérozygotie au cours des réintroductions à l'aide du code ci-dessus. Est-ce que les différences en hétérozygotie correspondent à vos attentes? Explications possibles?
 
 ## L'effet des goulots d'étranglement sur le F<sub>IS</sub>
-
-Q10 (optionnelle): Donnez la définition du F<sub>IS</sub> et son interprétation.
 
 Ci-dessous, nous allons utiliser le package `hierfstat` pour calculer une série de paramètres de génétique de populations (y inclut le F<sub>IS</sub> et F<sub>ST</sub>).
 
@@ -216,8 +209,6 @@ head(pop.stats$Ho)
 head(pop.stats$Fis)
 ```
 
-Q11 (optionnelle): Quelles sont les différentes statistiques incluses dans l'objet `pop.stats` (au niveau locus et population)?
-
 Génération d'un résumé des données dans un seul data.frame et visualisez les F<sub>IS</sub>
 
 ```
@@ -237,11 +228,9 @@ ggplot(pop.stats.df, aes(y = Fis, x = reorder(Population, Fis), fill = Reintrodu
 ggsave("Fis_populations.pdf", width = 6, height = 4)
 ```
 
-Q12 (optionnelle): Avec vos connaissances acquises sur les populations de bouquetins, expliquez la distribution des valeurs F<sub>IS</sub> à travers les populations.
+Q9: Avec vos connaissances acquises sur les populations de bouquetins, expliquez la distribution des valeurs F<sub>IS</sub> à travers les populations.
 
 ## Impact des goulots d'étranglement sur les fréquences alléliques
-
-Q13: Faites une prédiction (verbale) comment les fréquences alléliques se comportent à travers une série de goulots d'étranglement
 
 Code pour la visualisation des fréquences alléliques à un locus aléatoire
 
@@ -276,8 +265,6 @@ ggplot(RefSNP.freq.table, aes(x = population, y = ref_allele_frequency)) +
 
 ggsave("RefAlleleFreq-chr4_21289899.pdf", width = 5, height = 3.5)
 ```
-
-Q14: Est-ce que les fréquences au locus aléatoirement choisi correspondent à vos prédictions?
 
 Une analyse plus complète est nécessaire pour identifier des patterns. Voilà une option de code pour visualiser les fréquences alléliques à 10 loci choisis aléatoirement
 
@@ -314,6 +301,6 @@ ggplot(REF.freq.m.full_data.df[REF.freq.m.full_data.df$locus %in% ten.random.loc
 ggsave("Allele_Freq.Ten_random_loci.pdf", width = 7, height = 4.5)
 ```
 
-Q15 (optionnelle): Essayez une série de loci aléatoirement choisis (relancer la sélection de 10 loci ci-dessus). Sélectionnez un graphique qui vous paraît explicative et puis interprétez l'évolution des fréquences alléliques en fonction de l'histoire évolutive des  populations (introductions primaires, secondaires, admixture, etc.)
+Q10: Essayez une série de loci aléatoirement choisis (relancer la sélection de 10 loci ci-dessus). Sélectionnez un graphique qui vous paraît explicative et puis interprétez l'évolution des fréquences alléliques en fonction de l'histoire évolutive des  populations (introductions primaires, secondaires, admixture, etc.)
 
-Q16: Après avoir fait toutes ces analyses: Est-ce qu'il vous semble que les bouquetins des Alpes sont en danger? Et puis, si vous étiez en charge de planifier des translocations d'invidus, vous les feriez entre quelles populations? Argumentez en s'appuyant sur les résultats que vous avez obtenus.
+Q11: Après avoir fait toutes ces analyses: Est-ce qu'il vous semble que les bouquetins des Alpes sont en danger? Et puis, si vous étiez en charge de planifier des translocations d'invidus, vous les feriez entre quelles populations? Argumentez en s'appuyant sur les résultats que vous avez obtenus.
