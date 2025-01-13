@@ -1,6 +1,6 @@
 # Bioinformatics Tools
 
-Prof. Daniel Croll, PD Dr. Nikolai Ivanov, Hanna Glad, Aloïs Tschanz
+Prof. Daniel Croll, PD Dr. Nikolai Ivanov
 
 The course aims to introduce students to diverse areas of bioinformatics. We particularly focus on the needs of modern biology to treat large amounts of data and automate analyses procedures. The course is structured into lectures that introduce some key areas of bioinformatics followed by practicals on the computer to provide hands-on experience. Lecturers and students will be available for discussions of tools and approaches. The content of this course includes the following topics:
 - Introduction to Unix and scripting
