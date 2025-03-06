@@ -12,8 +12,11 @@
 Our lab offers you the possibility to access RStudio Server. This allows you to use RStudio from a web browser.
 
 **Access the RStudio website**
-- Only possible from the Unimail computer rooms OR from a laptop/tablet connected to the `unine` wifi
-- Use a web browser to navigate to this site here: [http://legcompute2.unine.ch:8787](http://legcompute2.unine.ch:8787)
+- Access options, choose either to connect...
+  - from a computer in a Unimail computer room
+  - from a laptop/tablet connected to the `unine` wifi
+  - from home through the UNINE VPN GlobalProtect (requires installing the software provided by SITEL)
+- Then, use a web browser to navigate to this site here: [http://legcompute2.unine.ch:8787](http://legcompute2.unine.ch:8787)
 
 ![](./Bioinformatics_Tools/images/image_1.png)
 
