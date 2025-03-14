@@ -16,7 +16,7 @@ Our lab offers you the possibility to access RStudio Server. This allows you to 
   - from a computer in a Unimail computer room
   - from a laptop/tablet connected to the `unine` wifi
   - from home through the UNINE VPN GlobalProtect (requires installing the software provided by SITEL)
-- Then, use a web browser to navigate to this site here: [http://legcompute2.unine.ch:8787](http://legcompute2.unine.ch:8787)
+- Then, use a web browser to navigate to this site here: [http://legcompute3.unine.ch:8787](http://legcompute3.unine.ch:8787)
 
 ![](./Bioinformatics_Tools/images/image_1.png)
 
