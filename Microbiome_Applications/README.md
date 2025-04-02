@@ -5,7 +5,8 @@
 - Sumarize and visualize microbiome composition data
 - Assess differences among groups of samples
   
-## Connection to the server
+## Connection to the server  
+
 - Open a web browser and go to the URL: `http://legcompute3.unine.ch:8787`
 - Log in with your credentials
 
@@ -26,12 +27,12 @@ MA-Tristan
 
 Password (same for all): `MA2025`
 
-- To recover a file from RStudio, select it in the file on the left and click on the download icon (arrow pointing down).
+- To recover a file from RStudio, select it in the file tab on the left and click on the download icon (arrow pointing down).
 - To upload a file, click on the upload icon (arrow pointing up) and select the file from your computer.
 
 ## Documenting your code and results with Quarto
 - Quarto is a document format that allows you to combine code, text, and results in a single file.
-- It is similar to RMarkdown, but with some differences.
+- It is similar to RMarkdown and can be most easily used in RStudio.
 - Quarto files have the extension `.qmd` and can be rendered to various formats (HTML, PDF, Word, etc.).
 - You can create a new Quarto document by clicking on the `New File` button in RStudio and selecting `Quarto Document`. Give it a name (e.g., `Microbiome_Applications_practical_MyName.qmd`).
 - You can render a Quarto document by clicking on the `Render` button in RStudio or by typing `quarto render` in the terminal.
@@ -59,9 +60,15 @@ y <- rnorm(100)
 plot(x, y)
 ```
 
+## Handing in your work
+
+- Please hand in your work by rendering the Quarto document to HTML or PDF and upload it to the Moodle platform. You only need to hand in your work at the end of the _second_ session.
+
+
 ## The dataset to analyze
 
-We will look at a study entitled "Fat, fibre and cancer risk in African Americans and rural Africans" published in 2015 in Nature Communications. The study investigates the association between diet and gut microbiome composition in African Americans and rural Africans. The data is available in the `data` folder of the repository.
+We will look at a study entitled ["Fat, fibre and cancer risk in African Americans and rural Africans"](https://www.nature.com/articles/ncomms7342) published in 2015 in Nature Communications. The study investigates the association between diet and gut microbiome composition in African Americans and rural Africans. 
+
 - The dataset is a CSV file named `diet_microbiome.csv`. It contains the following columns:
   - `SampleID`: the ID of the sample
   - `Group`: the group of the sample (African American or rural African)
