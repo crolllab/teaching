@@ -4,11 +4,15 @@
 - Familiarity with the work in R, RStudio, and Quarto
 - Sumarize and visualize microbiome composition data
 - Assess differences among groups of samples
-  
+
+## Handing in your work
+
+- Please hand in your answers to the questions (see below) by rendering the Quarto document to HTML or PDF and upload it to the Moodle platform. You only need to hand in your work at the end of the _second session_.
+
 ## Connection to the server  
 
-- Open a web browser and go to the URL: `http://legcompute3.unine.ch:8787`
-- Log in with your credentials
+- Open a web browser and go to the URL: [http://legcompute3.unine.ch:8787](http://legcompute3.unine.ch:8787)
+- Log in with your credentials (see below).
 
 ```
 MA-Antoine
@@ -25,17 +29,18 @@ MA-Tinian
 MA-Tristan
 ```
 
-Password (same for all): `MA2025`
+Password (same for all): `MA_2025`
 
-- To recover a file from RStudio, select it in the file tab on the left and click on the download icon (arrow pointing down).
+- What you see is a web interface RStudio. All code will run on the server, so you don't need to install anything on your computer.
+- To recover a file from RStudio, select it in the file tab on the right and click on the wheels icon (select Export).
 - To upload a file, click on the upload icon (arrow pointing up) and select the file from your computer.
 
 ## Documenting your code and results with Quarto
 - Quarto is a document format that allows you to combine code, text, and results in a single file.
-- It is similar to RMarkdown and can be most easily used in RStudio.
+- It is similar to RMarkdown and can be most easily used within RStudio.
 - Quarto files have the extension `.qmd` and can be rendered to various formats (HTML, PDF, Word, etc.).
-- You can create a new Quarto document by clicking on the `New File` button in RStudio and selecting `Quarto Document`. Give it a name (e.g., `Microbiome_Applications_practical_MyName.qmd`).
-- You can render a Quarto document by clicking on the `Render` button in RStudio or by typing `quarto render` in the terminal.
+- You can create a new Quarto document by clicking on the `New File` menu in RStudio (File -> ...) and selecting `Quarto Document`. Give it a name (e.g., `Microbiome_Applications_practical_MyName.qmd`).
+- You can render a Quarto document by clicking on the `Render` button in RStudio.
 
 - Look at the provided code, you see that a Quarto document starts by a header. You can adjust this to your liking.
 
@@ -49,9 +54,9 @@ editor: visual
 ---
 ```
 
-- You can start a new sections by adding a new header. The number of `#` indicates the level of the header. For example, `##` is a second-level header, `###` is a third-level header, etc.
+- You can start new sections by adding a new header. The number of `#` indicates the level of the header. For example, `##` is a second-level header, `###` is a third-level header, etc.
 
-- You can add text, code chunks, and figures in the document. Code chunks are enclosed by three backticks (```) and start with `{r}`. `#` here means a comment, so not code. For example:
+- You can add text, code chunks, and figures in the document. Code chunks are enclosed by three backticks and then `{r}` (if your code is R code). `#` here means a comment, so not code. For example:
 
 ```r
 # This is a code chunk
@@ -60,22 +65,21 @@ y <- rnorm(100)
 plot(x, y)
 ```
 
-## Handing in your work
 
-- Please hand in your work by rendering the Quarto document to HTML or PDF and upload it to the Moodle platform. You only need to hand in your work at the end of the _second_ session.
-
-
-## The dataset to analyze
+## The microbiome dataset to analyze
 
 We will look at a study entitled ["Fat, fibre and cancer risk in African Americans and rural Africans"](https://www.nature.com/articles/ncomms7342) published in 2015 in Nature Communications. The study investigates the association between diet and gut microbiome composition in African Americans and rural Africans. 
 
-- The dataset is a CSV file named `diet_microbiome.csv`. It contains the following columns:
-  - `SampleID`: the ID of the sample
-  - `Group`: the group of the sample (African American or rural African)
-  - `Diet`: the diet of the sample (high fat, low fat, high fiber, low fiber)
-  - `Microbiome`: the microbiome composition of the sample (OTU table)
+_Question 1: Summarize in your own words and 5-10 lines the main findings of the study. What is the main hypothesis? What are the main results? What are the conclusions? Focus on the microbiome part and sidestep the metabolic and tissue analyses._
 
-_Question 1: Summarize in your own words and 5-10 lines the main findings of the study. What is the main hypothesis? What are the main results? What are the conclusions?_
+Some helpful glossary terms:
+- AFR: African
+- AA: African American
+- HE: home environment
+- DI: dietary intervention (hospital)
+- ED: endoscopy day
+
+Take a look at Table 1 for a description of the sampling and study design.
 
 ## Starting with the analyses
 
@@ -94,10 +98,25 @@ transform <- microbiome::transform
 
 As we have loaded the microbiome dataset, we can start by looking at the data. The dataset is a phyloseq object, which is a class used to store microbiome data in R. You can use the `print` function to see the contents of the object.
 
-You find three main components in the dataset:
-- `otu_table`: the OTU table, which contains the abundance of each OTU in each sample
-- `sample_data`: the metadata of each sample, which contains information about e.g., group, diet, etc.
-- `tax_table`: the taxonomic classification of each OTU
+- The dataset as part of the R package `microbiome` and is called `dietswap`. It contains the following elements:
+  - `otu_table`: the OTU table, which contains the abundance of each OTU in each sample
+  - `tax_table`: the taxonomic classification of each OTU
+  - `sam_data`:  the metadata of each sample, which contains information about e.g., nationality, diet, timepoint, etc.
+  - `phy_tree`: the phylogenetic tree of the OTUs. This is empty for this dataset.
+  - `refseq`: the reference sequences of the OTUs. This is empty for this dataset.
+
+There are specific functions that help you "extract" the relevent `dietswap` dataset. Try these:
+
+```r
+# Extract the OTU table
+otu_table(dietswap)
+# Extract the taxonomic table
+tax_table(dietswap)
+# Extract the sample data
+sample_data(dietswap)
+```
+
+SUMMARIZE
 
 _Question 2: What is an OTU? What is the difference between an OTU and a species?_
 
@@ -115,7 +134,6 @@ library(phyloseq)
 pseq2 <- subset_samples(pseq, group == "DI" & nationality == "AFR" & timepoint.within.group == 1)
 
 # Let's explore this subset. We can use helper functions to inspect the content.
-```r
 otu_table(pseq2)
 sample_data(pseq2)
 tax_table(pseq2)
