@@ -74,7 +74,7 @@ _Question 1: Summarize in your own words and 5-10 lines the main findings of the
 
 Some helpful glossary terms:
 - AFR: African
-- AA: African American
+- AA(M): African American
 - HE: home environment
 - DI: dietary intervention (hospital)
 - ED: endoscopy day
@@ -98,12 +98,14 @@ transform <- microbiome::transform
 
 As we have loaded the microbiome dataset, we can start by looking at the data. The dataset is a phyloseq object, which is a class used to store microbiome data in R. You can use the `print` function to see the contents of the object.
 
-- The dataset as part of the R package `microbiome` and is called `dietswap`. It contains the following elements:
+The dataset is part of the R package `microbiome` and is called `dietswap`. It contains the following elements:
   - `otu_table`: the OTU table, which contains the abundance of each OTU in each sample
   - `tax_table`: the taxonomic classification of each OTU
   - `sam_data`:  the metadata of each sample, which contains information about e.g., nationality, diet, timepoint, etc.
   - `phy_tree`: the phylogenetic tree of the OTUs. This is empty for this dataset.
   - `refseq`: the reference sequences of the OTUs. This is empty for this dataset.
+
+## Explore the dataset
 
 There are specific functions that help you "extract" the relevent `dietswap` dataset. Try these:
 
@@ -116,15 +118,45 @@ tax_table(dietswap)
 sample_data(dietswap)
 ```
 
-SUMMARIZE
+We will explore first the available samples, categories and category sizes.
 
+```r
+# for simplicity, we create a new dataframe with the sample data
+sample.df <- sample_data(dietswap)
+# Sex ratio
+ggplot(sample.df, aes(x = sex)) + geom_bar() + facet_grid(. ~ nationality ) + theme_ipsum()
+# BMI types
+ggplot(sample.df, aes(x = bmi_group)) + geom_bar() + facet_grid(. ~ nationality ) + theme_ipsum()
+# Treatment group
+ggplot(sample.df, aes(x = group)) + geom_bar() + facet_grid(. ~ nationality ) + theme_ipsum()
+```
+
+## Microbiome composition analyses
 _Question 2: What is an OTU? What is the difference between an OTU and a species?_
 
 Next, we want to summarize the microbiota composition of the samples. We want to focus on the most abundant and broadly shared taxa in the dataset. 
 
-_Question 3: What is the difference between abundance and prevalence? What values did we choose?_
+_Question 3: What is the difference between abundance and prevalence in the context of our samples?_
+
+As a first step, we want to visualize the frequency of OTUs across all samples.
 
 ```r
+# create a new dataframe with the OTU table
+otu.df <- otu_table(dietswap)
+out.df <- as.data.frame(otu.df)
+# add the total number of samples carrying a given OTU
+
+counts.df <- rowSums(otu.df != 0)
+
+
+ggplot(colSums(otu.df), aes(x = colSums(otu.df))) +
+  geom_histogram(binwidth = 1) + 
+  scale_x_log10() +
+  theme_ipsum() +
+  labs(x = "Number of OTUs", y = "Number of samples")
+```
+
+
 # Merge rare taxa to speed up data processing
 pseq <- transform(dietswap, "compositional")
 pseq <- aggregate_rare(pseq, level = "Genus", detection = 1/100, prevalence = 50/100)
@@ -149,6 +181,12 @@ pseq3 <- atlas1006 %>%
 ```
 
 _Question 4: What body types are represented in the atlas1006 dataset?_
+
+# Represent phylogentic diversity
+
+alpha <- microbiome::alpha
+tab <- alpha(pseq, index = "all")
+kable(head(tab))
 
 # Plot the taxa composition
 
