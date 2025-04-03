@@ -213,14 +213,14 @@ plot_composition(mbiot,
   theme_ipsum(grid="Y") +
   theme(axis.text.x = element_text(angle=90, hjust=1),
         legend.text = element_text(face = "italic"))
-
+```
 
 Subset the dataset to a specific group of samples
 
 ```r
 # The subset function helps to filter the samples based on specific criteria
 mbiot_sub <- subset_samples(mbiot, group == "DI" & nationality == "AFR")
-````
+```
 
 Repeat the plot about but using the subset dataset
 
@@ -255,5 +255,7 @@ microbiome::transform(mbiot, "compositional") %>%
         legend.text = element_text(size = 8)) +
   ylab("Samples")
 ```
+
+_Question 6: Ask three different, simple questions about the microbiota composition of the different samples and adjust the code above to answer these. You do not need to do quantitative analyses. An impression from graphics is sufficient. Provide your questions, the code, plot and a brief answer._
 
 _Question 6: Ask three different, simple questions about the microbiota composition of the different samples and adjust the code above to answer these. You do not need to do quantitative analyses. An impression from graphics is sufficient. Provide your questions, the code, plot and a brief answer._
