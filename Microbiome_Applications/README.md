@@ -255,3 +255,5 @@ microbiome::transform(mbiot, "compositional") %>%
         legend.text = element_text(size = 8)) +
   ylab("Samples")
 ```
+
+_Question 6: Ask three different, simple questions about the microbiota composition of the different samples and adjust the code above to answer these. You do not need to do quantitative analyses. An impression from graphics is sufficient. Provide your questions, the code, plot and a brief answer._
