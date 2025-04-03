@@ -90,6 +90,9 @@ We will base our tutorial on the R package `microbiome` provided by co-authors o
 ```r
 library(microbiome)
 library(tidyverse)
+library(phyloseq)
+library(hrbrthemes)
+library(gcookbook)
 
 data(dietswap)
 # There is a conflict between identically named functions called "transform"
@@ -138,78 +141,67 @@ Next, we want to summarize the microbiota composition of the samples. We want to
 
 _Question 3: What is the difference between abundance and prevalence in the context of our samples?_
 
-As a first step, we want to visualize the frequency of OTUs across all samples.
+_Question 4: What is a HITChip phylogenetic microarray?_
+
+As a first analysis step, we want to visualize the frequency of OTUs across all samples.
 
 ```r
-# create a new dataframe with the OTU table
-otu.df <- otu_table(dietswap)
-out.df <- as.data.frame(otu.df)
-# add the total number of samples carrying a given OTU
+# counting how widely spread each taxa is among samples
+otu.df <- as.data.frame(otu_table(dietswap))
+otu.df$taxa_count_non0 <- rowSums(otu.df != 0)
 
-counts.df <- rowSums(otu.df != 0)
-
-
-ggplot(colSums(otu.df), aes(x = colSums(otu.df))) +
-  geom_histogram(binwidth = 1) + 
-  scale_x_log10() +
+ggplot(otu.df, aes(x = taxa_count_non0)) +
+  geom_histogram() + 
   theme_ipsum() +
-  labs(x = "Number of OTUs", y = "Number of samples")
+  labs(y = "Number of OTUs", x = "Number of samples")  
 ```
 
+_Question 5: What is more common - taxa shared among all samples or taxa unique to one sample?_
 
-# Merge rare taxa to speed up data processing
-pseq <- transform(dietswap, "compositional")
-pseq <- aggregate_rare(pseq, level = "Genus", detection = 1/100, prevalence = 50/100)
+Next, we explore abundance of taxa based on the 
 
-# Pick sample subset, here DI is the dietary intervention group and AFR is the African group
-library(phyloseq)
-pseq2 <- subset_samples(pseq, group == "DI" & nationality == "AFR" & timepoint.within.group == 1)
-
-# Let's explore this subset. We can use helper functions to inspect the content.
-otu_table(pseq2)
-sample_data(pseq2)
-tax_table(pseq2)
-``` 
-
-# Contrast to normal western adults
 ```r
-data(atlas1006)
-pseq3 <- atlas1006 %>%
-  subset_samples(DNA_extraction_method == "r") %>%
-  aggregate_taxa(level = "Phylum") %>%  
-  microbiome::transform(transform = "compositional")
+ggplot(otu.df, aes(x = `Sample-1`)) +
+  geom_histogram(binwidth = 10) + 
+  theme_ipsum() +
+  labs(y = "Number of OTUs", x = "Abundance of OTU")
 ```
 
-_Question 4: What body types are represented in the atlas1006 dataset?_
+We observe that the majority of OTUs are rare, with a few abundant ones. This is a common pattern in microbiome data. You can check that this pattern is true for other samples than "Sample-1" by changing the sample name in the code above.
 
-# Represent phylogentic diversity
+## Merge rare taxa to speed up data processing
 
-alpha <- microbiome::alpha
-tab <- alpha(pseq, index = "all")
-kable(head(tab))
-
-# Plot the taxa composition
+We will merge rare taxa to speed up data processing. We will use the `aggregate_rare` function from the `microbiome` package. This function will merge all taxa that are below a certain abundance threshold into a single "Other" category.
 
 ```r
-library(hrbrthemes)
-library(gcookbook)
-library(tidyverse)
-#theme_set(theme_bw(21))
-p <- pseq3 %>%
-  plot_composition(sample.sort = "Firmicutes", otu.sort = "abundance") +
-  # Set custom colors
-  scale_fill_manual("Phylum",values = default_colors("Phylum")[taxa(pseq3)]) +
+# Merge rare taxa
+mbiot <- transform(dietswap, "compositional")
+# Setting thresholds for detection and prevalence (among samples)
+mbiot <- aggregate_rare(mbiot, level = "Genus", detection = 1/100, prevalence = 50/100)
+```
+
+`mbiot` is now a phyloseq object that contains the merged taxa. You can check the contents of the object by using the `print` function.
+
+## Plot the genus composition among samples
+
+Sorted by the most abundant taxon (Prevotella melaninogenica et rel.)
+
+```r
+mbiot %>%
+  plot_composition(sample.sort = "Prevotella melaninogenica et rel.", otu.sort = "abundance") +
   scale_y_continuous(label = scales::percent) + 
+  scale_fill_brewer("Genera", palette = "Paired") +
   theme_ipsum(grid="Y") +
+  labs(x = "Samples", y = "Relative abundance (%)",
+       title = "Relative abundance data") + 
   # Removes sample names and ticks
   theme(axis.text.x=element_blank(), axis.ticks.x=element_blank())
-print(p)
 ```
 
-# Limit the analyses to core taxa and specific individuals
-```r 
-# Limit the analysis on core taxa and specific sample group
-p <- plot_composition(pseq2,
+Plot the samples sorted by geography (nationality)
+
+```r
+plot_composition(mbiot,
                       taxonomic.level = "Genus",
                       sample.sort = "nationality",
                       x.label = "nationality") +
@@ -221,5 +213,45 @@ p <- plot_composition(pseq2,
   theme_ipsum(grid="Y") +
   theme(axis.text.x = element_text(angle=90, hjust=1),
         legend.text = element_text(face = "italic"))
-print(p)  
+
+
+Subset the dataset to a specific group of samples
+
+```r
+# The subset function helps to filter the samples based on specific criteria
+mbiot_sub <- subset_samples(mbiot, group == "DI" & nationality == "AFR")
+````
+
+Repeat the plot about but using the subset dataset
+
+```r
+plot_composition(mbiot_sub,
+                      taxonomic.level = "Genus",
+                      sample.sort = "nationality",
+                      x.label = "nationality") +
+  scale_fill_brewer("Genera", palette = "Paired") +
+  guides(fill = guide_legend(ncol = 1)) +
+  scale_y_percent() +
+  labs(x = "Samples", y = "Relative abundance (%)",
+       title = "Relative abundance data") + 
+  theme_ipsum(grid="Y") +
+  theme(axis.text.x = element_text(angle=90, hjust=1),
+        legend.text = element_text(face = "italic"))
+```
+
+
+## Plot composition heatmaps
+
+For this example, we will return to the full dataset (`mbiot`)
+
+```r
+microbiome::transform(mbiot, "compositional") %>% 
+  plot_composition(plot.type = "heatmap",
+                   sample.sort = "neatmap", 
+                   otu.sort = "neatmap") +
+  theme(axis.text.y=element_blank(), 
+        axis.ticks.y = element_blank(), 
+        axis.text.x = element_text(size = 9, hjust=1),
+        legend.text = element_text(size = 8)) +
+  ylab("Samples")
 ```
