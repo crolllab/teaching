@@ -52,7 +52,11 @@ date: "2025-04-03"
 format: html
 editor: visual
 ---
-```
+
+``` ```{r}
+library(knitr)
+knitr::opts_chunk$set(dev = "ragg_png")
+``` ```
 
 - You can start new sections by adding a new header. The number of `#` indicates the level of the header. For example, `##` is a second-level header, `###` is a third-level header, etc.
 
