@@ -258,6 +258,14 @@ microbiome::transform(mbiot, "compositional") %>%
 
 _Question 6: Ask three different, simple questions about the microbiota composition of the different samples and adjust the code above to answer these. You do not need to do quantitative analyses. An impression from graphics is sufficient. Provide your questions, the code, plot and a brief answer._
 
+Hint: Use this code here to get an overview of the samples according to the available factors in the dataset.
+
+```r
+ggplot(sample.df, aes(x = bmi_group, fill = ..count..)) + 
+         geom_bar() + theme_ipsum() + 
+         scale_fill_distiller(direction = 1) + 
+         facet_grid(sex ~ nationality)
+````
 
 # Microbiome diversity analyses
 
