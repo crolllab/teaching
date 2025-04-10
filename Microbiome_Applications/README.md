@@ -2,7 +2,7 @@
 
 ## Aims of the practical
 - Familiarity with the work in R, RStudio, and Quarto
-- Sumarize and visualize microbiome composition data
+- Summarize and visualize microbiome composition data
 - Assess differences among groups of samples
 
 ## Handing in your work
@@ -345,7 +345,7 @@ anova(model)
 TukeyHSD(model)
 ```
 
-N.B.: To adjust the test for a different grouping change the following parameters: inside the `aov()`.
+N.B.: To adjust the test for a different grouping change the grouping factor inside the `aov()`.
 
 
 ## Visualization of sample similarities
