@@ -330,16 +330,14 @@ Significance testing among groups (e.g. diet groups)
 ```r
 d <- meta(mbiot)
 d$diversity <- microbiome::diversity(mbiot, "shannon")$shannon
-# Split the values by group
-spl <- split(d$diversity, d$group)
-# Kolmogorov-Smironv test
-pv <- ks.test(spl$HE, spl$DI, spl$ED)$p.value
-# Adjust the p-value
-padj <- p.adjust(pv)
-print(padj)
+# ANOVA among based on diet groups
+model <- aov(diversity ~ group, data = d)
+anova(model)
+# Tukey's HSD test (among levels of the factor)
+TukeyHSD(model)
 ```
 
-N.B.: To adjust the test for a different grouping change the following parameters: inside the `split()` function and `ks.test` at the level of `spl` column names.
+N.B.: To adjust the test for a different grouping change the following parameters: inside the `aov()`.
 
 
 ## Visualization of sample similarities
