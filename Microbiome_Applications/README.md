@@ -358,4 +358,4 @@ plot_landscape(mbiot, "t-SNE", distance = "euclidean", transformation = "helling
 
 _Question 7: Adjust each of the above plots to highlight differences among geographies and BMI._
 
-_Synthesis: Question 8: Summarize what differences you observe between the different groups based on your various approaches. How would you describe the significance of these differences (if there are any)?_
+_Synthesis - Question 8: Summarize what differences you observe between the different groups based on your various approaches. How would you describe the significance of these differences (if there are any)?_
