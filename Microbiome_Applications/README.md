@@ -358,6 +358,10 @@ plot_landscape(mbiot, method = "PCA", transformation = "clr", col = "group") +
        scale_color_brewer("Genera", palette = "Paired")
 ```
 
+t-SNE is a non-linear dimensionality reduction technique that is particularly useful for visualizing high-dimensional data. It focuses on preserving local structure and is often used for clustering analysis. The non-linear nature of t-SNE prevents simple distance interpretations among clusters.
+
+A great explainer is here: [https://medium.com/data-science/t-sne-clearly-explained-d84c537f53a](https://medium.com/data-science/t-sne-clearly-explained-d84c537f53a)
+
 ```r
 plot_landscape(mbiot, "t-SNE", distance = "euclidean", transformation = "hellinger",  col = "group") +
       labs(title = paste("t-SNE representation")) +       
