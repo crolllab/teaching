@@ -65,7 +65,7 @@ y <- rnorm(100)
 plot(x, y)
 ```
 
-- To produce a pdf inside of a html, you need to include this code here at the beginning of your document. Use the correct three backticks to enclose the code and the `{r}` (see above). 
+- To produce a pdf instead of a html output ("rendering"), replace the `html` with `pdf` in the header. You need to include also this code here at the beginning of your document. Use the correct three backticks to enclose the code and the `{r}` (see above). 
 
 ```r
 library(knitr)
