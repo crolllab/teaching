@@ -350,6 +350,8 @@ N.B.: To adjust the test for a different grouping change the grouping factor ins
 
 ## Visualization of sample similarities
 
+### PCA
+
 Let's first start with a principal component analysis (PCA). This is a common method to visualize the relationships between samples based on their microbiome composition. It reduces the dimensionality of the data and preserves global variance. Principal components are linear combinations of the original variables (OTUs) that explain the most variance in the data.
 
 ```r
@@ -358,7 +360,9 @@ plot_landscape(mbiot, method = "PCA", transformation = "clr", col = "group") +
        scale_color_brewer("Genera", palette = "Paired")
 ```
 
-t-SNE is a non-linear dimensionality reduction technique that is particularly useful for visualizing high-dimensional data. It focuses on preserving local structure and is often used for clustering analysis. The non-linear nature of t-SNE prevents simple distance interpretations among clusters.
+### t-SNE
+
+t-SNE (t-distributed Stochastic Neighbor Embedding) is a non-linear dimensionality reduction technique that is particularly useful for visualizing high-dimensional data. It focuses on preserving local structure and is often used for clustering analysis. The non-linear nature of t-SNE prevents simple distance interpretations among clusters.
 
 A great explainer is here: [https://medium.com/data-science/t-sne-clearly-explained-d84c537f53a](https://medium.com/data-science/t-sne-clearly-explained-d84c537f53a)
 
