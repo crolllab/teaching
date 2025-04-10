@@ -261,7 +261,7 @@ _Question 6: Ask three different, simple questions about the microbiota composit
 Hint: Use this code here to get an overview of the samples according to the available factors in the dataset.
 
 ```r
-ggplot(sample.df, aes(x = bmi_group, fill = ..count..)) + 
+ggplot(sample.df, aes(x = bmi_group, fill = after_stat(count))) + 
          geom_bar() + theme_ipsum() + 
          scale_fill_distiller(direction = 1) + 
          facet_grid(sex ~ nationality)
