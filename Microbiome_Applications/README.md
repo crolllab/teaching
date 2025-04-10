@@ -134,7 +134,7 @@ ggplot(sample.df, aes(x = bmi_group)) + geom_bar() + facet_grid(. ~ nationality 
 ggplot(sample.df, aes(x = group)) + geom_bar() + facet_grid(. ~ nationality ) + theme_ipsum()
 ```
 
-## Microbiome composition analyses
+# Microbiome composition analyses
 _Question 2: What is an OTU? What is the difference between an OTU and a species?_
 
 Next, we want to summarize the microbiota composition of the samples. We want to focus on the most abundant and broadly shared taxa in the dataset. 
@@ -257,3 +257,107 @@ microbiome::transform(mbiot, "compositional") %>%
 ```
 
 _Question 6: Ask three different, simple questions about the microbiota composition of the different samples and adjust the code above to answer these. You do not need to do quantitative analyses. An impression from graphics is sufficient. Provide your questions, the code, plot and a brief answer._
+
+
+# Microbiome diversity analyses
+
+Here, we want to focus on diversity metrics. Alpha diversity is a measure of the number of species in a given area, or the species richness of a community. The relative abundance (or eveness) is a crucial factor in the diversity metric. Please take a look at the following [Wikipedia page](https://en.wikipedia.org/wiki/Alpha_diversity) for a more detailed description of the metrics if needed.
+
+We will continue working with the `mbiot` dataset. Please repeat the steps above until the definition of `mbiot` if needed.
+
+Here's the code to calculate and visualize different metrics per sample.
+
+### Alpha diversity
+
+```r
+library(microbiome)
+library(knitr)
+
+mbiot_tab <- microbiome::alpha(mbiot, index = "all")
+kable(head(mbiot_tab))
+```
+
+### Rarity
+
+The rarity indices quantify the concentration of rare or low abundance taxa. 
+
+```r
+tab <- rarity(mbiot, index = "all")
+kable(head(tab))
+```
+
+### Dominance
+
+The dominance index refers to the abundance of the most abundant species.
+
+```r
+tab <- dominance(mbiot, index = "all")
+kable(head(tab))
+```
+
+### Evenness
+
+Evenness is a measure of how evenly the individuals in a community are distributed among the different species. 
+
+```r
+tab <- evenness(mbiot, index = "all")
+kable(head(tab))
+```
+
+### Visualization of diversity indices
+
+Assess variation among groups based on the Shannon diversity index(e.g. diet groups, geography, etc.)
+
+```r
+p.shannon <- boxplot_alpha(mbiot, 
+                           index = "shannon",
+                           x_var = "group",
+                           fill.colors = c(HE="cyan4", DI="deeppink4", ED="darkorange2"),)
+
+p.shannon <- p.shannon + theme_minimal() + 
+  labs(x="Dietary group", y="Shannon diversity") +
+  theme(axis.text = element_text(size=12),
+        axis.title = element_text(size=16),
+        legend.text = element_text(size=12),
+        legend.title = element_text(size=16))
+p.shannon
+```
+
+N.B.: To adjust the plot for a different grouping change the following parameters: `x_var` and `fill.colors`.
+
+Significance testing among groups (e.g. diet groups)
+
+```r
+d <- meta(mbiot)
+d$diversity <- microbiome::diversity(mbiot, "shannon")$shannon
+# Split the values by group
+spl <- split(d$diversity, d$group)
+# Kolmogorov-Smironv test
+pv <- ks.test(spl$HE, spl$DI, spl$ED)$p.value
+# Adjust the p-value
+padj <- p.adjust(pv)
+print(padj)
+```
+
+N.B.: To adjust the test for a different grouping change the following parameters: inside the `split()` function and `ks.test` at the level of `spl` column names.
+
+
+## Visualization of sample similarities
+
+Let's first start with a principal component analysis (PCA). This is a common method to visualize the relationships between samples based on their microbiome composition. It reduces the dimensionality of the data and preserves global variance. Principal components are linear combinations of the original variables (OTUs) that explain the most variance in the data.
+
+```r
+plot_landscape(mbiot, method = "PCA", transformation = "clr", col = "group") +
+       labs(title = paste("PCA representation")) +
+       scale_color_brewer("Genera", palette = "Paired")
+```
+
+```r
+plot_landscape(mbiot, "t-SNE", distance = "euclidean", transformation = "hellinger",  col = "group") +
+      labs(title = paste("t-SNE representation")) +       
+      scale_color_brewer("Genera", palette = "Paired")
+```
+
+_Question 7: Adjust each of the above plots to highlight differences among geographies and BMI._
+
+_Synthesis: Question 8: Summarize what differences you observe between the different groups based on your various approaches. How would you describe the significance of these differences (if there are any)?_
