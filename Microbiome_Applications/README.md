@@ -54,11 +54,6 @@ editor: visual
 ---
 ``` 
 
-``` ```{r}
-library(knitr)
-knitr::opts_chunk$set(dev = "ragg_png")
-``` ```
-
 - You can start new sections by adding a new header. The number of `#` indicates the level of the header. For example, `##` is a second-level header, `###` is a third-level header, etc.
 
 - You can add text, code chunks, and figures in the document. Code chunks are enclosed by three backticks and then `{r}` (if your code is R code). `#` here means a comment, so not code. For example:
@@ -68,6 +63,13 @@ knitr::opts_chunk$set(dev = "ragg_png")
 x <- rnorm(100)
 y <- rnorm(100)
 plot(x, y)
+```
+
+- To produce a pdf inside of a html, you need to include this code here at the beginning of your document. Use the correct three backticks to enclose the code and the `{r}` (see above). 
+
+```r
+library(knitr)
+knitr::opts_chunk$set(dev = "ragg_png")
 ```
 
 
