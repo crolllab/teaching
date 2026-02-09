@@ -15,21 +15,10 @@
 - Log in with your credentials (see below).
 
 ```
-MA-Antoine
-MA-Arthur
-MA-Benoit
-MA-Elena
-MA-Liam
-MA-Matthias
-MA-Nina
-MA-Ryutaro
-MA-Stefany
-MA-Subidsha
-MA-Tinian
-MA-Tristan
+N/A
 ```
 
-Password (same for all): `MA_2025`
+Password (same for all): `MA_2026`
 
 - What you see is a web interface RStudio. All code will run on the server, so you don't need to install anything on your computer.
 - To recover a file from RStudio, select it in the file tab on the right and click on the wheels icon (select Export).
