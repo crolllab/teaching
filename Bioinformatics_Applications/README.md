@@ -2,6 +2,6 @@
 
 ## Introductory tutorials
 
-- Setting up and using Visual Studio Code
-- Introduction to BASH
-- Git and version control
+1. Setting up and using Visual Studio Code
+2. Introduction to BASH
+3. Git and version control
