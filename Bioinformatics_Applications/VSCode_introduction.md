@@ -270,12 +270,7 @@ You need to add your public key to the server's authorized keys.
 #### On macOS/Linux:
 
 ```bash
-ssh-copy-id username@server_address
-```
-
-For example:
-```bash
-ssh-copy-id bt-daniel@legcompute.unine.ch
+ssh-copy-id username@legcompute3.unine.ch
 ```
 
 Enter your password when prompted.
@@ -293,7 +288,7 @@ If `ssh-copy-id` is not available, manually copy the key:
 
 3. Connect to your server:
    ```bash
-   ssh username@server_address
+   ssh username@legcompute3.unine.ch
    ```
 
 4. On the server, add the key:
@@ -320,8 +315,8 @@ The SSH config file makes connecting much easier by storing connection details.
 3. Add your server configuration:
    ```
    Host legcompute
-       HostName legcompute.unine.ch
-       User bt-daniel
+       HostName legcompute3.unine.ch
+       User username
        IdentityFile ~/.ssh/id_ed25519
        ForwardAgent yes
    ```
@@ -350,8 +345,8 @@ The SSH config file makes connecting much easier by storing connection details.
 4. Add your server configuration:
    ```
    Host legcompute
-       HostName legcompute.unine.ch
-       User bt-daniel
+       HostName legcompute3.unine.ch
+       User username
        IdentityFile C:\Users\YourUsername\.ssh\id_ed25519
        ForwardAgent yes
    ```
@@ -606,10 +601,10 @@ VS Code treats these as text files with syntax highlighting available through ex
 
 ```bash
 # On your local machine, to upload:
-scp local_file.txt username@server:~/remote/path/
+scp local_file.txt username@legcompute3.unine.ch:~/remote/path/
 
 # To download:
-scp username@server:~/remote/path/file.txt ~/local/path/
+scp username@legcompute3.unine.ch:~/remote/path/file.txt ~/local/path/
 ```
 
 ## Using GitHub Copilot
@@ -884,7 +879,7 @@ your-project/
 
 **Check**:
 - Is your internet connection working?
-- Can you SSH from the terminal? Test: `ssh username@server`
+- Can you SSH from the terminal? Test: `ssh username@legcompute3.unine.ch`
 - Is your SSH config file correct?
 - Are your SSH keys properly set up?
 - Is the server running and accessible?
