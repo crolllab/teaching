@@ -245,7 +245,7 @@ SSH keys are more secure and convenient than passwords.
    ssh-keygen -t ed25519 -C "your_email@example.com"
    ```
 3. Press Enter to accept the default file location (`~/.ssh/id_ed25519`)
-4. Enter a passphrase (optional but recommended)
+4. Enter a passphrase (on a personal computer, do not set one for convenience)
 5. Your keys are now in:
    - Private key: `~/.ssh/id_ed25519`
    - Public key: `~/.ssh/id_ed25519.pub`
@@ -312,7 +312,7 @@ The SSH config file makes connecting much easier by storing connection details.
    nano ~/.ssh/config
    ```
 
-3. Add your server configuration:
+3. Add your server configuration (adjust "username"):
    ```
    Host legcompute
        HostName legcompute3.unine.ch

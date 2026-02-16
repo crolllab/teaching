@@ -35,10 +35,13 @@ Finally, for bioinformatics applications, a shell helps you to repeat analyses, 
 
 - On **macOS/Linux**: Use the built-in Terminal application
 - On **Windows**: Use WSL (Windows Subsystem for Linux) or Git Bash
-- Via **VS Code**: Open the integrated terminal (View → Terminal)
 - Via **RStudio Server**: Locate the "Terminal" tab (Tools → Terminal → New Terminal)
 
+- Preferred for this course: via **VS Code**: Open the integrated terminal (View → Terminal)
+
 ### First Steps
+
+Once you are successfully connected to the server, complete the following tutorial there. But most commands would also work on your Mac or Windows (with WSL).
 
 Create a shell script file to record what you will do. This keeps a good record of all your commands, so that you can refer yourself to this later. In VS Code, create a new file with a `.sh` extension (e.g., `my_commands.sh`). You'll see that the script file gets some automatic coloring (e.g., comment lines).
 
