@@ -125,10 +125,9 @@ Shows information about your current file and workspace:
 
 GitHub offers free access to GitHub Copilot and other tools for students:
 
-1. Go to [https://education.github.com/students](https://education.github.com/students)
-2. Click "Sign up for Student Developer Pack"
-3. Provide proof of enrollment (student ID, enrollment verification, etc.)
-4. Wait for approval (usually within a few days)
+1. Go to [https://education.github.com/students](https://education.github.com/students). Alternatively, google "Sign up for Github Student Developer Pack" to find the correct link.
+2. Provide proof of enrollment (student ID, enrollment verification, etc.)
+3. Wait for approval (usually within a few days)
 
 **Note**: Even without the student pack, you can use VS Code's free features. Copilot requires either a student account, a paid subscription, or sometimes institutional access.
 
