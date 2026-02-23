@@ -134,9 +134,7 @@ You need to authenticate for push/pull operations.
    ```
 6. Save it securely (password manager)
 
-When VS Code prompts for credentials:
-- **Username**: Your GitHub username  
-- **Password**: Paste the token (not your actual password!)
+**Important**: Keep this token handy - you'll need it in the next step for cloning!
 
 ## Step 6: Clone Repository to Your Server (VS Code GUI)
 
@@ -144,16 +142,27 @@ When VS Code prompts for credentials:
 
 2. Type **"Git: Clone"** and press Enter
 
-3. Paste your repository URL:
+3. Paste your repository URL **with your token embedded**:
    ```
-   https://github.com/YOUR_USERNAME/bioinfo_applications_2026.git
+   https://YOUR_USERNAME:YOUR_TOKEN@github.com/YOUR_USERNAME/bioinfo_applications_2026.git
    ```
+   
+   **Example**: If your username is `jsmith` and token is `ghp_abc123xyz`, use:
+   ```
+   https://jsmith:ghp_abc123xyz@github.com/jsmith/bioinfo_applications_2026.git
+   ```
+   
+   Replace:
+   - `YOUR_USERNAME` with your GitHub username
+   - `YOUR_TOKEN` with your Personal Access Token from Step 5
 
 4. Choose where to save it (e.g., your home directory)
 
 5. When cloning completes, click **Open**
 
 6. You're now in your repository folder! Check the Source Control panel - you should see the branch name (`main`).
+
+**Important**: By including your token in the URL, Git will remember your credentials and you won't be prompted when pushing changes later.
 
 ## Step 7: Set Up Your Repository Structure
 
@@ -235,10 +244,6 @@ Save all files (`Cmd+S` / `Ctrl+S`).
 Your changes are now committed locally!
 
 ## Step 9: Push to GitHub (VS Code GUI)
-
-**First-time push**: You'll be prompted for credentials:
-- **Username**: Your GitHub username
-- **Password**: Use your **Personal Access Token** (starts with `ghp_...`)
 
 **Push your commit**:
 1. Look at the **Status Bar** (bottom of VS Code)
