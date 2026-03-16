@@ -17,7 +17,7 @@ Check these out in [this folder](https://github.com/crolllab/teaching/tree/maste
 ### Tutorials
 
 1. Léo: TUTORIAL_LINK
-2. Raquel: TUTORIAL_LINK
-3. Alexis: TUTORIAL_LINK
-4. Tara: TUTORIAL_LINK
+2. Raquel: `git clone https://github.com/RaaaaquelMejia/CodingUnine` or (github.com/RaaaaquelMejia/CodingUnine)[https://github.com/RaaaaquelMejia/CodingUnine]
+3. Alexis: `git clone https://github.com/alexisagostini/Tuto-2` or (github.com/alexisagostini/Tuto-2)[https://github.com/alexisagostini/Tuto-2]
+4. Tara: `git clone https://github.com/taralizee/bioinfo_applications_2026` or (github.com/taralizee/bioinfo_applications_2026)[https://github.com/taralizee/bioinfo_applications_2026]
 
