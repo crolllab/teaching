@@ -1,0 +1,657 @@
+---
+title: "Ecological Genomics: Planning Translocations"
+subtitle: "Simulating genetic drift and building an interactive Shiny app"
+author: "Daniel Croll"
+date: spring 2026
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    toc-title: "Contents"
+    theme: cosmo
+    code-fold: false
+    code-tools: true
+    embed-resources: true
+---
+
+## Learning Objectives
+
+By the end of this tutorial you will be able to:
+
+- Explain why genetic drift erodes heterozygosity in small, isolated populations
+- Simulate allele-frequency trajectories across multiple populations in R using `learnPopGen`
+- Compute and visualise the expected and observed loss in heterozygosity over time
+- Build an interactive Shiny app that lets a conservation manager explore translocation scenarios
+
+---
+
+## Submission of your work
+
+You can work in groups of 2–3 people. 
+
+Submit a succinct tutorial report including responses to the questions in the tutorial. You can optionally include screenshots of particular plots or app outputs to illustrate your answers. The focus should be on simple explanations and interpretations of the results.
+
+Each student should submit their own copy of the responses to the questions in the tutorial, but you can collaborate on the exploration of the code and discuss responses. 
+
+---
+
+## Background: Conservation Genomics and Translocations
+
+Small, isolated populations lose genetic diversity over time through **genetic drift** — the random sampling of alleles each generation. This matters in conservation because lower heterozygosity is associated with reduced fitness, impaired immune response, and a decreased ability to adapt to environmental change.
+
+**Translocation** is the deliberate movement of individuals between populations to:
+
+1. Rescue a genetically depauperate population (*genetic rescue*)
+2. Reintroduce a species to a recovered habitat
+3. Buffer a population against inbreeding depression
+
+Before carrying out a translocation, managers need to anticipate *how much* genetic diversity a target population is likely to have lost given its history. That is exactly what your simulator will estimate.
+
+The expected heterozygosity at generation $t$ under pure drift in a closed population of effective size $N_e$ is:
+
+$$H_t = H_0 \left(1 - \frac{1}{2N_e}\right)^t$$
+
+where $H_0 = 2p_0(1-p_0)$ is the initial expected heterozygosity.
+
+> **Q1** – Looking at the formula above, what happens to $H_t$ as $N_e$ decreases (holding $t$ constant)? What does this imply for conservation policy?
+
+---
+
+## Part 1: Setting Up Your Environment
+
+Before you start, make sure the required packages are installed. Run the following chunk **once** (you can set `eval: false` after the first run).
+
+```{r}
+#| label: install
+#| eval: false
+install.packages("learnPopGen")
+install.packages("ggplot2")
+install.packages("tidyr")
+install.packages("dplyr")
+install.packages("shiny")
+```
+
+Now load the packages:
+
+```{r}
+#| label: setup
+#| message: false
+#| warning: false
+library(learnPopGen)
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+```
+
+---
+
+## Part 2: Simulating Genetic Drift in 5 Isolated Populations
+
+### Running the simulation
+
+The `learnPopGen` package provides `genetic.drift()`, which simulates random genetic drift at a single bi-allelic locus across replicate populations.
+
+Key arguments:
+
+| Argument | Meaning |
+|----------|---------|
+| `p0`     | Initial frequency of allele A (0–1) |
+| `Ne`     | Effective population size |
+| `nrep`   | Number of replicate populations |
+| `time`   | Number of generations to simulate |
+| `show`   | What to plot: `"p"` for allele frequency |
+
+Run the simulation with **5 populations** (`nrep = 5`) of equal effective size:
+
+```{r}
+#| label: simulate-drift
+set.seed(123)          # For reproducibility
+
+p0   <- 0.5            # Starting allele frequency
+Ne   <- 100            # Effective population size (same for all 5 pops)
+ngen <- 200            # Number of generations
+
+# genetic.drift() returns a 'genetic.drift' S3 object.
+# unclass() strips the custom class so it behaves as a plain numeric matrix,
+# which is required by as.data.frame() and other standard operations.
+# pause = 0 disables the animation delay (speeds up rendering).
+freq_matrix <- unclass(genetic.drift(
+  p0    = p0,
+  Ne    = Ne,
+  nrep  = 5,
+  time  = ngen,
+  show  = "p",
+  pause = 0
+))
+
+cat("Dimensions of the frequency matrix:", dim(freq_matrix), "\n")
+cat("(rows = generations, columns = populations)\n\n")
+cat("Allele frequencies at generation 1 (starting values):\n")
+print(freq_matrix[1, ])
+```
+
+> **Q2** – What does each column of `freq_matrix` represent? Why do all five populations start with the same value?
+
+### Computing heterozygosity
+
+Expected heterozygosity at a single locus with allele frequency $p$ is $H = 2p(1-p)$. Apply this to every cell of the frequency matrix:
+
+```{r}
+#| label: compute-H
+# Compute heterozygosity for each population at each generation
+H_matrix <- 2 * freq_matrix * (1 - freq_matrix)
+
+# Compute the mean heterozygosity across all 5 populations at each generation
+H_mean <- rowMeans(H_matrix)
+
+cat("H at generation 1 (all pops start at p0 =", p0, "):", round(H_matrix[1, 1], 4), "\n")
+cat("Mean H at final generation (", ngen, "):", round(H_mean[ngen], 4), "\n")
+```
+
+Add the **theoretical expectation** predicted by the drift formula:
+
+```{r}
+#| label: theory
+generations <- 1:ngen
+H0          <- 2 * p0 * (1 - p0)          # Initial heterozygosity
+H_expected  <- H0 * (1 - 1 / (2 * Ne))^generations
+```
+
+> **Q3** – Compare `H_mean[ngen]` to `H_expected[ngen]`. Are they similar? Why might they differ?
+
+---
+
+## Part 3: Visualising Heterozygosity Loss
+
+Build a tidy data frame so we can plot everything cleanly with `ggplot2`:
+
+```{r}
+#| label: tidy-data
+# unclass() ensures H_matrix is treated as a plain numeric matrix by
+# as.data.frame() (the genetic.drift S3 class has a custom method that
+# would otherwise melt the matrix into a single-column data frame)
+H_df <- as.data.frame(unclass(H_matrix))
+colnames(H_df) <- paste0("Pop", 1:5)
+H_df$generation <- generations
+
+H_long <- pivot_longer(
+  H_df,
+  cols      = starts_with("Pop"),
+  names_to  = "population",
+  values_to = "heterozygosity"
+)
+
+# Add the theoretical expectation to every row so each population panel
+# can overlay its own expected trajectory
+H_long <- H_long %>%
+  left_join(
+    data.frame(generation = generations, H_expected = H_expected),
+    by = "generation"
+  )
+
+# Summary data frame for the overview plot (observed mean + theory)
+summary_df <- data.frame(
+  generation     = generations,
+  H_mean         = H_mean,
+  H_expected     = H_expected
+)
+```
+
+First, an **overview** showing all population trajectories together with the observed mean and the theoretical prediction:
+
+```{r}
+#| label: plot-H-overview
+#| fig-width: 8
+#| fig-height: 5
+ggplot() +
+  # Individual population trajectories (thin, semi-transparent)
+  geom_line(
+    data  = H_long,
+    aes(x = generation, y = heterozygosity, colour = population),
+    alpha = 0.5, linewidth = 0.6
+  ) +
+  # Mean across populations
+  geom_line(
+    data   = summary_df,
+    aes(x  = generation, y = H_mean),
+    colour = "black", linewidth = 1.2, linetype = "solid"
+  ) +
+  # Theoretical expectation
+  geom_line(
+    data   = summary_df,
+    aes(x  = generation, y = H_expected),
+    colour = "red", linewidth = 1, linetype = "dashed"
+  ) +
+  annotate("text", x = ngen * 0.68, y = H_expected[round(ngen * 0.68)] * 1.07,
+           label = "Theoretical H", colour = "red", hjust = 0, size = 3.5) +
+  annotate("text", x = ngen * 0.68, y = H_mean[round(ngen * 0.68)] * 0.88,
+           label = "Observed mean H", colour = "black", hjust = 0, size = 3.5) +
+  labs(
+    title  = paste0("Overview: heterozygosity loss in 5 isolated populations (Ne = ", Ne, ")"),
+    x      = "Generation",
+    y      = "Heterozygosity (H)",
+    colour = "Population"
+  ) +
+  theme_classic(base_size = 13) +
+  theme(legend.position = "right")
+```
+
+Now **facet by population** so we can compare the observed and expected trajectories for each population individually. The red dashed line is the same theoretical prediction in every panel — deviations from it reflect stochastic drift unique to that population:
+
+```{r}
+#| label: plot-H-per-pop
+#| fig-width: 9
+#| fig-height: 6
+ggplot(H_long, aes(x = generation)) +
+  # Observed heterozygosity for this population
+  geom_line(
+    aes(y = heterozygosity, colour = population),
+    linewidth = 0.7
+  ) +
+  # Theoretical expectation (same for every panel)
+  geom_line(
+    aes(y = H_expected),
+    colour = "red", linewidth = 0.8, linetype = "dashed"
+  ) +
+  facet_wrap(~ population, ncol = 3) +
+  labs(
+    title   = paste0("Observed (solid) vs. expected (red dashed) heterozygosity per population (Ne = ", Ne, ")"),
+    x       = "Generation",
+    y       = "Heterozygosity (H)",
+    colour  = "Population"
+  ) +
+  theme_classic(base_size = 12) +
+  theme(legend.position = "none",
+        strip.background = element_rect(fill = "grey92", colour = NA))
+```
+
+> **Q4** – Repeat the simulation with `Ne = 20` and `Ne = 500`. How does the rate of heterozygosity loss change? Sketch your predictions before running the code.
+
+> **Q5** – In the context of a translocation, what would be the minimum effective population size you would recommend for a target population to retain at least 90% of its initial heterozygosity after 50 generations? Use the theoretical formula to calculate this analytically, then verify with the simulator.
+
+---
+
+## Part 4: Simulating a Translocation Event
+
+After a period of genetic drift, each population has a different allele frequency — some may have drifted close to fixation (p ≈ 0 or p ≈ 1), drastically reducing their heterozygosity. A **translocation** introduces migrants from a source population (e.g., a reservoir population or ex-situ captive group), shifting allele frequencies back toward intermediate values and restoring heterozygosity.
+
+### Why we need a custom simulator
+
+`genetic.drift()` from `learnPopGen` simulates the entire run in one call and returns the complete trajectory, so there is no way to pause it mid-run and inject migrants. We therefore write our own equivalent function using **binomial sampling** — the same biological process `genetic.drift()` implements internally:
+
+At each generation, the number of copies of allele A out of $2N_e$ drawn is:
+
+$$k_t \sim \text{Binomial}(2N_e,\; p_{t-1})$$
+
+$$p_t = \frac{k_t}{2N_e}$$
+
+```{r}
+#| label: simulate-drift-fn
+# Custom genetic drift simulator
+# Returns a matrix of allele frequencies: rows = generations, columns = populations
+simulate_drift <- function(p_start, Ne, nrep, ngen) {
+  freq        <- matrix(NA, nrow = ngen, ncol = nrep)
+  freq[1, ]   <- p_start
+  for (t in 2:ngen) {
+    allele_counts <- rbinom(nrep, size = 2 * Ne, prob = freq[t - 1, ])
+    freq[t, ]     <- allele_counts / (2 * Ne)
+  }
+  freq
+}
+```
+
+Verify that it gives the same qualitative behaviour as `genetic.drift()`:
+
+```{r}
+#| label: verify-custom-fn
+set.seed(123)
+freq_matrix <- simulate_drift(p_start = 0.5, Ne = 100, nrep = 5, ngen = 200)
+cat("Dimensions:", dim(freq_matrix), "\n")
+cat("Starting frequencies (gen 1):", freq_matrix[1, ], "\n")
+```
+
+### The allele-frequency mixing formula
+
+When $n_m$ migrants from a **source** with allele frequency $p_{\text{source}}$ enter a **target** population of size $N_e$ at generation $t^*$, the new allele frequency is a weighted average:
+
+$$p_{t^*}^{\,\text{new}} = \frac{N_e \cdot p_{t^*} + n_m \cdot p_{\text{source}}}{N_e + n_m}$$
+
+This immediately pushes $p$ closer to $p_{\text{source}}$. Because $H = 2p(1-p)$ is maximised at $p = 0.5$, any movement of a near-fixed population (p ≈ 0 or p ≈ 1) toward 0.5 increases heterozygosity.
+
+### Two-phase simulation
+
+We split the simulation at the translocation generation $t^*$:
+
+- **Phase 1** — run drift for $t^*$ generations
+- **Apply mixing** — update allele frequencies using the formula above
+- **Phase 2** — continue drift from the new frequencies for the remaining $t_{\text{gen}} - t^*$ generations
+
+```{r}
+#| label: translocation-sim
+set.seed(123)
+
+# ── Parameters ──────────────────────────────────────────────────────────────
+p0         <- 0.5    # Initial allele frequency
+Ne         <- 100    # Effective population size
+nrep       <- 5      # Number of populations
+ngen       <- 200    # Total generations
+t_trans    <- 80     # Generation at which translocation occurs
+n_migrants <- 10     # Number of migrants introduced
+p_source   <- 0.5    # Allele frequency in the source population
+
+# ── Phase 1: drift to t_trans ────────────────────────────────────────────────
+freq_pre  <- simulate_drift(p0, Ne, nrep, t_trans)
+
+# Allele frequencies and heterozygosity immediately BEFORE translocation
+p_before  <- freq_pre[t_trans, ]
+H_before  <- 2 * p_before * (1 - p_before)
+
+cat("Allele frequencies at generation", t_trans, "(before translocation):\n")
+print(round(p_before, 3))
+cat("\nHeterozygosity per population BEFORE translocation:\n")
+print(round(H_before, 3))
+
+# ── Apply allele-frequency mixing ────────────────────────────────────────────
+p_after <- (Ne * p_before + n_migrants * p_source) / (Ne + n_migrants)
+H_after <- 2 * p_after * (1 - p_after)
+
+cat("\nAllele frequencies directly AFTER translocation:\n")
+print(round(p_after, 3))
+cat("\nHeterozygosity per population AFTER translocation:\n")
+print(round(H_after, 3))
+cat("\nAbsolute mean H gain at translocation:",
+    round(mean(H_after) - mean(H_before), 4), "\n")
+
+# ── Phase 2: continue drift from post-translocation frequencies ──────────────
+freq_post     <- simulate_drift(p_after, Ne, nrep, ngen - t_trans + 1)
+# Combine: row t_trans of freq_post[1,] duplicates freq_pre[t_trans,] → drop it
+freq_with_trans <- rbind(freq_pre, freq_post[-1, ])
+
+# ── Baseline: same simulation WITHOUT translocation ──────────────────────────
+set.seed(123)
+freq_no_trans <- simulate_drift(p0, Ne, nrep, ngen)
+```
+
+> **Q6** – Look at the allele frequencies at generation `t_trans`. Which populations benefit most from the translocation, and why? (*Hint*: think about how far each population's frequency is from `p_source`.)
+
+### Comparing scenarios
+
+```{r}
+#| label: translocation-compare
+#| fig-width: 9
+#| fig-height: 5
+generations <- 1:ngen
+H0          <- 2 * p0 * (1 - p0)
+H_expected  <- H0 * (1 - 1 / (2 * Ne))^generations
+
+# Mean H trajectories for both scenarios
+H_mean_with <- rowMeans(2 * freq_with_trans * (1 - freq_with_trans))
+H_mean_no   <- rowMeans(2 * freq_no_trans   * (1 - freq_no_trans))
+
+# Per-population H in long format (with translocation only)
+H_mat_with <- 2 * freq_with_trans * (1 - freq_with_trans)
+H_df_with  <- as.data.frame(H_mat_with)
+colnames(H_df_with) <- paste0("Pop", 1:nrep)
+H_df_with$generation <- generations
+H_long_with <- pivot_longer(H_df_with, starts_with("Pop"),
+                             names_to = "population", values_to = "H_observed")
+H_long_with$scenario <- "With translocation"
+
+H_mat_no <- 2 * freq_no_trans * (1 - freq_no_trans)
+H_df_no  <- as.data.frame(H_mat_no)
+colnames(H_df_no) <- paste0("Pop", 1:nrep)
+H_df_no$generation <- generations
+H_long_no <- pivot_longer(H_df_no, starts_with("Pop"),
+                           names_to = "population", values_to = "H_observed")
+H_long_no$scenario <- "No translocation"
+
+H_long_both <- bind_rows(H_long_with, H_long_no)
+
+# Mean lines + theoretical
+summary_comparison <- data.frame(
+  generation = rep(generations, 3),
+  H          = c(H_mean_with, H_mean_no, H_expected),
+  line       = rep(c("Observed mean — with translocation",
+                     "Observed mean — no translocation",
+                     "Theoretical (no translocation)"), each = ngen)
+)
+
+ggplot() +
+  # Per-population lines, coloured by scenario
+  geom_line(
+    data  = H_long_both,
+    aes(x = generation, y = H_observed,
+        colour = scenario, group = interaction(population, scenario)),
+    alpha = 0.35, linewidth = 0.55
+  ) +
+  # Mean lines
+  geom_line(
+    data = summary_comparison,
+    aes(x = generation, y = H, linetype = line, colour = line),
+    linewidth = 1
+  ) +
+  # Translocation marker
+  geom_vline(xintercept = t_trans, linetype = "dotted", colour = "grey30") +
+  annotate("text", x = t_trans + 3, y = H0 * 0.97,
+           label = paste0("Translocation\n(gen ", t_trans, ", ", n_migrants, " migrants)"),
+           hjust = 0, size = 3.2, colour = "grey30") +
+  scale_colour_manual(values = c(
+    "With translocation"                       = "#2196F3",
+    "No translocation"                         = "#FF7043",
+    "Observed mean — with translocation"       = "#0D47A1",
+    "Observed mean — no translocation"         = "#BF360C",
+    "Theoretical (no translocation)"           = "darkred"
+  )) +
+  scale_linetype_manual(values = c(
+    "Observed mean — with translocation"  = "solid",
+    "Observed mean — no translocation"    = "solid",
+    "Theoretical (no translocation)"      = "dashed"
+  )) +
+  labs(
+    title    = paste0("Effect of translocation on heterozygosity (Ne = ", Ne,
+                      ", ", n_migrants, " migrants at gen ", t_trans, ")"),
+    x        = "Generation",
+    y        = "Heterozygosity (H)",
+    colour   = NULL,
+    linetype = NULL
+  ) +
+  theme_classic(base_size = 13) +
+  theme(legend.position = "bottom",
+        legend.key.width = unit(1.5, "cm"))
+```
+
+> **Q7** – Run the simulation with `n_migrants = 5`, `n_migrants = 20`, and `n_migrants = 50`. How does the immediate H gain at generation `t_trans` scale with the number of migrants? Is it linear? At what point does adding more migrants have diminishing returns?
+
+> **Q8** – Change `t_trans` to generation 20 vs. generation 150. How does the timing of the translocation affect the magnitude of the heterozygosity rescue?
+
+---
+
+## Part 5: Building Your Own Shiny App
+
+A static script is useful, but a conservation manager without R knowledge cannot explore scenarios interactively. A **Shiny app** lets you turn your simulation into a browser-based tool with sliders and live plots — and building one yourself is the goal of this part.
+
+### How Shiny works
+
+Every Shiny app is a single R script (`app.R`) with three elements:
+
+```r
+library(shiny)
+
+ui <- fluidPage(          # 1. Layout + inputs + output placeholders
+  ...
+)
+
+server <- function(input, output) {   # 2. Logic: reads inputs, renders outputs
+  output$myPlot <- renderPlot({ ... })
+}
+
+shinyApp(ui = ui, server = server)    # 3. Launches the app
+```
+
+Key concepts:
+
+| Concept | What it does |
+|---|---|
+| `sliderInput("id", ...)` | Creates a slider; its value is read as `input$id` in the server |
+| `checkboxInput("id", ...)` | Creates a checkbox; value is `TRUE`/`FALSE` |
+| `plotOutput("id")` | Reserves a panel for a plot |
+| `renderPlot({ })` | Runs whenever any `input$` it uses changes; returns a ggplot |
+| `reactive({ })` | Caches a computed result and re-runs only when its inputs change |
+
+> **RStudio Server note:** Always view your app in the **Viewer pane** (bottom-right). Do *not* click "Open in Browser" — that opens `localhost:PORT` on your local machine, which cannot reach the remote server.
+
+### Step-by-step: create `app.R`
+
+In RStudio, go to **File > New File > R Script**, immediately save it as `app.R` in the `Ecological_Genomics/` folder, then build it up following the steps below.
+
+**Step 1 — Load packages and paste `simulate_drift()`**
+
+Your app needs the same custom simulator from Part 4. Copy it at the top of `app.R`:
+
+```r
+library(shiny)
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+
+simulate_drift <- function(p_start, Ne, nrep, ngen) {
+  freq      <- matrix(NA, nrow = ngen, ncol = nrep)
+  freq[1, ] <- p_start
+  for (t in 2:ngen) {
+    freq[t, ] <- rbinom(nrep, size = 2 * Ne, prob = freq[t - 1, ]) / (2 * Ne)
+  }
+  freq
+}
+```
+
+**Step 2 — Build the UI**
+
+Create a sidebar layout with sliders for the population parameters and the translocation event. Replace each `# TODO` with the appropriate `sliderInput()` or `numericInput()` call:
+
+```r
+ui <- fluidPage(
+  titlePanel("Translocation Planner: Heterozygosity Simulator"),
+  sidebarLayout(
+    sidebarPanel(
+      h4("Population parameters"),
+      sliderInput("Ne",     "Effective population size (Ne):",
+                  min = 10, max = 500, value = 100, step = 10),
+      # TODO: add sliderInput for number of populations (2-10, default 5)
+      # TODO: add sliderInput for total generations (50-500, default 200)
+      # TODO: add numericInput for initial allele frequency p0 (0.05-0.95, default 0.5)
+      hr(),
+      h4("Translocation event"),
+      checkboxInput("do_trans", "Enable translocation", value = TRUE),
+      # TODO: add sliderInput for generation of translocation (10-490, default 80)
+      # TODO: add sliderInput for number of migrants (1-100, default 10)
+      # TODO: add numericInput for source allele frequency p_source (0.05-0.95, default 0.5)
+    ),
+    mainPanel(
+      tabsetPanel(
+        tabPanel("Heterozygosity over time", plotOutput("hetPlot", height = "460px")),
+        tabPanel("Summary table",            tableOutput("summaryTable"))
+      )
+    )
+  )
+)
+```
+
+**Step 3 — Write the server**
+
+The server runs both drift scenarios and renders the plot. Fill in the `# TODO` sections:
+
+```r
+server <- function(input, output) {
+
+  sim_data <- reactive({
+    set.seed(42)
+    # TODO: read Ne, n_pops, ngen, p0, t_trans, n_migrants, p_source from input$
+    # TODO: guard t_trans so it can never equal or exceed ngen
+
+    # Baseline: pure drift (no translocation)
+    freq_no <- simulate_drift(p0, Ne, nrep, ngen)
+
+    # With translocation (two-phase)
+    freq_pre  <- simulate_drift(p0, Ne, nrep, t_trans)
+    p_after   <- (Ne * freq_pre[t_trans, ] + n_m * p_src) / (Ne + n_m)
+    freq_post <- simulate_drift(p_after, Ne, nrep, ngen - t_trans + 1)
+    freq_with <- rbind(freq_pre, freq_post[-1, ])
+
+    list(freq_no = freq_no, freq_with = freq_with, t_trans = t_trans)
+  })
+
+  output$hetPlot <- renderPlot({
+    dat         <- sim_data()
+    generations <- 1:input$ngen
+    H0          <- 2 * input$p0 * (1 - input$p0)
+    H_th        <- H0 * (1 - 1 / (2 * input$Ne))^generations
+
+    # Helper: compute H, reshape to long format, tag scenario
+    make_long <- function(freq_mat, label) {
+      H_mat <- 2 * freq_mat * (1 - freq_mat)
+      df    <- as.data.frame(H_mat)
+      colnames(df) <- paste0("Pop", seq_len(input$n_pops))
+      df$generation <- generations
+      long <- pivot_longer(df, starts_with("Pop"),
+                           names_to = "population", values_to = "H_observed")
+      long$scenario <- label
+      long
+    }
+
+    H_long_both <- bind_rows(
+      make_long(dat$freq_no,   "No translocation"),
+      make_long(dat$freq_with, "With translocation")
+    )
+
+    H_mean_no   <- rowMeans(2 * dat$freq_no   * (1 - dat$freq_no))
+    H_mean_with <- rowMeans(2 * dat$freq_with * (1 - dat$freq_with))
+
+    means_df <- data.frame(
+      generation = rep(generations, 3),
+      H    = c(H_mean_no, H_mean_with, H_th),
+      line = rep(c("Mean - no translocation",
+                   "Mean - with translocation",
+                   "Theoretical (no translocation)"), each = input$ngen)
+    )
+
+    # TODO: build the ggplot using H_long_both and means_df
+    # - geom_line for individual population trajectories (use colour = scenario)
+    # - geom_line for mean and theoretical lines (use colour = line, linetype = line)
+    # - scale_colour_manual and scale_linetype_manual to distinguish the lines
+    # - if input$do_trans is TRUE, add a geom_vline at dat$t_trans
+  })
+
+  output$summaryTable <- renderTable({
+    dat  <- sim_data()
+    ngen <- input$ngen
+    H0   <- 2 * input$p0 * (1 - input$p0)
+
+    H_final_no   <- mean(2 * dat$freq_no[ngen, ]   * (1 - dat$freq_no[ngen, ]))
+    H_final_with <- mean(2 * dat$freq_with[ngen, ] * (1 - dat$freq_with[ngen, ]))
+    H_th_final   <- H0 * (1 - 1 / (2 * input$Ne))^ngen
+
+    # TODO: return a data.frame with Statistic and Value columns summarising
+    # H0, theoretical H, observed H (both scenarios), H rescued, and % retained
+  })
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+> **Q9** – Click **Run App** after completing Step 2 and Step 3. Use the sliders to find the minimum number of migrants that rescues at least 10% more heterozygosity (absolute) at the final generation compared to no translocation, with Ne = 50 and 150 generations.
+
+> **Q10** – Disable the translocation checkbox. At what effective population size does a population retain ≥ 90% of its initial heterozygosity after 100 generations? Compare your slider experiment with the analytical answer from Q5.
+
+---
+
+## Summary
+
+| Step | What you did |
+|------|-------------|
+| 1    | Simulated genetic drift in 5 isolated populations using `genetic.drift()` |
+| 2    | Computed expected heterozygosity $H = 2p(1-p)$ at each generation |
+| 3    | Compared observed heterozygosity loss to the theoretical prediction |
+| 4    | Wrote a custom `simulate_drift()` function and implemented a translocation event using the allele-frequency mixing formula |
+| 5    | Wrapped the two-scenario simulation in an interactive Shiny app |
+
+The key message: even a small number of migrants ($n_m \approx 10$) can substantially rescue heterozygosity in a near-fixed small population, but the benefit decays rapidly if the rescued population remains small — sustaining genetic diversity requires either larger $N_e$ or repeated translocations.
