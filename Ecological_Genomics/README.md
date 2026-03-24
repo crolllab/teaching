@@ -39,6 +39,16 @@ To pull the latest updates at any point:
 git pull
 ```
 
+Optionally, you can also download the `app.R`file, which contains the Shiny app code used in Part 5 of the tutorial:
+
+```r
+download.file(
+  "https://raw.githubusercontent.com/crolllab/teaching/master/Ecological_Genomics/app.R",
+  destfile = "app.R",
+  method   = "wget"
+)
+```
+
 ## 3. Running the tutorial
 
 - Work through the `.qmd` file section by section, running each code chunk with the **Run** button (▶) or `Ctrl+Enter`.
