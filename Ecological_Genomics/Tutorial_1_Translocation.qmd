@@ -510,6 +510,18 @@ Key concepts:
 
 In RStudio, go to **File > New File > R Script**, immediately save it as `app.R` in your home folder, then build it up following the steps below.
 
+Alternatively, you can download the complete `app.R` file from the GitHub repository:
+
+```{r}
+
+```
+download.file(
+  "https://raw.githubusercontent.com/crolllab/teaching/master/Ecological_Genomics/app.R",
+  destfile = "app.R",
+  method   = "wget"
+)
+```
+
 **Step 1 — Load packages and paste `simulate_drift()`**
 
 Your app needs the same custom simulator from Part 4. Copy it at the top of `app.R`:
