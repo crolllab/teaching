@@ -1,4 +1,4 @@
-# Ecological Genomics — Tutorial 1: Conservation Genomics and Translocations
+# Tutorial 1: Conservation Genomics and Translocations
 
 ## 1. Accessing RStudio Server
 
