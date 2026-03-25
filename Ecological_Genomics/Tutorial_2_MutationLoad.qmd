@@ -1,0 +1,1079 @@
+---
+title: "Ecological Genomics: Deleterious Mutation Load in Small Populations"
+subtitle: "Simulating purging and accumulation of deleterious mutations"
+author: "Daniel Croll"
+date: spring 2026
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    toc-title: "Contents"
+    theme: cosmo
+    code-fold: false
+    code-tools: true
+    embed-resources: true
+---
+
+## Learning Objectives
+
+By the end of this tutorial you will be able to:
+
+-   Describe the diploid fitness model using selection and dominance coefficients
+-   Implement a Wright-Fisher simulation that jointly models genetic drift and natural selection at a single locus
+-   Extend the single-locus simulator to track hundreds of independently segregating deleterious loci
+-   Compute and visualise population mean fitness and genetic load over time
+-   Compare purging versus mutation accumulation under different population sizes and dominance regimes
+
+------------------------------------------------------------------------
+
+## Submission of your work
+
+You can work in groups of two or more people.
+
+Submit a succinct report including responses to the questions in the tutorial. You can optionally include screenshots of particular plots to illustrate your answers. The focus should be on simple explanations and exploration of your findings.
+
+Each student should submit on Moodle their own copy of the responses to the questions in the tutorial, but you can collaborate on the exploration of the code and discuss responses.
+
+------------------------------------------------------------------------
+
+## Background: Deleterious Mutations and Genetic Load
+
+### The diploid fitness model
+
+Most organisms carry numerous **deleterious alleles** — variants that reduce individual fitness to some degree. How harmful a deleterious allele is in a diploid organism depends on two parameters:
+
+| Parameter | Symbol | Meaning |
+|----------------------------|---------------------|-----------------------|
+| Selection coefficient | $s$ | Fractional fitness reduction in the deleterious homozygote: $w_{aa} = 1 - s$ |
+| Dominance coefficient | $h$ | Degree to which the heterozygote is also affected: $w_{Aa} = 1 - hs$ |
+
+Together, these define the **fitness of each diploid genotype** at a biallelic locus (A = wildtype allele, a = deleterious allele):
+
+| Genotype | Fitness  | Description                             |
+|----------|----------|-----------------------------------------|
+| AA       | $1$      | Wildtype homozygote — unaffected        |
+| Aa       | $1 - hs$ | Heterozygote — partially affected       |
+| aa       | $1 - s$  | Deleterious homozygote — fully affected |
+
+The dominance coefficient $h$ determines the mode of action of the deleterious allele:
+
+-   $h = 0$: **fully recessive** — the deleterious allele is completely masked in heterozygotes ($w_{Aa} = 1$)
+-   $h = 0.5$: **additive / co-dominant** — heterozygotes show exactly half the fitness reduction of homozygotes
+-   $h = 1$: **fully dominant** — even a single copy causes the full fitness reduction ($w_{Aa} = w_{aa}$)
+
+In reality, most new deleterious mutations are slightly to partially recessive ($0 \leq h \leq 0.5$), and the distribution of selection coefficients is continuous — ranging from nearly neutral ($s \approx 0$) to lethal ($s = 1$).
+
+### Allele frequency change under selection
+
+Starting from allele frequencies $p$ (wildtype A) and $q = 1 - p$ (deleterious a), and assuming Hardy-Weinberg proportions within a generation, the **mean fitness** of the population is:
+
+$$\bar{w} = p^2 \cdot 1 + 2pq(1 - hs) + q^2(1 - s)$$
+
+After one round of selection, the frequency of the deleterious allele becomes:
+
+$$q' = \frac{q^2(1 - s) + pq(1 - hs)}{\bar{w}}$$
+
+This can be understood intuitively: the numerator sums the contributions to the next generation from homozygous ($q^2(1-s)$) and heterozygous ($pq(1-hs)$) carriers, weighted by their fitness and normalised by mean fitness. Because $q' < q$ whenever $s > 0$, selection always acts to reduce the frequency of deleterious alleles — but how quickly depends on $h$ and the current frequency.
+
+### Genetic load across multiple loci
+
+The **genetic load** ($L$) of a population measures the proportional reduction in mean fitness compared to an ideal population carrying only wildtype alleles at all loci:
+
+$$L = 1 - \bar{W}$$
+
+If a genome carries $n$ independently segregating deleterious loci, the **total mean fitness** under a **multiplicative** fitness model is:
+
+$$\bar{W} = \prod_{i=1}^{n} \bar{w}_i$$
+
+where $\bar{w}_i$ is the mean fitness at locus $i$. Assuming independence between loci is a simplification, but it is standard for problems of this scale and captures the first-order dynamics well.
+
+### Purging versus mutation accumulation
+
+Small populations face two competing pressures on their deleterious mutation load:
+
+1.  **Purging**: Genetic drift increases homozygosity (acts similarly to inbreeding), which exposes recessive or partially recessive deleterious alleles in homozygous genotypes more often. There, selection acts with full (or greater) force and can eliminate the allele.
+
+2.  **Mutation accumulation (drift load)**: Strong genetic drift can overcome selection, causing deleterious alleles to increase in frequency by chance — or even to fix. This is particularly likely when the selection is weak relative to drift, i.e. when $4 N_e s \lesssim 1$.
+
+The expected outcome depends on the interplay of $N_e$, $s$, and $h$:
+
+| Scenario | Dominant force | Expected outcome |
+|------------------|--------------------------|-----------------------------|
+| Large $N_e$, large $s$ | Selection | Efficient removal regardless of $h$ |
+| Large $N_e$, small $s$, recessive | Selection (slow) | Allele sheltered in heterozygotes; slow decline |
+| Small $N_e$, large $s$, recessive | Purging | Homozygosity exposes allele; accelerated removal |
+| Small $N_e$, small $s$ | Drift | Allele can fix; "mutational meltdown" |
+
+The aim of this tutorial is to simulate this interplay and characterise the conditions under which a small population is more likely to **purge** its deleterious load versus **accumulate** it.
+
+------------------------------------------------------------------------
+
+## Part 1: Setting Up Your Environment
+
+Before you start, make sure the required packages are installed. **NB: this is not necessary on the server.**
+
+If needed, run the following chunk **once** (you can set `eval: false` after the first run).
+
+```{r}
+#| label: install
+#| eval: false
+install.packages("ggplot2")
+install.packages("tidyr")
+install.packages("dplyr")
+install.packages("shiny")
+```
+
+Load the packages:
+
+```{r}
+#| label: setup
+#| message: false
+#| warning: false
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+```
+
+------------------------------------------------------------------------
+
+## Part 2: Single-Locus Simulation — Drift and Selection
+
+### The Wright-Fisher simulator with selection
+
+We build a custom diploid Wright-Fisher simulator that combines selection and genetic drift. At each generation $t$ the simulator performs four steps:
+
+1.  Retrieve the deleterious allele frequency $q$ from the previous generation
+2.  Compute mean fitness: $\bar{w} = p^2 + 2pq(1-hs) + q^2(1-s)$
+3.  Update allele frequency after selection: $q' = [q^2(1-s) + pq(1-hs)] / \bar{w}$
+4.  Apply genetic drift via binomial sampling: $k \sim \text{Binomial}(2N_e,\, q')$ and $q_{\text{new}} = k/(2N_e)$
+
+```{r}
+#| label: simulator-fn
+# Wright-Fisher simulator with selection and drift (diploid model).
+# Returns a matrix of deleterious allele frequencies:
+#   rows = generations, columns = replicate populations.
+# Parameters:
+#   q0   – initial frequency of the deleterious allele
+#   s    – selection coefficient (fitness of aa = 1 - s)
+#   h    – dominance coefficient (fitness of Aa = 1 - h*s)
+#   Ne   – effective population size
+#   nrep – number of replicate populations
+#   ngen – number of generations to simulate
+simulate_selection_drift <- function(q0, s, h, Ne, nrep, ngen) {
+  q_mat      <- matrix(NA, nrow = ngen, ncol = nrep)
+  q_mat[1, ] <- q0
+
+  for (t in 2:ngen) {
+    q     <- q_mat[t - 1, ]
+    p     <- 1 - q
+
+    # Mean fitness under Hardy-Weinberg genotype proportions
+    w_bar <- p^2 * 1 + 2 * p * q * (1 - h * s) + q^2 * (1 - s)
+
+    # Allele frequency after selection
+    q_sel <- (q^2 * (1 - s) + p * q * (1 - h * s)) / w_bar
+    q_sel <- pmax(0, pmin(1, q_sel))   # numerical guard against floating-point drift
+
+    # Genetic drift: binomial sampling of 2*Ne gene copies
+    q_mat[t, ] <- rbinom(nrep, size = 2 * Ne, prob = q_sel) / (2 * Ne)
+  }
+  q_mat
+}
+```
+
+### Effect of dominance on allele-frequency trajectories
+
+Let's compare three dominance regimes for the same deleterious allele in a moderately large population ($N_e = 200$), where selection is reasonably efficient:
+
+```{r}
+#| label: dominance-comparison
+set.seed(123)
+
+q0   <- 0.3    # initial frequency of the deleterious allele
+s    <- 0.1    # 10 % fitness reduction in homozygotes (aa)
+Ne   <- 200    # effective population size
+nrep <- 15     # replicate populations
+ngen <- 400    # generations
+
+q_recessive  <- simulate_selection_drift(q0, s, h = 0.0, Ne, nrep, ngen)
+q_codominant <- simulate_selection_drift(q0, s, h = 0.5, Ne, nrep, ngen)
+q_dominant   <- simulate_selection_drift(q0, s, h = 1.0, Ne, nrep, ngen)
+
+cat("Mean final frequency — recessive   (h = 0.0):", round(mean(q_recessive[ngen, ]),  4), "\n")
+cat("Mean final frequency — co-dominant (h = 0.5):", round(mean(q_codominant[ngen, ]), 4), "\n")
+cat("Mean final frequency — dominant    (h = 1.0):", round(mean(q_dominant[ngen, ]),   4), "\n")
+```
+
+Build a tidy data frame to visualise all three scenarios together:
+
+```{r}
+#| label: dominance-tidy
+generations <- 1:ngen
+
+make_long_q <- function(q_mat, label) {
+  df           <- as.data.frame(q_mat)
+  colnames(df) <- paste0("Pop", seq_len(nrep))
+  df$generation <- generations
+  long <- pivot_longer(df, starts_with("Pop"), names_to = "population", values_to = "q")
+  long$dominance <- label
+  long
+}
+
+q_long <- bind_rows(
+  make_long_q(q_recessive,  "Recessive (h = 0)"),
+  make_long_q(q_codominant, "Co-dominant (h = 0.5)"),
+  make_long_q(q_dominant,   "Dominant (h = 1)")
+)
+
+q_means <- q_long %>%
+  group_by(generation, dominance) %>%
+  summarise(mean_q = mean(q), .groups = "drop")
+```
+
+```{r}
+#| label: plot-dominance
+#| fig-width: 10
+#| fig-height: 5
+ggplot() +
+  geom_line(
+    data  = q_long,
+    aes(x = generation, y = q, colour = dominance,
+        group = interaction(population, dominance)),
+    alpha = 0.2, linewidth = 0.45
+  ) +
+  geom_line(
+    data = q_means,
+    aes(x = generation, y = mean_q, colour = dominance),
+    linewidth = 1.4
+  ) +
+  geom_hline(yintercept = 0, linetype = "dotted", colour = "grey50") +
+  scale_colour_manual(values = c(
+    "Recessive (h = 0)"      = "#E41A1C",
+    "Co-dominant (h = 0.5)"  = "#377EB8",
+    "Dominant (h = 1)"       = "#4DAF4A"
+  )) +
+  labs(
+    title  = paste0("Fate of a deleterious allele under different dominance regimes  (s = ", s, ", Ne = ", Ne, ")"),
+    x      = "Generation",
+    y      = "Frequency of deleterious allele (q)",
+    colour = "Dominance"
+  ) +
+  theme_classic(base_size = 13) +
+  theme(legend.position = "right")
+```
+
+> **Q1** — Examine the mean trajectories. Which dominance regime leads to the fastest elimination of the deleterious allele, and why? Consider what fraction of deleterious alleles are sheltered in heterozygotes under each regime. Hint: at frequency $q$, the fraction of all deleterious alleles present in heterozygotes is $2pq / (2pq + 2q^2) = p/(p+q) = p$.
+
+### Effect of population size on a recessive deleterious allele
+
+Now fix the dominance coefficient at $h = 0$ (fully recessive) and compare three population sizes. With a recessive allele, heterozygotes are not at a disadvantage, so selection only acts on the rare homozygotes — making the outcome sensitive to drift:
+
+```{r}
+#| label: pop-size-comparison
+set.seed(456)
+
+q0   <- 0.3
+s    <- 0.05    # moderately deleterious
+h    <- 0.0     # fully recessive
+nrep <- 20
+ngen <- 500
+
+q_small  <- simulate_selection_drift(q0, s, h, Ne = 20,  nrep, ngen)
+q_medium <- simulate_selection_drift(q0, s, h, Ne = 100, nrep, ngen)
+q_large  <- simulate_selection_drift(q0, s, h, Ne = 500, nrep, ngen)
+
+cat("Mean final frequency — Ne =  20:", round(mean(q_small[ngen, ]),  4), "\n")
+cat("Mean final frequency — Ne = 100:", round(mean(q_medium[ngen, ]), 4), "\n")
+cat("Mean final frequency — Ne = 500:", round(mean(q_large[ngen, ]),  4), "\n")
+
+cat("\nProportion of populations with deleterious allele fixed (q > 0.95):\n")
+cat("  Ne =  20:", round(mean(q_small[ngen, ]  > 0.95), 3), "\n")
+cat("  Ne = 100:", round(mean(q_medium[ngen, ] > 0.95), 3), "\n")
+cat("  Ne = 500:", round(mean(q_large[ngen, ]  > 0.95), 3), "\n")
+
+cat("\nProportion of populations with deleterious allele purged (q < 0.05):\n")
+cat("  Ne =  20:", round(mean(q_small[ngen, ]  < 0.05), 3), "\n")
+cat("  Ne = 100:", round(mean(q_medium[ngen, ] < 0.05), 3), "\n")
+cat("  Ne = 500:", round(mean(q_large[ngen, ]  < 0.05), 3), "\n")
+```
+
+```{r}
+#| label: plot-pop-size
+#| fig-width: 10
+#| fig-height: 5
+generations <- 1:ngen
+
+make_long_q2 <- function(q_mat, label) {
+  df           <- as.data.frame(q_mat)
+  colnames(df) <- paste0("Pop", seq_len(nrep))
+  df$generation <- generations
+  long <- pivot_longer(df, starts_with("Pop"), names_to = "population", values_to = "q")
+  long$Ne_label <- label
+  long
+}
+
+q_long2 <- bind_rows(
+  make_long_q2(q_small,  "Ne = 20"),
+  make_long_q2(q_medium, "Ne = 100"),
+  make_long_q2(q_large,  "Ne = 500")
+)
+
+q_means2 <- q_long2 %>%
+  group_by(generation, Ne_label) %>%
+  summarise(mean_q = mean(q), .groups = "drop")
+
+ggplot() +
+  geom_line(
+    data  = q_long2,
+    aes(x = generation, y = q, colour = Ne_label,
+        group = interaction(population, Ne_label)),
+    alpha = 0.2, linewidth = 0.4
+  ) +
+  geom_line(
+    data = q_means2,
+    aes(x = generation, y = mean_q, colour = Ne_label),
+    linewidth = 1.4
+  ) +
+  scale_colour_manual(values = c(
+    "Ne = 20"  = "#E41A1C",
+    "Ne = 100" = "#FF7F00",
+    "Ne = 500" = "#4DAF4A"
+  )) +
+  labs(
+    title  = paste0("Fate of a recessive deleterious allele  (h = 0, s = ", s,
+                    ")  under different population sizes"),
+    x      = "Generation",
+    y      = "Frequency of deleterious allele (q)",
+    colour = "Population size"
+  ) +
+  theme_classic(base_size = 13) +
+  theme(legend.position = "right")
+```
+
+> **Q2** — Compare the mean final frequencies and the proportions fixed versus purged across the three population sizes. For the recessive mutation simulated here, does a smaller population lead to better or worse outcomes in terms of the deleterious allele frequency? Is the result dominated by purging or by drift?
+
+> **Q3** — Repeat the single-locus analysis with `h = 0.5` (co-dominant) and `s = 0.05`. How does the pattern change compared to the fully recessive case? Explain the difference in terms of the efficiency of selection on heterozygotes.
+
+------------------------------------------------------------------------
+
+## Part 3: Multi-Locus Mutation Load
+
+Real genomes do not carry a single deleterious allele — they carry hundreds to thousands of segregating deleterious variants simultaneously. We now simulate a **population with 100 independently segregating loci**, each with its own selection coefficient drawn from a realistic distribution and its own starting frequency.
+
+### Defining a mutation landscape
+
+Empirical estimates of the distribution of fitness effects (DFE) of new deleterious mutations suggest a roughly **gamma-distributed** selection coefficient, with many mildly deleterious variants and a smaller number of strongly deleterious ones (Eyre-Walker & Keightley 2007). Here we model *standing variation* already present at the start of the simulation:
+
+```{r}
+#| label: mutation-landscape
+set.seed(42)
+
+n_loci <- 100
+
+# Selection coefficients drawn from a gamma distribution:
+# shape = 0.3, rate = 3  →  mean s ≈ 0.1, heavily right-skewed
+# (many nearly neutral loci, few strongly deleterious ones)
+s_values <- rgamma(n_loci, shape = 0.3, rate = 3)
+s_values <- pmin(s_values, 0.99)   # cap: lethal mutations rare in standing variation
+
+# Dominance: all partially recessive (a common empirical finding)
+h_values <- rep(0.1, n_loci)
+
+# Starting frequencies: uniform between 0.05 and 0.30
+q0_values <- runif(n_loci, 0.05, 0.30)
+
+loci <- data.frame(s = s_values, h = h_values, q0 = q0_values)
+
+cat("Summary of selection coefficients across 100 loci:\n")
+print(summary(loci$s))
+cat("\nMean starting frequency of deleterious allele:", round(mean(loci$q0), 3), "\n")
+
+# Expected initial genetic load (multiplicative, no drift yet)
+p0_vec    <- 1 - loci$q0
+w_bar_vec <- p0_vec^2 + 2 * p0_vec * loci$q0 * (1 - loci$h * loci$s) +
+             loci$q0^2 * (1 - loci$s)
+L_initial <- 1 - prod(w_bar_vec)
+cat("Approximate initial genetic load:", round(L_initial, 4), "\n")
+```
+
+```{r}
+#| label: plot-mutation-landscape
+#| fig-width: 9
+#| fig-height: 4
+ggplot(loci, aes(x = s)) +
+  geom_histogram(bins = 30, fill = "#E41A1C", colour = "white", alpha = 0.85) +
+  labs(
+    title = "Distribution of selection coefficients across 100 loci",
+    x     = "Selection coefficient (s)",
+    y     = "Number of loci"
+  ) +
+  theme_classic(base_size = 13)
+```
+
+### Multi-locus simulator and fitness calculator
+
+We run the single-locus simulator independently for each locus and store the results in a three-dimensional array (generations × replicates × loci). Loci are treated as independent — no linkage disequilibrium.
+
+```{r}
+#| label: multilocus-fn
+# Run the single-locus simulator for every locus independently.
+# Returns a 3D array: dim = c(ngen, nrep, n_loci)
+simulate_multilocus <- function(loci, Ne, nrep, ngen) {
+  n_loci  <- nrow(loci)
+  q_array <- array(NA, dim = c(ngen, nrep, n_loci))
+  for (l in seq_len(n_loci)) {
+    q_array[, , l] <- simulate_selection_drift(
+      q0   = loci$q0[l],
+      s    = loci$s[l],
+      h    = loci$h[l],
+      Ne   = Ne,
+      nrep = nrep,
+      ngen = ngen
+    )
+  }
+  q_array
+}
+
+# Compute mean population fitness at every generation and replicate
+# using a multiplicative model across loci.
+# Returns a matrix: dim = c(ngen, nrep)
+compute_fitness <- function(q_array, loci) {
+  ngen   <- dim(q_array)[1]
+  nrep   <- dim(q_array)[2]
+  n_loci <- dim(q_array)[3]
+
+  W_mat <- matrix(1, nrow = ngen, ncol = nrep)
+  for (l in seq_len(n_loci)) {
+    q       <- q_array[, , l]
+    p       <- 1 - q
+    s       <- loci$s[l]
+    h       <- loci$h[l]
+    w_bar_l <- p^2 * 1 + 2 * p * q * (1 - h * s) + q^2 * (1 - s)
+    W_mat   <- W_mat * w_bar_l
+  }
+  W_mat
+}
+```
+
+### Running the simulation
+
+```{r}
+#| label: run-multilocus
+set.seed(123)
+
+nrep <- 10
+ngen <- 300
+Ne   <- 100
+
+q_array <- simulate_multilocus(loci, Ne = Ne, nrep = nrep, ngen = ngen)
+W_mat   <- compute_fitness(q_array, loci)
+L_mat   <- 1 - W_mat   # genetic load matrix
+
+cat("Mean genetic load at generation 1  (initial):", round(mean(L_mat[1, ]),    4), "\n")
+cat("Mean genetic load at generation", ngen, "(final): ", round(mean(L_mat[ngen, ]), 4), "\n")
+```
+
+### Visualising the genetic load over time
+
+```{r}
+#| label: plot-genetic-load
+#| fig-width: 8
+#| fig-height: 5
+generations <- 1:ngen
+
+L_df           <- as.data.frame(L_mat)
+colnames(L_df) <- paste0("Rep", seq_len(nrep))
+L_df$generation <- generations
+
+L_long  <- pivot_longer(L_df, starts_with("Rep"), names_to = "replicate", values_to = "load")
+L_means <- L_long %>% group_by(generation) %>% summarise(mean_load = mean(load), .groups = "drop")
+
+ggplot() +
+  geom_line(
+    data   = L_long,
+    aes(x  = generation, y = load, group = replicate),
+    colour = "#2196F3", alpha = 0.45, linewidth = 0.55
+  ) +
+  geom_line(
+    data   = L_means,
+    aes(x  = generation, y = mean_load),
+    colour = "#0D47A1", linewidth = 1.4
+  ) +
+  geom_hline(
+    yintercept = mean(L_mat[1, ]),
+    linetype   = "dashed", colour = "grey40"
+  ) +
+  annotate("text", x = ngen * 0.65, y = mean(L_mat[1, ]) * 1.03,
+           label = "Initial load", colour = "grey40", size = 3.5) +
+  labs(
+    title = paste0("Genetic load over time  —  Ne = ", Ne,
+                   ",  100 loci  (h = 0.1,  s ~ Gamma)"),
+    x     = "Generation",
+    y     = "Genetic load  (L = 1 − W̄)"
+  ) +
+  theme_classic(base_size = 13)
+```
+
+> **Q4** — Is the genetic load increasing or decreasing over time for this population size? What processes are responsible for the change?
+
+> **Q5** — Increase `Ne` to 500 and re-run from the **Running the simulation** code block. How does the trajectory of the genetic load change? Interpret the difference.
+
+------------------------------------------------------------------------
+
+## Part 4: Purging versus Accumulation across Population Sizes
+
+We now run the multi-locus simulation for three population sizes and compare both the trajectory of the genetic load and the eventual fate of individual loci.
+
+### Comparing small, medium, and large populations
+
+```{r}
+#| label: pop-size-multilocus
+set.seed(777)
+
+nrep <- 15
+ngen <- 400
+
+q_small_ml  <- simulate_multilocus(loci, Ne = 20,  nrep = nrep, ngen = ngen)
+q_medium_ml <- simulate_multilocus(loci, Ne = 100, nrep = nrep, ngen = ngen)
+q_large_ml  <- simulate_multilocus(loci, Ne = 500, nrep = nrep, ngen = ngen)
+
+W_small  <- compute_fitness(q_small_ml,  loci)
+W_medium <- compute_fitness(q_medium_ml, loci)
+W_large  <- compute_fitness(q_large_ml,  loci)
+
+L_small  <- 1 - W_small
+L_medium <- 1 - W_medium
+L_large  <- 1 - W_large
+
+generations <- 1:ngen
+
+make_load_long <- function(L_mat, label) {
+  df           <- as.data.frame(L_mat)
+  colnames(df) <- paste0("Rep", seq_len(nrep))
+  df$generation <- generations
+  long <- pivot_longer(df, starts_with("Rep"), names_to = "replicate", values_to = "load")
+  long$Ne_label <- label
+  long
+}
+
+L_all <- bind_rows(
+  make_load_long(L_small,  "Ne = 20"),
+  make_load_long(L_medium, "Ne = 100"),
+  make_load_long(L_large,  "Ne = 500")
+)
+
+L_means_all <- L_all %>%
+  group_by(generation, Ne_label) %>%
+  summarise(mean_load = mean(load), .groups = "drop")
+```
+
+```{r}
+#| label: plot-load-comparison
+#| fig-width: 10
+#| fig-height: 5
+ggplot() +
+  geom_line(
+    data  = L_all,
+    aes(x = generation, y = load,
+        colour = Ne_label, group = interaction(replicate, Ne_label)),
+    alpha = 0.2, linewidth = 0.4
+  ) +
+  geom_line(
+    data = L_means_all,
+    aes(x = generation, y = mean_load, colour = Ne_label),
+    linewidth = 1.4
+  ) +
+  geom_hline(yintercept = mean(L_small[1, ]), linetype = "dashed", colour = "grey40") +
+  annotate("text", x = ngen * 0.55, y = mean(L_small[1, ]) * 1.03,
+           label = "Initial load", colour = "grey40", size = 3.5) +
+  scale_colour_manual(values = c(
+    "Ne = 20"  = "#E41A1C",
+    "Ne = 100" = "#FF7F00",
+    "Ne = 500" = "#4DAF4A"
+  )) +
+  labs(
+    title  = "Genetic load over time  —  100 loci  (h = 0.1,  s ~ Gamma)",
+    x      = "Generation",
+    y      = "Genetic load  (L = 1 − W̄)",
+    colour = "Population size"
+  ) +
+  theme_classic(base_size = 13) +
+  theme(legend.position = "right")
+```
+
+> **Q6** — Compare the genetic load trajectories across population sizes. Which population ends up with the highest load? Is this driven by the loss of many loci to drift (fixation of the deleterious allele) or by the failure to purge? What does the Ne = 500 trajectory tell you about the effectiveness of selection in large populations?
+
+### Classifying loci: purged, fixed, or still segregating
+
+We classify the final state of each locus in each replicate:
+
+-   **Purged** ($q < 0.05$): the deleterious allele was (essentially) eliminated — selection won
+-   **Fixed** ($q > 0.95$): the deleterious allele went to fixation — drift overcame selection
+-   **Segregating**: the locus remains polymorphic
+
+```{r}
+#| label: classify-loci
+classify_loci <- function(q_array, loci, threshold = 0.05) {
+  q_final     <- q_array[dim(q_array)[1], , ]   # matrix [nrep × n_loci]
+  prop_purged <- colMeans(q_final < threshold)
+  prop_fixed  <- colMeans(q_final > 1 - threshold)
+  prop_segreg <- 1 - prop_purged - prop_fixed
+
+  data.frame(
+    locus_id    = seq_len(ncol(q_final)),
+    s           = loci$s,
+    h           = loci$h,
+    q0          = loci$q0,
+    prop_purged = prop_purged,
+    prop_fixed  = prop_fixed,
+    prop_segreg = prop_segreg
+  )
+}
+
+class_small  <- classify_loci(q_small_ml,  loci)
+class_medium <- classify_loci(q_medium_ml, loci)
+class_large  <- classify_loci(q_large_ml,  loci)
+
+make_summary <- function(df, label) {
+  data.frame(
+    Population       = label,
+    Mean_prop_purged = round(mean(df$prop_purged), 3),
+    Mean_prop_fixed  = round(mean(df$prop_fixed),  3),
+    Mean_prop_segreg = round(mean(df$prop_segreg), 3)
+  )
+}
+
+summary_class <- bind_rows(
+  make_summary(class_small,  "Ne = 20"),
+  make_summary(class_medium, "Ne = 100"),
+  make_summary(class_large,  "Ne = 500")
+)
+
+cat("Average proportion of loci in each category (across replicates):\n\n")
+print(summary_class)
+```
+
+### Fate of loci as a function of selection strength
+
+The classification above averages over all loci. Now let's break it down by the selection coefficient $s$ to see which types of mutations are most at risk of fixation versus most likely to be purged:
+
+```{r}
+#| label: plot-fate-by-s
+#| fig-width: 11
+#| fig-height: 6
+fate_all <- bind_rows(
+  mutate(class_small,  Ne_label = "Ne = 20"),
+  mutate(class_medium, Ne_label = "Ne = 100"),
+  mutate(class_large,  Ne_label = "Ne = 500")
+) %>%
+  pivot_longer(
+    cols      = c(prop_purged, prop_fixed, prop_segreg),
+    names_to  = "outcome",
+    values_to = "proportion"
+  ) %>%
+  mutate(outcome = recode(outcome,
+    prop_purged = "Purged  (q < 0.05)",
+    prop_fixed  = "Fixed  (q > 0.95)",
+    prop_segreg = "Segregating"
+  ))
+
+ggplot(fate_all, aes(x = s, y = proportion, colour = outcome)) +
+  geom_point(alpha = 0.5, size = 1.8) +
+  geom_smooth(method = "loess", se = FALSE, linewidth = 1) +
+  facet_wrap(~ Ne_label, ncol = 3) +
+  scale_colour_manual(values = c(
+    "Purged  (q < 0.05)" = "#4DAF4A",
+    "Fixed  (q > 0.95)"  = "#E41A1C",
+    "Segregating"        = "#377EB8"
+  )) +
+  labs(
+    title  = "Fate of deleterious alleles by selection strength and population size",
+    x      = "Selection coefficient (s)",
+    y      = "Proportion of replicates",
+    colour = "Outcome"
+  ) +
+  theme_classic(base_size = 12) +
+  theme(
+    legend.position  = "bottom",
+    strip.background = element_rect(fill = "grey92", colour = NA)
+  )
+```
+
+> **Q7** — Examine how the outcome (purged / fixed / segregating) depends on the selection coefficient $s$ for each population size. At what approximate threshold of $s$ does a mutation switch from being predominantly fixed by drift to being predominantly purged? How does this threshold shift with $N_e$?
+
+> **Q8** — Compare the proportion of loci **fixed** for Ne = 20 versus Ne = 500. What does this tell you about the risk of mutational meltdown in small populations? Does the Ne = 20 population show any evidence of purging (higher proportion purged than Ne = 500) for any class of $s$?
+
+### Comparing dominance regimes in a small population
+
+The dominance coefficient fundamentally changes how efficiently selection can act. Let's compare all three dominance extremes for a small population ($N_e = 50$) where the contrast is sharpest:
+
+```{r}
+#| label: dominance-multilocus
+set.seed(888)
+
+nrep_dom <- 15
+ngen_dom <- 400
+Ne_dom   <- 50
+
+loci_recessive  <- mutate(loci, h = 0.0)
+loci_codominant <- mutate(loci, h = 0.5)
+loci_dominant   <- mutate(loci, h = 1.0)
+
+q_rec <- simulate_multilocus(loci_recessive,  Ne = Ne_dom, nrep = nrep_dom, ngen = ngen_dom)
+q_cod <- simulate_multilocus(loci_codominant, Ne = Ne_dom, nrep = nrep_dom, ngen = ngen_dom)
+q_dom <- simulate_multilocus(loci_dominant,   Ne = Ne_dom, nrep = nrep_dom, ngen = ngen_dom)
+
+W_rec <- compute_fitness(q_rec, loci_recessive)
+W_cod <- compute_fitness(q_cod, loci_codominant)
+W_dom <- compute_fitness(q_dom, loci_dominant)
+
+generations_dom <- 1:ngen_dom
+
+# Mean load per generation for each dominance model
+L_rec_means <- rowMeans(1 - W_rec)
+L_cod_means <- rowMeans(1 - W_cod)
+L_dom_means <- rowMeans(1 - W_dom)
+
+dom_df <- data.frame(
+  generation = rep(generations_dom, 3),
+  mean_load  = c(L_rec_means, L_cod_means, L_dom_means),
+  dominance  = rep(
+    c("Recessive (h = 0)", "Co-dominant (h = 0.5)", "Dominant (h = 1)"),
+    each = ngen_dom
+  )
+)
+```
+
+```{r}
+#| label: plot-dominance-load
+#| fig-width: 9
+#| fig-height: 5
+ggplot(dom_df, aes(x = generation, y = mean_load, colour = dominance)) +
+  geom_line(linewidth = 1.3) +
+  scale_colour_manual(values = c(
+    "Recessive (h = 0)"      = "#E41A1C",
+    "Co-dominant (h = 0.5)"  = "#377EB8",
+    "Dominant (h = 1)"       = "#4DAF4A"
+  )) +
+  labs(
+    title  = paste0("Mean genetic load by dominance regime  (Ne = ", Ne_dom, ",  100 loci,  s ~ Gamma)"),
+    x      = "Generation",
+    y      = "Mean genetic load  (L = 1 − W̄)",
+    colour = "Dominance"
+  ) +
+  theme_classic(base_size = 13) +
+  theme(legend.position = "right")
+```
+
+```{r}
+#| label: dominance-summary
+# Classification tables for the three dominance models
+class_rec <- classify_loci(q_rec, loci_recessive)
+class_cod <- classify_loci(q_cod, loci_codominant)
+class_dom <- classify_loci(q_dom, loci_dominant)
+
+dom_summary <- bind_rows(
+  make_summary(class_rec, "Recessive (h = 0)"),
+  make_summary(class_cod, "Co-dominant (h = 0.5)"),
+  make_summary(class_dom, "Dominant (h = 1)")
+)
+
+cat("Locus fate by dominance regime  (Ne =", Ne_dom, "):\n\n")
+print(dom_summary)
+```
+
+> **Q9** — The three dominance models start from different initial genetic loads (because at the same allele frequency, dominant mutations are more exposed to selection). Nevertheless, how does the *trajectory* of the load differ across dominance regimes? Which model ends up with the highest final load, and why?
+
+> **Q10** — For the recessive model in a small population (Ne = 50), examine the proportion of loci purged versus fixed. Does the small population purge recessive mutations more or less effectively than dominant mutations? Explain in terms of the exposure of the allele to selection in each dominance regime.
+
+------------------------------------------------------------------------
+
+## Part 5: Building an Interactive Shiny App
+
+A conservation geneticist advising on a management program needs to explore mutation load scenarios interactively — without editing R code. We will build a Shiny app that exposes the key parameters of the multi-locus simulator through sliders and presents the genetic-load trajectory and locus-fate summary in real time.
+
+### How Shiny works
+
+Every Shiny app is a single R script (`app_load.R`) with three elements:
+
+``` r
+library(shiny)
+
+ui <- fluidPage(          # 1. Layout + input widgets + output placeholders
+  ...
+)
+
+server <- function(input, output) {   # 2. Reactive logic
+  output$myPlot <- renderPlot({ ... })
+}
+
+shinyApp(ui = ui, server = server)    # 3. Launch
+```
+
+Key concepts:
+
+| Concept | What it does |
+|------------------------------------|------------------------------------|
+| `sliderInput("id", ...)` | Creates a slider; its value is read as `input$id` in the server |
+| `selectInput("id", ...)` | Creates a drop-down; value is one of the provided choices |
+| `plotOutput("id")` | Reserves a panel for a rendered plot |
+| `renderPlot({ })` | Runs whenever any `input$` it uses changes; returns a ggplot |
+| `reactive({ })` | Caches a computed result and re-runs only when its inputs change |
+
+> **RStudio Server note:** Always view your app in the **Viewer pane** (bottom-right). Do *not* click "Open in Browser" — that opens `localhost:PORT` on your local machine, which cannot reach the remote server.
+
+### Step-by-step: create `app_load.R`
+
+In RStudio, go to **File \> New File \> R Script**, save it as `app_load.R`, then build it up following the steps below.
+
+------------------------------------------------------------------------
+
+**Step 1 — Load packages and paste the two simulator functions**
+
+Copy `simulate_selection_drift()` and `simulate_multilocus()` and `compute_fitness()` from earlier in this tutorial into the top of `app_load.R`:
+
+``` r
+library(shiny)
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+
+simulate_selection_drift <- function(q0, s, h, Ne, nrep, ngen) {
+  q_mat      <- matrix(NA, nrow = ngen, ncol = nrep)
+  q_mat[1, ] <- q0
+  for (t in 2:ngen) {
+    q     <- q_mat[t - 1, ]
+    p     <- 1 - q
+    w_bar <- p^2 * 1 + 2 * p * q * (1 - h * s) + q^2 * (1 - s)
+    q_sel <- (q^2 * (1 - s) + p * q * (1 - h * s)) / w_bar
+    q_sel <- pmax(0, pmin(1, q_sel))
+    q_mat[t, ] <- rbinom(nrep, size = 2 * Ne, prob = q_sel) / (2 * Ne)
+  }
+  q_mat
+}
+
+simulate_multilocus <- function(loci, Ne, nrep, ngen) {
+  n_loci  <- nrow(loci)
+  q_array <- array(NA, dim = c(ngen, nrep, n_loci))
+  for (l in seq_len(n_loci)) {
+    q_array[, , l] <- simulate_selection_drift(
+      q0 = loci$q0[l], s = loci$s[l], h = loci$h[l],
+      Ne = Ne, nrep = nrep, ngen = ngen
+    )
+  }
+  q_array
+}
+
+compute_fitness <- function(q_array, loci) {
+  ngen   <- dim(q_array)[1]
+  nrep   <- dim(q_array)[2]
+  n_loci <- dim(q_array)[3]
+  W_mat  <- matrix(1, nrow = ngen, ncol = nrep)
+  for (l in seq_len(n_loci)) {
+    q       <- q_array[, , l]
+    p       <- 1 - q
+    s       <- loci$s[l]
+    h       <- loci$h[l]
+    w_bar_l <- p^2 + 2 * p * q * (1 - h * s) + q^2 * (1 - s)
+    W_mat   <- W_mat * w_bar_l
+  }
+  W_mat
+}
+```
+
+------------------------------------------------------------------------
+
+**Step 2 — Build the UI**
+
+The sidebar contains sliders for the population parameters, the mutation landscape, and the dominance model:
+
+``` r
+ui <- fluidPage(
+  titlePanel("Deleterious Mutation Load Simulator"),
+  sidebarLayout(
+    sidebarPanel(
+      h4("Population parameters"),
+      sliderInput("Ne",   "Effective population size (Ne):",
+                  min = 10, max = 1000, value = 100, step = 10),
+      sliderInput("nrep", "Number of replicate populations:",
+                  min = 5,  max = 30,   value = 10,  step = 5),
+      sliderInput("ngen", "Number of generations:",
+                  min = 50, max = 600,  value = 300, step = 25),
+      hr(),
+      h4("Mutation landscape"),
+      sliderInput("n_loci",   "Number of loci:",
+                  min = 10, max = 200, value = 100, step = 10),
+      sliderInput("s_shape",  "DFE shape parameter (Gamma):",
+                  min = 0.1, max = 2.0, value = 0.3, step = 0.1),
+      sliderInput("s_rate",   "DFE rate parameter (Gamma):",
+                  min = 0.5, max = 10,  value = 3.0, step = 0.5),
+      sliderInput("q0_max",   "Max starting frequency of deleterious allele:",
+                  min = 0.1, max = 0.5, value = 0.3, step = 0.05),
+      hr(),
+      h4("Dominance model"),
+      selectInput("h_model", "Dominance coefficient (h):",
+                  choices  = c("Recessive (h = 0)"      = "0",
+                               "Partially recessive (h = 0.1)" = "0.1",
+                               "Co-dominant (h = 0.5)"  = "0.5",
+                               "Dominant (h = 1)"       = "1"),
+                  selected = "0.1")
+    ),
+    mainPanel(
+      tabsetPanel(
+        tabPanel("Genetic load over time",
+                 plotOutput("loadPlot",  height = "420px")),
+        tabPanel("Locus fate",
+                 plotOutput("fatePlot",  height = "420px")),
+        tabPanel("Summary table",
+                 tableOutput("summaryTable"))
+      )
+    )
+  )
+)
+```
+
+------------------------------------------------------------------------
+
+**Step 3 — Write the server**
+
+The server generates the mutation landscape, runs the simulation *reactively*, and renders three outputs:
+
+``` r
+server <- function(input, output) {
+
+  # Generate mutation landscape whenever landscape parameters change
+  loci_react <- reactive({
+    set.seed(42)
+    n <- input$n_loci
+    s <- rgamma(n, shape = input$s_shape, rate = input$s_rate)
+    s <- pmin(s, 0.99)
+    h  <- rep(as.numeric(input$h_model), n)
+    q0 <- runif(n, 0.05, input$q0_max)
+    data.frame(s = s, h = h, q0 = q0)
+  })
+
+  # Run multi-locus simulation whenever any input changes
+  sim_result <- reactive({
+    set.seed(123)
+    loci    <- loci_react()
+    q_array <- simulate_multilocus(loci,
+                                   Ne   = input$Ne,
+                                   nrep = input$nrep,
+                                   ngen = input$ngen)
+    W_mat <- compute_fitness(q_array, loci)
+    list(q_array = q_array, W_mat = W_mat, loci = loci)
+  })
+
+  # ── Genetic load plot ─────────────────────────────────────────────────────
+  output$loadPlot <- renderPlot({
+    res  <- sim_result()
+    L_mat <- 1 - res$W_mat
+    ngen  <- input$ngen
+    nrep  <- input$nrep
+    gens  <- 1:ngen
+
+    L_df        <- as.data.frame(L_mat)
+    colnames(L_df) <- paste0("Rep", seq_len(nrep))
+    L_df$generation <- gens
+    L_long  <- pivot_longer(L_df, starts_with("Rep"), names_to = "rep", values_to = "load")
+    L_means <- L_long %>%
+      group_by(generation) %>% summarise(mean_load = mean(load), .groups = "drop")
+
+    ggplot() +
+      geom_line(data = L_long,
+                aes(x = generation, y = load, group = rep),
+                colour = "#2196F3", alpha = 0.4, linewidth = 0.5) +
+      geom_line(data = L_means,
+                aes(x = generation, y = mean_load),
+                colour = "#0D47A1", linewidth = 1.4) +
+      geom_hline(yintercept = mean(L_mat[1, ]),
+                 linetype = "dashed", colour = "grey40") +
+      labs(title = paste0("Genetic load  (Ne = ", input$Ne,
+                          ",  ", input$n_loci, " loci,  h = ", input$h_model, ")"),
+           x = "Generation", y = "Genetic load  (L = 1 − W̄)") +
+      theme_classic(base_size = 13)
+  })
+
+  # ── Locus fate plot ───────────────────────────────────────────────────────
+  output$fatePlot <- renderPlot({
+    res     <- sim_result()
+    loci    <- res$loci
+    q_array <- res$q_array
+    q_final <- q_array[dim(q_array)[1], , ]   # [nrep × n_loci]
+
+    fate_df <- data.frame(
+      s           = loci$s,
+      prop_purged = colMeans(q_final < 0.05),
+      prop_fixed  = colMeans(q_final > 0.95),
+      prop_segreg = colMeans(q_final >= 0.05 & q_final <= 0.95)
+    ) %>%
+      pivot_longer(starts_with("prop_"), names_to = "outcome", values_to = "proportion") %>%
+      mutate(outcome = recode(outcome,
+        prop_purged = "Purged  (q < 0.05)",
+        prop_fixed  = "Fixed  (q > 0.95)",
+        prop_segreg = "Segregating"))
+
+    ggplot(fate_df, aes(x = s, y = proportion, colour = outcome)) +
+      geom_point(alpha = 0.55, size = 2) +
+      geom_smooth(method = "loess", se = FALSE, linewidth = 1) +
+      scale_colour_manual(values = c(
+        "Purged  (q < 0.05)" = "#4DAF4A",
+        "Fixed  (q > 0.95)"  = "#E41A1C",
+        "Segregating"        = "#377EB8")) +
+      labs(title = paste0("Locus fate by selection coefficient  (Ne = ", input$Ne, ")"),
+           x = "Selection coefficient (s)", y = "Proportion of replicates",
+           colour = "Outcome") +
+      theme_classic(base_size = 13) +
+      theme(legend.position = "right")
+  })
+
+  # ── Summary table ─────────────────────────────────────────────────────────
+  output$summaryTable <- renderTable({
+    res     <- sim_result()
+    loci    <- res$loci
+    W_mat   <- res$W_mat
+    q_array <- res$q_array
+    ngen    <- input$ngen
+    q_final <- q_array[ngen, , ]
+
+    data.frame(
+      Statistic = c(
+        "Number of loci simulated",
+        "Mean selection coefficient (s)",
+        "Dominance coefficient (h)",
+        "Initial mean genetic load",
+        "Final mean genetic load",
+        "Change in genetic load",
+        "Mean proportion of loci purged (q < 0.05)",
+        "Mean proportion of loci fixed  (q > 0.95)",
+        "Mean proportion of loci segregating"
+      ),
+      Value = round(c(
+        input$n_loci,
+        mean(loci$s),
+        mean(loci$h),
+        mean(1 - W_mat[1, ]),
+        mean(1 - W_mat[ngen, ]),
+        mean(1 - W_mat[ngen, ]) - mean(1 - W_mat[1, ]),
+        mean(q_final < 0.05),
+        mean(q_final > 0.95),
+        mean(q_final >= 0.05 & q_final <= 0.95)
+      ), 4)
+    )
+  })
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+------------------------------------------------------------------------
+
+**Step 4 — Save and run the app**
+
+Save `app_load.R` and click the green "Run App" button. The app launches in the Viewer pane.
+
+> **Q11** — Using the app, explore the effect of population size on the genetic load trajectory. Set the dominance model to **Recessive (h = 0)** and the DFE parameters to their defaults. Systematically vary Ne from 10 to 500. Describe the pattern. Is there a population size at which the final genetic load is minimised? What do you think drives this?
+
+> **Q12** — Now compare **Recessive** versus **Co-dominant** versus **Dominant** at a fixed small population size (Ne = 50). How do the genetic load trajectory and the locus-fate plots differ? Which scenario poses the greatest conservation risk, and why?
+
+> **Q13** — Consider a critically endangered species with an estimated effective population size of $N_e \approx 30$. The genome is estimated to carry approximately 150 segregating sites with mildly deleterious effects ($s \approx 0.02–0.05$) and partial recessivity ($h \approx 0.1$). Use the app to simulate this scenario. Based on your results, is this population more likely to purge or accumulate its deleterious load over 200 generations? What would change if a translocation introduced 20 new individuals from a large outbred population? (Hint: you can approximate the translocation by increasing Ne to reflect the larger effective size after mixing.)
