@@ -1,24 +1,20 @@
 # Microbiome Applications practical
 
 ## Aims of the practical
-- Familiarity with the work in R, RStudio, and Quarto
-- Summarize and visualize microbiome composition data
-- Assess differences among groups of samples
+
+- Gain familiarity with R, RStudio, and Quarto
+- Summarise and visualise microbiome composition data
+- Assess differences in microbiome diversity and composition among sample groups
 
 ## Handing in your work
 
-- Please hand in your answers to the questions (see below) by rendering the Quarto document to HTML or PDF and upload it to the Moodle platform. You only need to hand in your work at the end of the _second session_.
+- Answer the numbered questions throughout this document by editing your Quarto file.
+- Render the document to HTML or PDF and upload it to the Moodle platform. You only need to hand in your work at the end of the **second session**.
 
 ## Connection to the server  
 
 - Open a web browser and go to the URL: [http://legcompute3.unine.ch:8787](http://legcompute3.unine.ch:8787)
-- Log in with your credentials (see below).
-
-```
-N/A
-```
-
-Password (same for all): `MA_2026`
+- Log in with your credentials (see Moodle how to claim an account).
 
 - What you see is a web interface RStudio. All code will run on the server, so you don't need to install anything on your computer.
 - To recover a file from RStudio, select it in the file tab on the right and click on the wheels icon (select Export).
@@ -62,26 +58,29 @@ knitr::opts_chunk$set(dev = "ragg_png")
 ```
 
 
-## The microbiome dataset to analyze
+## The microbiome dataset to analyse
 
-We will look at a study entitled ["Fat, fibre and cancer risk in African Americans and rural Africans"](https://www.nature.com/articles/ncomms7342) published in 2015 in Nature Communications. The study investigates the association between diet and gut microbiome composition in African Americans and rural Africans. 
+We will look at a study entitled ["Fat, fibre and cancer risk in African Americans and rural Africans"](https://www.nature.com/articles/ncomms7342) published in 2015 in *Nature Communications*. The study investigates the association between diet and gut microbiome composition in African Americans and rural Africans.
 
-_Question 1: Summarize in your own words and 5-10 lines the main findings of the study. What is the main hypothesis? What are the main results? What are the conclusions? Focus on the microbiome part and sidestep the metabolic and tissue analyses._
+> **Question 1:** Summarise in your own words (5–10 lines) the main findings of the study. What is the main hypothesis? What are the main results and conclusions? Focus on the microbiome part and sidestep the metabolic and tissue analyses.
 
-Some helpful glossary terms:
-- AFR: African
-- AA(M): African American
-- HE: home environment
-- DI: dietary intervention (hospital)
-- ED: endoscopy day
+### Glossary of key terms
 
-Take a look at Table 1 for a description of the sampling and study design.
+| Abbreviation | Meaning |
+|---|---|
+| AFR | African (rural South African) |
+| AA(M) | African American |
+| HE | Home environment (baseline, no dietary intervention) |
+| DI | Dietary intervention (participants housed in hospital and fed a controlled diet) |
+| ED | Endoscopy day (sample collected on the day of the colonoscopy) |
+
+Take a look at Table 1 of the paper for a full description of sampling and study design.
 
 ## Starting with the analyses
 
-[Tutorial adapted from the microbiome tutorial by Lahti, Shetty et al.]
+*Tutorial adapted from the microbiome tutorial by Lahti, Shetty et al.*
 
-We will base our tutorial on the R package `microbiome` provided by co-authors of the study. This packages includes a wealth of functions to analyze microbiome data. The package is already installed on the server, so you don't need to install it again. You can load it by running the following command in R:
+We will base our tutorial on the R package `microbiome`, which was developed by co-authors of the study. It provides a rich set of functions for analysing and visualising microbiome data. The package is already installed on the server. Load it together with the other required packages:
 
 ```r
 library(microbiome)
@@ -95,183 +94,214 @@ data(dietswap)
 transform <- microbiome::transform
 ```
 
-As we have loaded the microbiome dataset, we can start by looking at the data. The dataset is a phyloseq object, which is a class used to store microbiome data in R. You can use the `print` function to see the contents of the object.
+Once loaded, `dietswap` is a **phyloseq** object — a dedicated R class for storing microbiome data. Use `print()` to get an overview:
 
-The dataset is part of the R package `microbiome` and is called `dietswap`. It contains the following elements:
-  - `otu_table`: the OTU table, which contains the abundance of each OTU in each sample
-  - `tax_table`: the taxonomic classification of each OTU
-  - `sam_data`:  the metadata of each sample, which contains information about e.g., nationality, diet, timepoint, etc.
-  - `phy_tree`: the phylogenetic tree of the OTUs. This is empty for this dataset.
-  - `refseq`: the reference sequences of the OTUs. This is empty for this dataset.
+```r
+print(dietswap)
+```
+
+The object contains the following components:
+
+| Component | Description |
+|---|---|
+| `otu_table` | Abundance of each OTU (row) in each sample (column) |
+| `tax_table` | Taxonomic classification of each OTU (Kingdom → Genus) |
+| `sam_data` | Sample metadata: nationality, diet group, timepoint, BMI, sex, etc. |
+| `phy_tree` | Phylogenetic tree — *not available for this dataset* |
+| `refseq` | Reference sequences — *not available for this dataset* |
 
 ## Explore the dataset
 
-There are specific functions that help you "extract" the relevent `dietswap` dataset. Try these:
+Phyloseq provides accessor functions to extract each component individually:
 
 ```r
-# Extract the OTU table
+# Extract the OTU table (taxa × samples)
 otu_table(dietswap)
-# Extract the taxonomic table
+# Extract the taxonomic classification table
 tax_table(dietswap)
-# Extract the sample data
+# Extract the sample metadata
 sample_data(dietswap)
 ```
 
-We will explore first the available samples, categories and category sizes.
+Let's start by visualising how the samples are distributed across the key metadata variables (sex, BMI group, and dietary group), broken down by nationality:
 
 ```r
-# for simplicity, we create a new dataframe with the sample data
+# For convenience, pull the sample metadata into a plain data frame
 sample.df <- sample_data(dietswap)
-# Sex ratio
-ggplot(sample.df, aes(x = sex)) + geom_bar() + facet_grid(. ~ nationality ) + theme_ipsum()
-# BMI types
-ggplot(sample.df, aes(x = bmi_group)) + geom_bar() + facet_grid(. ~ nationality ) + theme_ipsum()
-# Treatment group
-ggplot(sample.df, aes(x = group)) + geom_bar() + facet_grid(. ~ nationality ) + theme_ipsum()
+
+# Sex ratio by nationality
+ggplot(sample.df, aes(x = sex)) +
+  geom_bar() + facet_grid(. ~ nationality) + theme_ipsum()
+
+# BMI category by nationality
+ggplot(sample.df, aes(x = bmi_group)) +
+  geom_bar() + facet_grid(. ~ nationality) + theme_ipsum()
+
+# Dietary intervention group by nationality
+ggplot(sample.df, aes(x = group)) +
+  geom_bar() + facet_grid(. ~ nationality) + theme_ipsum()
 ```
 
-# Microbiome composition analyses
-_Question 2: What is an OTU? What is the difference between an OTU and a species?_
+## Microbiome composition analyses
 
-Next, we want to summarize the microbiota composition of the samples. We want to focus on the most abundant and broadly shared taxa in the dataset. 
+> **Question 2:** What is an OTU? What is the difference between an OTU and a species?
 
-_Question 3: What is the difference between abundance and prevalence in the context of our samples?_
+Next, we want to summarise the microbiota composition of the samples, focusing on the most abundant and broadly shared taxa.
 
-_Question 4: What is a HITChip phylogenetic microarray?_
+> **Question 3:** What is the difference between *abundance* and *prevalence* in the context of these samples?
 
-As a first analysis step, we want to visualize the frequency of OTUs across all samples.
+> **Question 4:** What is a HITChip phylogenetic microarray? How does it differ from 16S rRNA amplicon sequencing?
+
+As a first step, we visualise the **prevalence** of each OTU — i.e., how many samples it appears in:
 
 ```r
-# counting how widely spread each taxa is among samples
+# For each OTU (row), count the number of samples where it is detected (abundance > 0)
 otu.df <- as.data.frame(otu_table(dietswap))
 otu.df$taxa_count_non0 <- rowSums(otu.df != 0)
 
 ggplot(otu.df, aes(x = taxa_count_non0)) +
-  geom_histogram() + 
+  geom_histogram() +
   theme_ipsum() +
-  labs(y = "Number of OTUs", x = "Number of samples")  
+  labs(y = "Number of OTUs", x = "Number of samples in which OTU is detected")
 ```
 
-_Question 5: What is more common - taxa shared among all samples or taxa unique to one sample?_
+> **Question 5:** What is more common — taxa shared among all samples, or taxa unique to just one sample?
 
-Next, we explore abundance of taxa based on the 
+Next, we look at the **abundance distribution** of OTUs within a single sample. The example below uses `Sample-1`:
 
 ```r
 ggplot(otu.df, aes(x = `Sample-1`)) +
-  geom_histogram(binwidth = 10) + 
+  geom_histogram(binwidth = 10) +
   theme_ipsum() +
-  labs(y = "Number of OTUs", x = "Abundance of OTU")
+  labs(y = "Number of OTUs", x = "Abundance of OTU in Sample-1")
 ```
 
-We observe that the majority of OTUs are rare, with a few abundant ones. This is a common pattern in microbiome data. You can check that this pattern is true for other samples than "Sample-1" by changing the sample name in the code above.
+You will observe that the majority of OTUs have very low abundance, with only a few highly abundant ones. This **hollow curve** or **long-tail** distribution is a universal feature of microbiome datasets. Try swapping `Sample-1` for another sample name to confirm the pattern holds.
 
-## Merge rare taxa to speed up data processing
+## Filter and aggregate rare taxa
 
-We will merge rare taxa to speed up data processing. We will use the `aggregate_rare` function from the `microbiome` package. This function will merge all taxa that are below a certain abundance threshold into a single "Other" category.
+Working with hundreds of low-abundance OTUs adds noise and slows down computation. We therefore:
+
+1. **Convert to relative (compositional) abundance** — each sample's counts are divided by its total, so values represent proportions summing to 1.
+2. **Aggregate rare taxa at the genus level** — any genus detected at less than 1 % abundance (`detection = 1/100`) in fewer than 50 % of samples (`prevalence = 50/100`) is collapsed into a single *"Other"* category.
 
 ```r
-# Merge rare taxa
+# Step 1: convert raw counts to relative abundance (proportions sum to 1 per sample)
 mbiot <- transform(dietswap, "compositional")
-# Setting thresholds for detection and prevalence (among samples)
+
+# Step 2: merge genera that are rare or infrequent into an "Other" category
 mbiot <- aggregate_rare(mbiot, level = "Genus", detection = 1/100, prevalence = 50/100)
+
+# Inspect the reduced dataset
+print(mbiot)
 ```
 
-`mbiot` is now a phyloseq object that contains the merged taxa. You can check the contents of the object by using the `print` function.
+This leaves you with a much smaller set of well-characterised genera plus the *Other* bin.
 
-## Plot the genus composition among samples
+## Plot genus composition across samples
 
-Sorted by the most abundant taxon (Prevotella melaninogenica et rel.)
+### All samples, sorted by the dominant taxon
+
+Samples are ordered by the relative abundance of *Prevotella melaninogenica* et rel. — the most abundant genus in this dataset — so that compositional gradients become visible from left to right:
 
 ```r
 mbiot %>%
-  plot_composition(sample.sort = "Prevotella melaninogenica et rel.", otu.sort = "abundance") +
-  scale_y_continuous(label = scales::percent) + 
+  plot_composition(sample.sort = "Prevotella melaninogenica et rel.",
+                   otu.sort = "abundance") +
+  scale_y_continuous(label = scales::percent) +
   scale_fill_brewer("Genera", palette = "Paired") +
-  theme_ipsum(grid="Y") +
+  theme_ipsum(grid = "Y") +
   labs(x = "Samples", y = "Relative abundance (%)",
-       title = "Relative abundance data") + 
-  # Removes sample names and ticks
-  theme(axis.text.x=element_blank(), axis.ticks.x=element_blank())
+       title = "Genus-level composition — sorted by dominant taxon") +
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
 ```
 
-Plot the samples sorted by geography (nationality)
+### All samples, grouped by nationality
+
+Sorting by `nationality` places AFR and AAM samples side-by-side, making geographic differences in composition immediately apparent:
 
 ```r
 plot_composition(mbiot,
-                      taxonomic.level = "Genus",
-                      sample.sort = "nationality",
-                      x.label = "nationality") +
+                 taxonomic.level = "Genus",
+                 sample.sort = "nationality",
+                 x.label = "nationality") +
   scale_fill_brewer("Genera", palette = "Paired") +
   guides(fill = guide_legend(ncol = 1)) +
   scale_y_percent() +
   labs(x = "Samples", y = "Relative abundance (%)",
-       title = "Relative abundance data") + 
-  theme_ipsum(grid="Y") +
-  theme(axis.text.x = element_text(angle=90, hjust=1),
+       title = "Genus-level composition — grouped by nationality") +
+  theme_ipsum(grid = "Y") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1),
         legend.text = element_text(face = "italic"))
 ```
 
-Subset the dataset to a specific group of samples
+### Subset to a specific group
+
+You can focus on any sub-group of interest using `subset_samples()`. The example below selects only rural African participants during the dietary intervention (DI), i.e., when they were fed an African American-style diet in a controlled hospital setting:
 
 ```r
-# The subset function helps to filter the samples based on specific criteria
+# Recall: DI = dietary intervention group; AFR = rural African participants
 mbiot_sub <- subset_samples(mbiot, group == "DI" & nationality == "AFR")
 ```
 
-Repeat the plot about but using the subset dataset
+Repeat the composition plot for this subset:
 
 ```r
 plot_composition(mbiot_sub,
-                      taxonomic.level = "Genus",
-                      sample.sort = "nationality",
-                      x.label = "nationality") +
+                 taxonomic.level = "Genus",
+                 sample.sort = "nationality",
+                 x.label = "nationality") +
   scale_fill_brewer("Genera", palette = "Paired") +
   guides(fill = guide_legend(ncol = 1)) +
   scale_y_percent() +
   labs(x = "Samples", y = "Relative abundance (%)",
-       title = "Relative abundance data") + 
-  theme_ipsum(grid="Y") +
-  theme(axis.text.x = element_text(angle=90, hjust=1),
+       title = "Genus-level composition — AFR dietary intervention only") +
+  theme_ipsum(grid = "Y") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1),
         legend.text = element_text(face = "italic"))
 ```
 
 
 ## Plot composition heatmaps
 
-For this example, we will return to the full dataset (`mbiot`)
+A heatmap gives a simultaneous overview of all genera across all samples. The `"neatmap"` ordering re-arranges both rows (genera) and columns (samples) using a seriation algorithm that places the most similar entries adjacent to each other, making compositional gradients and clusters visually clear:
 
 ```r
-microbiome::transform(mbiot, "compositional") %>% 
+# Return to the full dataset (mbiot) for the heatmap
+microbiome::transform(mbiot, "compositional") %>%
   plot_composition(plot.type = "heatmap",
-                   sample.sort = "neatmap", 
-                   otu.sort = "neatmap") +
-  theme(axis.text.y=element_blank(), 
-        axis.ticks.y = element_blank(), 
-        axis.text.x = element_text(size = 9, hjust=1),
-        legend.text = element_text(size = 8)) +
+                   sample.sort = "neatmap",
+                   otu.sort    = "neatmap") +
+  theme(axis.text.y  = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.text.x  = element_text(size = 9, hjust = 1),
+        legend.text  = element_text(size = 8)) +
   ylab("Samples")
 ```
 
-_Question 6: Ask three different, simple questions about the microbiota composition of the different samples and adjust the code above to answer these. You do not need to do quantitative analyses. An impression from graphics is sufficient. Provide your questions, the code, plot and a brief answer._
+> **Question 6:** Formulate three distinct, simple questions about microbiota composition differences between sample groups. Adapt the plots above (e.g. by subsetting samples or changing the sorting variable) to address each question visually. For each question, provide: (1) the question, (2) the code you used, (3) the resulting plot, and (4) a brief interpretation. Quantitative tests are not required.
 
-Hint: Use this code here to get an overview of the samples according to the available factors in the dataset.
+**Hint:** The following plot gives an overview of the sample distribution across the available metadata factors, which may help you identify interesting comparisons:
 
 ```r
-ggplot(sample.df, aes(x = bmi_group, fill = after_stat(count))) + 
-         geom_bar() + theme_ipsum() + 
-         scale_fill_distiller(direction = 1) + 
-         facet_grid(sex ~ nationality)
-````
+ggplot(sample.df, aes(x = bmi_group, fill = after_stat(count))) +
+  geom_bar() +
+  theme_ipsum() +
+  scale_fill_distiller(direction = 1) +
+  facet_grid(sex ~ nationality)
+```
 
-# Microbiome diversity analyses
+## Microbiome diversity analyses
 
-Here, we want to focus on diversity metrics. Alpha diversity is a measure of the number of species in a given area, or the species richness of a community. The relative abundance (or eveness) is a crucial factor in the diversity metric. Please take a look at the following [Wikipedia page](https://en.wikipedia.org/wiki/Alpha_diversity) for a more detailed description of the metrics if needed.
+In this section we shift from describing *which* taxa are present towards quantifying *how diverse* each sample is. **Alpha diversity** summarises the diversity within a single sample — capturing both species richness (how many taxa) and evenness (how equally abundant they are). For a review of alpha-diversity metrics, see the [Wikipedia page on alpha diversity](https://en.wikipedia.org/wiki/Alpha_diversity).
 
-We will continue working with the `mbiot` dataset. Please repeat the steps above until the definition of `mbiot` if needed.
+We will continue working with the `mbiot` dataset (the filtered, relative-abundance phyloseq object created above). If you are starting a fresh R session, re-run the package-loading and `mbiot`-creation steps first.
 
 Here's the code to calculate and visualize different metrics per sample.
 
 ### Alpha diversity
+
+The `alpha()` function computes several richness and diversity indices simultaneously for each sample:
 
 ```r
 library(microbiome)
@@ -283,7 +313,7 @@ kable(head(mbiot_tab))
 
 ### Rarity
 
-The rarity indices quantify the concentration of rare or low abundance taxa. 
+Rarity indices quantify how concentrated the community is among rare, low-abundance taxa — higher values indicate that rare taxa contribute more to the overall community:
 
 ```r
 tab <- rarity(mbiot, index = "all")
@@ -292,7 +322,7 @@ kable(head(tab))
 
 ### Dominance
 
-The dominance index refers to the abundance of the most abundant species.
+Dominance indices capture the contribution of the single most abundant taxon. A highly dominant community is one where one or a few taxa account for most of the reads:
 
 ```r
 tab <- dominance(mbiot, index = "all")
@@ -301,73 +331,82 @@ kable(head(tab))
 
 ### Evenness
 
-Evenness is a measure of how evenly the individuals in a community are distributed among the different species. 
+Evenness measures how uniformly individuals are distributed across taxa. A perfectly even community has all taxa at equal abundance; an uneven community has a few very dominant taxa and many rare ones:
 
 ```r
 tab <- evenness(mbiot, index = "all")
 kable(head(tab))
 ```
 
-### Visualization of diversity indices
+### Visualising diversity indices
 
-Assess variation among groups based on the Shannon diversity index(e.g. diet groups, geography, etc.)
+Boxplots are a concise way to compare Shannon diversity (which balances both richness and evenness) across dietary intervention groups:
 
 ```r
-p.shannon <- boxplot_alpha(mbiot, 
-                           index = "shannon",
-                           x_var = "group",
-                           fill.colors = c(HE="cyan4", DI="deeppink4", ED="darkorange2"),)
+p.shannon <- boxplot_alpha(mbiot,
+                           index      = "shannon",
+                           x_var      = "group",
+                           fill.colors = c(HE = "cyan4", DI = "deeppink4", ED = "darkorange2"))
 
-p.shannon <- p.shannon + theme_minimal() + 
-  labs(x="Dietary group", y="Shannon diversity") +
-  theme(axis.text = element_text(size=12),
-        axis.title = element_text(size=16),
-        legend.text = element_text(size=12),
-        legend.title = element_text(size=16))
+p.shannon <- p.shannon + theme_minimal() +
+  labs(x = "Dietary group", y = "Shannon diversity") +
+  theme(axis.text    = element_text(size = 12),
+        axis.title   = element_text(size = 16),
+        legend.text  = element_text(size = 12),
+        legend.title = element_text(size = 16))
 p.shannon
 ```
 
-N.B.: To adjust the plot for a different grouping change the following parameters: `x_var` and `fill.colors`.
+> **Note:** To compare a different grouping variable (e.g. `nationality` or `bmi_group`), update `x_var` and adjust the colour names in `fill.colors` to match the new group levels.
 
-Significance testing among groups (e.g. diet groups)
+### Statistical testing of diversity differences
+
+To determine whether the observed differences in Shannon diversity across groups are statistically significant, we use a one-way ANOVA followed by Tukey's Honest Significant Difference (HSD) test for pairwise comparisons:
 
 ```r
 d <- meta(mbiot)
 d$diversity <- microbiome::diversity(mbiot, "shannon")$shannon
-# ANOVA among based on diet groups
+
+# One-way ANOVA: does Shannon diversity differ among dietary groups?
 model <- aov(diversity ~ group, data = d)
 anova(model)
-# Tukey's HSD test (among levels of the factor)
+
+# Tukey's HSD: which specific pairs of groups differ?
 TukeyHSD(model)
 ```
 
-N.B.: To adjust the test for a different grouping change the grouping factor inside the `aov()`.
+> **Note:** To test a different grouping factor, replace `group` in the `aov()` formula with the variable of interest (e.g. `nationality`, `sex`, or `bmi_group`).
 
 
-## Visualization of sample similarities
+## Visualising sample similarities
 
-### PCA
+Ordination methods reduce the high-dimensional OTU table to a 2-D plot where similar samples cluster together.
 
-Let's first start with a principal component analysis (PCA). This is a common method to visualize the relationships between samples based on their microbiome composition. It reduces the dimensionality of the data and preserves global variance. Principal components are linear combinations of the original variables (OTUs) that explain the most variance in the data.
+### PCA (Principal Component Analysis)
+
+PCA is a linear method that finds the axes of greatest variance in the data. Points far apart in the PCA plot have very different overall compositions. We apply a **centred log-ratio (CLR) transformation** before PCA because it is the compositionally appropriate way to handle relative abundance data — it removes the unit-sum constraint that distorts Euclidean distances on raw proportions:
 
 ```r
 plot_landscape(mbiot, method = "PCA", transformation = "clr", col = "group") +
-       labs(title = paste("PCA representation")) +
-       scale_color_brewer("Genera", palette = "Paired")
+  labs(title = "PCA of genus composition (CLR-transformed)") +
+  scale_color_brewer("Group", palette = "Paired")
 ```
 
-### t-SNE
+### t-SNE (t-distributed Stochastic Neighbor Embedding)
 
-t-SNE (t-distributed Stochastic Neighbor Embedding) is a non-linear dimensionality reduction technique that is particularly useful for visualizing high-dimensional data. It focuses on preserving local structure and is often used for clustering analysis. The non-linear nature of t-SNE prevents simple distance interpretations among clusters.
+t-SNE is a **non-linear** dimensionality reduction method that prioritises preserving local neighbourhood structure — samples that are most similar end up closest together. It is especially good at revealing tight clusters, but distances *between* well-separated clusters are not directly interpretable. We use a **Hellinger transformation** here (square-root of proportions), which down-weights very abundant taxa and makes Euclidean distance behave more like the Bray-Curtis dissimilarity commonly used in ecology.
 
-A great explainer is here: [https://medium.com/data-science/t-sne-clearly-explained-d84c537f53a](https://medium.com/data-science/t-sne-clearly-explained-d84c537f53a)
+For a detailed visual explainer of t-SNE, see: [t-SNE clearly explained](https://medium.com/data-science/t-sne-clearly-explained-d84c537f53a)
 
 ```r
-plot_landscape(mbiot, "t-SNE", distance = "euclidean", transformation = "hellinger",  col = "group") +
-      labs(title = paste("t-SNE representation")) +       
-      scale_color_brewer("Genera", palette = "Paired")
+plot_landscape(mbiot, "t-SNE",
+               distance       = "euclidean",
+               transformation = "hellinger",
+               col            = "group") +
+  labs(title = "t-SNE of genus composition (Hellinger-transformed)") +
+  scale_color_brewer("Group", palette = "Paired")
 ```
 
-_Question 7: Adjust each of the above plots to highlight differences among geographies and BMI._
+> **Question 7:** Adjust both ordination plots to colour points by (a) nationality and (b) BMI group. What patterns emerge that were not visible when colouring by dietary group?
 
-_Synthesis - Question 8: Summarize what differences you observe between the different groups based on your various approaches. How would you describe the significance of these differences (if there are any)?_
+> **Synthesis — Question 8:** Based on all the analyses above (composition plots, heatmaps, alpha diversity, and ordinations), summarise the main differences you observe between the sample groups. Do the different methods tell a consistent story? How would you describe the biological significance of these differences?
