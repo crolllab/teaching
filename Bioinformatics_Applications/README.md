@@ -21,3 +21,9 @@ Check these out in [this folder](https://github.com/crolllab/teaching/tree/maste
 3. Alexis: `git clone https://github.com/alexisagostini/Tuto-2` or [github.com/alexisagostini/Tuto-2](https://github.com/alexisagostini/Tuto-2)
 4. Tara: `git clone https://github.com/taralizee/bioinfo_applications_2026` or [github.com/taralizee/bioinfo_applications_2026](https://github.com/taralizee/bioinfo_applications_2026)
 
+### Journal club
+
+1. Léo: [Yu et al. (2017)](journalclub/2017_Yu_et_al_MethodsEcolEvol.pdf)
+2. Raquel: [Steenwyk and Rokas (2021, Orthofisher)](journalclub/2021_Steenwyk_and_Rokas_G3.pdf)
+3. Alexis: [Nolen (2025)](journalclub/2025_Nolen_Bioinformatics.pdf)
+4. Tara: [Hackl et al. (2024)](journalclub/2024_Hackl_et_al_xarxiv.pdf)
