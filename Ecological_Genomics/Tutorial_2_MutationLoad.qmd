@@ -2,7 +2,7 @@
 title: "Ecological Genomics: Deleterious Mutation Load in Small Populations"
 subtitle: "Simulating purging and accumulation of deleterious mutations"
 author: "Daniel Croll"
-date: spring 2026
+date: today
 format:
   html:
     toc: true
@@ -98,7 +98,7 @@ Small populations face two competing pressures on their deleterious mutation loa
 The expected outcome depends on the interplay of $N_e$, $s$, and $h$:
 
 | Scenario | Dominant force | Expected outcome |
-|------------------|--------------------------|-----------------------------|
+|------------------|--------------------------|----------------------------|
 | Large $N_e$, large $s$ | Selection | Efficient removal regardless of $h$ |
 | Large $N_e$, small $s$, recessive | Selection (slow) | Allele sheltered in heterozygotes; slow decline |
 | Small $N_e$, large $s$, recessive | Purging | Homozygosity exposes allele; accelerated removal |
@@ -189,7 +189,7 @@ Let's compare three dominance regimes for the same deleterious allele in a moder
 #| label: dominance-comparison
 set.seed(123)
 
-q0   <- 0.3    # initial frequency of the deleterious allele
+q0   <- 0.05   # initial frequency of the deleterious allele (low: recessive allele hidden in heterozygotes)
 s    <- 0.1    # 10 % fitness reduction in homozygotes (aa)
 Ne   <- 200    # effective population size
 nrep <- 15     # replicate populations
@@ -262,11 +262,9 @@ ggplot() +
   theme(legend.position = "right")
 ```
 
-> **Q1** — Examine the mean trajectories. Which dominance regime leads to the fastest elimination of the deleterious allele, and why? Consider what fraction of deleterious alleles are sheltered in heterozygotes under each regime. Hint: at frequency $q$, the fraction of all deleterious alleles present in heterozygotes is $2pq / (2pq + 2q^2) = p/(p+q) = p$.
+> **Q1** — Examine the mean trajectories. Which dominance regime leads to the fastest elimination of the deleterious allele, and why?
 
 ### Effect of population size on a recessive deleterious allele
-
-Now fix the dominance coefficient at $h = 0$ (fully recessive) and compare three population sizes. With a recessive allele, heterozygotes are not at a disadvantage, so selection only acts on the rare homozygotes — making the outcome sensitive to drift:
 
 ```{r}
 #| label: pop-size-comparison
@@ -278,23 +276,9 @@ h    <- 0.0     # fully recessive
 nrep <- 20
 ngen <- 500
 
-q_small  <- simulate_selection_drift(q0, s, h, Ne = 20,  nrep, ngen)
-q_medium <- simulate_selection_drift(q0, s, h, Ne = 100, nrep, ngen)
-q_large  <- simulate_selection_drift(q0, s, h, Ne = 500, nrep, ngen)
-
-cat("Mean final frequency — Ne =  20:", round(mean(q_small[ngen, ]),  4), "\n")
-cat("Mean final frequency — Ne = 100:", round(mean(q_medium[ngen, ]), 4), "\n")
-cat("Mean final frequency — Ne = 500:", round(mean(q_large[ngen, ]),  4), "\n")
-
-cat("\nProportion of populations with deleterious allele fixed (q > 0.95):\n")
-cat("  Ne =  20:", round(mean(q_small[ngen, ]  > 0.95), 3), "\n")
-cat("  Ne = 100:", round(mean(q_medium[ngen, ] > 0.95), 3), "\n")
-cat("  Ne = 500:", round(mean(q_large[ngen, ]  > 0.95), 3), "\n")
-
-cat("\nProportion of populations with deleterious allele purged (q < 0.05):\n")
-cat("  Ne =  20:", round(mean(q_small[ngen, ]  < 0.05), 3), "\n")
-cat("  Ne = 100:", round(mean(q_medium[ngen, ] < 0.05), 3), "\n")
-cat("  Ne = 500:", round(mean(q_large[ngen, ]  < 0.05), 3), "\n")
+q_small  <- simulate_selection_drift(q0, s, h, Ne = 20,   nrep, ngen)
+q_medium <- simulate_selection_drift(q0, s, h, Ne = 200,  nrep, ngen)
+q_large  <- simulate_selection_drift(q0, s, h, Ne = 1000, nrep, ngen)
 ```
 
 ```{r}
@@ -314,8 +298,8 @@ make_long_q2 <- function(q_mat, label) {
 
 q_long2 <- bind_rows(
   make_long_q2(q_small,  "Ne = 20"),
-  make_long_q2(q_medium, "Ne = 100"),
-  make_long_q2(q_large,  "Ne = 500")
+  make_long_q2(q_medium, "Ne = 200"),
+  make_long_q2(q_large,  "Ne = 1000")
 )
 
 q_means2 <- q_long2 %>%
@@ -335,9 +319,9 @@ ggplot() +
     linewidth = 1.4
   ) +
   scale_colour_manual(values = c(
-    "Ne = 20"  = "#E41A1C",
-    "Ne = 100" = "#FF7F00",
-    "Ne = 500" = "#4DAF4A"
+    "Ne = 20"   = "#E41A1C",
+    "Ne = 200"  = "#FF7F00",
+    "Ne = 1000" = "#4DAF4A"
   )) +
   labs(
     title  = paste0("Fate of a recessive deleterious allele  (h = 0, s = ", s,
@@ -350,9 +334,68 @@ ggplot() +
   theme(legend.position = "right")
 ```
 
-> **Q2** — Compare the mean final frequencies and the proportions fixed versus purged across the three population sizes. For the recessive mutation simulated here, does a smaller population lead to better or worse outcomes in terms of the deleterious allele frequency? Is the result dominated by purging or by drift?
+```{r}
+#| label: plot-fate-grid
+#| fig-width: 10
+#| fig-height: 9
+set.seed(789)
 
-> **Q3** — Repeat the single-locus analysis with `h = 0.5` (co-dominant) and `s = 0.05`. How does the pattern change compared to the fully recessive case? Explain the difference in terms of the efficiency of selection on heterozygotes.
+Ne_values <- c(20, 200, 1000)
+h_values  <- c(0.0, 0.5, 1.0)
+s_values_grid <- c(0.001, 0.01, 0.1)
+nrep_grid <- 100
+ngen_grid <- 1000
+q0_grid   <- 0.05
+
+grid_results <- expand.grid(Ne = Ne_values, h = h_values, s = s_values_grid) %>%
+  rowwise() %>%
+  mutate(
+    q_final = list(
+      simulate_selection_drift(q0_grid, s, h, Ne, nrep_grid, ngen_grid)[ngen_grid, ]
+    ),
+    prop_fixed  = mean(q_final > 0.95),
+    prop_purged = mean(q_final < 0.05),
+    prop_seg    = 1 - prop_fixed - prop_purged
+  ) %>%
+  ungroup() %>%
+  mutate(
+    Ne_label = factor(paste0("Ne = ", Ne), levels = paste0("Ne = ", Ne_values)),
+    h_label  = factor(paste0("h = ", h),  levels = paste0("h = ", h_values)),
+    s_label  = factor(paste0("s = ", s),  levels = paste0("s = ", s_values_grid))
+  ) %>%
+  select(Ne_label, h_label, s_label, prop_fixed, prop_purged, prop_seg) %>%
+  pivot_longer(starts_with("prop_"), names_to = "outcome", values_to = "proportion") %>%
+  mutate(outcome = recode(outcome,
+    prop_fixed  = "Fixed (q > 0.95)",
+    prop_purged = "Purged (q < 0.05)",
+    prop_seg    = "Segregating"
+  )) %>%
+  mutate(outcome = factor(outcome, levels = c("Fixed (q > 0.95)", "Segregating", "Purged (q < 0.05)")))
+
+ggplot(grid_results, aes(x = Ne_label, y = proportion, fill = outcome)) +
+  geom_col(width = 0.7, position = "stack") +
+  facet_grid(s_label ~ h_label) +
+  scale_fill_manual(values = c(
+    "Fixed (q > 0.95)"  = "#E41A1C",
+    "Segregating"       = "#377EB8",
+    "Purged (q < 0.05)" = "#4DAF4A"
+  )) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(
+    title = paste0("Fate of a deleterious allele across population sizes, dominance and selection strength\n",
+                   "(q0 = ", q0_grid, ", ", nrep_grid, " replicates, ", ngen_grid, " generations)"),
+    x     = "Population size",
+    y     = "Proportion of populations",
+    fill  = "Outcome"
+  ) +
+  theme_classic(base_size = 12) +
+  theme(
+    legend.position = "bottom",
+    strip.text = element_text(face = "bold")
+  )
+```
+
+> **Q2** — How does population size, dominance, and selection strength affect the fate of a recessive deleterious allele?
 
 ------------------------------------------------------------------------
 

@@ -2,7 +2,7 @@
 title: "Ecological Genomics: Planning Translocations"
 subtitle: "Simulating genetic drift and building an interactive Shiny app"
 author: "Daniel Croll"
-date: spring 2026
+date: today
 format:
   html:
     toc: true
