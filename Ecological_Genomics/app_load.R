@@ -62,7 +62,7 @@ ui <- fluidPage(
                   min = 10, max = 200, value = 100, step = 10),
       sliderInput("s_shape", "DFE shape parameter (Gamma):",
                   min = 0.1, max = 2.0, value = 0.3, step = 0.1),
-      sliderInput("s_rate",  "Mutation rate (Gamma rate parameter):",
+      sliderInput("s_rate",  "DFE scale — mean s = shape / scale:",
                   min = 0.5, max = 10,  value = 3.0, step = 0.5),
       sliderInput("q0_max",  "Max starting frequency of deleterious allele:",
                   min = 0.1, max = 0.5, value = 0.3, step = 0.05),

@@ -693,9 +693,53 @@ The mutation landscape in the app is controlled by two parameters of a **Gamma d
 | Parameter | Label in app | Meaning |
 |------------------------|------------------------|------------------------|
 | **Shape** | DFE shape parameter | Controls the *shape* of the distribution. Values $< 1$ give a strongly right-skewed distribution: many nearly neutral mutations and few strongly deleterious ones. Values $> 1$ produce a more bell-shaped distribution with fewer nearly-neutral variants. |
-| **Rate** | Mutation rate | Controls the *scale* (spread) of the distribution. The mean selection coefficient is $\bar{s} = \text{shape} / \text{rate}$. A higher mutation rate compresses the distribution towards smaller $s$ values (more mildly deleterious mutations); a lower value stretches it towards larger $s$ (more strongly deleterious mutations). |
+| **Scale** | DFE scale | Controls the *spread* of the distribution. The mean selection coefficient is $\bar{s} = \text{shape} / \text{scale}$. A higher scale compresses the distribution towards smaller $s$ values (more mildly deleterious mutations); a lower scale stretches it towards larger $s$ (more strongly deleterious mutations). |
 
-At the defaults (shape = 0.3, mutation rate = 3) the mean selection coefficient is $\bar{s} = 0.3 / 3 = 0.1$, with a long tail of nearly-neutral loci — a profile consistent with empirical DFE estimates from natural populations (Eyre-Walker & Keightley 2007).
+At the defaults (shape = 0.3, scale = 3) the mean selection coefficient is $\bar{s} = 0.3 / 3 = 0.1$, with a long tail of nearly-neutral loci — a profile consistent with empirical DFE estimates from natural populations (Eyre-Walker & Keightley 2007).
+
+The four panels below illustrate how shape and scale jointly determine the DFE:
+
+```{r}
+#| label: plot-dfe-grid
+#| fig-width: 9
+#| fig-height: 7
+#| echo: false
+library(ggplot2)
+
+dfe_params <- data.frame(
+  shape = c(0.3,  0.3,  1.5,  1.5),
+  scale = c(3.0,  15.0, 10.0, 30.0)
+)
+dfe_params$label <- paste0(
+  "shape = ", dfe_params$shape,
+  ",  scale = ", dfe_params$scale,
+  "\nmean s = ", round(dfe_params$shape / dfe_params$scale, 3)
+)
+dfe_params$label <- factor(dfe_params$label, levels = dfe_params$label)
+
+s_seq <- seq(1e-4, 1, length.out = 500)
+
+dfe_curves <- do.call(rbind, lapply(seq_len(nrow(dfe_params)), function(i) {
+  data.frame(
+    s     = s_seq,
+    density = dgamma(s_seq, shape = dfe_params$shape[i], rate = dfe_params$scale[i]),
+    label = dfe_params$label[i]
+  )
+}))
+
+ggplot(dfe_curves, aes(x = s, y = density)) +
+  geom_area(fill = "#E41A1C", alpha = 0.55) +
+  geom_line(colour = "#B71C1C", linewidth = 0.8) +
+  facet_wrap(~ label, scales = "free_y", ncol = 2) +
+  labs(
+    title = "Distribution of Fitness Effects under different shape and scale combinations",
+    x     = "Selection coefficient (s)",
+    y     = "Density"
+  ) +
+  theme_classic(base_size = 12) +
+  theme(strip.background = element_rect(fill = "#FFF3E0"),
+        strip.text = element_text(size = 11))
+```
 
 ### Step-by-step: create `app_load.R`
 
@@ -780,7 +824,7 @@ ui <- fluidPage(
                   min = 10, max = 200, value = 100, step = 10),
       sliderInput("s_shape",  "DFE shape parameter (Gamma):",
                   min = 0.1, max = 2.0, value = 0.3, step = 0.1),
-      sliderInput("s_rate",   "Mutation rate (Gamma rate parameter):",
+      sliderInput("s_rate",   "DFE scale — mean s = shape / scale:",
                   min = 0.5, max = 10,  value = 3.0, step = 0.5),
       sliderInput("q0_max",   "Max starting frequency of deleterious allele:",
                   min = 0.1, max = 0.5, value = 0.3, step = 0.05),
@@ -955,6 +999,6 @@ You can also create the file by returning to the Ecological Genomics repository 
 >
 > **Q7** — How do different dominance models affect the fate of deleterious mutations? Look at the co-dominant and dominant models for deleterious mutations? Test each scenario with two extreme starting allele frequencies.
 >
-> **Q8** — What is the effect of the mutation rate on the fate of deleterious mutations?
+> **Q8** — (Optional) What is the effect of the shape/rate parameters on the fate of deleterious mutations at a given population size (e.g. Ne = 100)?
 
 > **Q9** — In conclusion, how would you describe the threat of deleterious mutation fixation given these simulations? Under what conditions does it become "dangerous" in terms of genetic load?
