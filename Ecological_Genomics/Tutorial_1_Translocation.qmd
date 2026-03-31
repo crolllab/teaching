@@ -478,7 +478,7 @@ A static script is useful, but a conservation manager without R knowledge cannot
 
 ### How Shiny works
 
-Every Shiny app is a single R script (`app.R`) with three elements:
+Every Shiny app is a single R script (`app_transloc.R`) with three elements:
 
 ```r
 library(shiny)
@@ -506,25 +506,25 @@ Key concepts:
 
 > **RStudio Server note:** Always view your app in the **Viewer pane** (bottom-right). Do *not* click "Open in Browser" — that opens `localhost:PORT` on your local machine, which cannot reach the remote server.
 
-### Step-by-step: create `app.R`
+### Step-by-step: create `app_transloc.R`
 
-In RStudio, go to **File > New File > R Script**, immediately save it as `app.R` in your home folder, then build it up following the steps below.
+In RStudio, go to **File > New File > R Script**, immediately save it as `app_transloc.R` in your home folder, then build it up following the steps below.
 
-Alternatively, you can download the complete `app.R` file from the GitHub repository:
+Alternatively, you can download the complete `app_transloc.R` file from the GitHub repository:
 
 ```{r}
 
 ```
 download.file(
-  "https://raw.githubusercontent.com/crolllab/teaching/master/Ecological_Genomics/app.R",
-  destfile = "app.R",
+  "https://raw.githubusercontent.com/crolllab/teaching/master/Ecological_Genomics/app_transloc.R",
+  destfile = "app_transloc.R",
   method   = "wget"
 )
 ```
 
 **Step 1 — Load packages and paste `simulate_drift()`**
 
-Your app needs the same custom simulator from Part 4. Copy it at the top of `app.R`:
+Your app needs the same custom simulator from Part 4. Copy it at the top of `app_transloc.R`:
 
 ```r
 library(shiny)
@@ -737,7 +737,9 @@ shinyApp(ui = ui, server = server)
 
 **Step 3 — Save file and run the app**
 
-Make sure to save `app.R`, then click the green "Run App" button in RStudio. The app should launch in the Viewer pane. Adjust the sliders and checkboxes to explore different scenarios.
+Make sure to save `app_transloc.R`, then click the green "Run App" button in RStudio. The app should launch in the Viewer pane. Adjust the sliders and checkboxes to explore different scenarios.
+
+You can also create the file by returning to the Ecological Genomics repository and using the download link provided.
 
 > **Q5** – Explore the parameter space (population size, number of migrants, allele frequencies in source and recipient populations, etc.). Get a feeling for the impact of the timing and magnitude of the translocation on the heterozygosity trajectories. Then, imagine a particular, highly endangered species and conservation scenario. Define some plausible parameter values for population size and number of populations. Explore what translocation strategy (timing, number of migrants, source allele frequency) would maximise the heterozygosity rescue for that species. Investigate your scenarios and discuss your findings how well a translocation program could mitigate the loss of heterozygosity in your chosen case.
 
