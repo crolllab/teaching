@@ -399,7 +399,7 @@ ggplot(grid_results, aes(x = Ne_label, y = proportion, fill = outcome)) +
   )
 ```
 
-> **Q2** — How does population size, dominance, and selection strength affect the fate of a recessive deleterious allele?
+> **Q2** — How does population size, dominance, and selection strength affect the fate of a deleterious allele?
 
 ------------------------------------------------------------------------
 
@@ -993,12 +993,12 @@ Save `app_load.R` and click the green "Run App" button. The app launches in the 
 
 You can also create the file by returning to the Ecological Genomics repository and using the download link provided.
 
-> **Q5** — Explore the simulator outcomes and explore in particular the "Locus Fate". What does this graphic represent?
->
+> **Q5** — Discover the simulator outcomes and explore in particular the "Locus Fate". What does this graphic represent?
+
 > **Q6** — Let's now look at effects of different factors. Start by reducing *Ne* : What are the effects of stronger drift on the fate of various mutations?
->
-> **Q7** — How do different dominance models affect the fate of deleterious mutations? Look at the co-dominant and dominant models for deleterious mutations? Test each scenario with two extreme starting allele frequencies.
->
+
+> **Q7** — How do different dominance models affect the fate of deleterious mutations? Look at the recessive and dominant models for deleterious mutations: test each scenario with two extreme starting allele frequencies.
+
 > **Q8** — (Optional) What is the effect of the shape/rate parameters on the fate of deleterious mutations at a given population size (e.g. Ne = 100)?
 
-> **Q9** — In conclusion, how would you describe the threat of deleterious mutation fixation given these simulations? Under what conditions does it become "dangerous" in terms of genetic load?
+> **Q9** — In conclusion, how would you describe the threat of deleterious mutation fixation given these simulations? Under what conditions does it become "dangerous" in terms of genetic load? 
