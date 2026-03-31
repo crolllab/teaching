@@ -2,9 +2,20 @@
 
 ## Currently available courses
 
-[TP Génétique évolutive](./TP_Génétique_évolutive) (3me année BSc)
+### [TP Génétique évolutive](./TP_Génétique_évolutive) (3me année BSc)
+Travaux pratiques accompagnant le cours de génétique évolutive de 3ème année. Les séances couvrent les bases théoriques de la génétique des populations (loi de Hardy-Weinberg, sélection, dérive génétique, goulots d'étranglement) et leurs applications aux données génomiques humaines et à la génétique de la conservation des bouquetins des Alpes. Les étudiants acquièrent une expérience pratique de l'analyse de données génétiques sous R et RStudio.
 
-[Bioinformatics Tools](./Bioinformatics_Tools) (1st year MSc)
+### [Bioinformatics Tools](./Bioinformatics_Tools) (1st year MSc; until 2024-2025)
+An introductory MSc course co-taught with PD Dr. Nikolai Ivanov covering key areas of bioinformatics. Topics include Unix and shell scripting, high-throughput sequencing analysis, genome assembly, and epigenomics. Each lecture is paired with a hands-on computer practical to build skills in handling large biological datasets and automating analysis pipelines.
+
+### [Bioinformatics Applications](./Bioinformatics_Applications) (1st year MSc)
+A practical course combining instructor-led introductory tutorials (VS Code, BASH, Git/GitHub) with student-led journal club-style tutorials on self-chosen bioinformatics topics. Students gain experience reading primary literature, presenting computational methods, and programming with version-controlled repositories.
+
+### [Ecological Genomics](./Ecological_Genomics) (1st year MSc)
+Tutorials at the interface of population genetics theory and conservation biology. Students simulate and analyse the fate of deleterious mutations in small populations using Wright-Fisher models, explore genetic load, purging, and mutation accumulation under different dominance regimes, and interact with custom Shiny apps to investigate how effective population size shapes genomic health in threatened species.
+
+### [Microbiome Applications](./Microbiome_Applications) (1st year MSc)
+A practical introducing students to microbiome data analysis in R using Quarto. Students summarise and visualise microbiome composition data, assess alpha and beta diversity, and compare microbial community structure across sample groups. All analyses run on a shared RStudio Server, requiring no local software installation.
 
 
 ## How to access the "shell" and RStudio for the different courses and exercises
