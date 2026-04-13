@@ -39,7 +39,7 @@ To pull the latest updates at any point:
 git pull
 ```
 
-Optionally, you can also download the `app.R`file, which contains the Shiny app code used in Part 5 of the tutorial:
+Optionally, you can also download the `app_transloc.R`file, which contains the Shiny app code used in Part 5 of the tutorial:
 
 ```r
 download.file(
@@ -52,7 +52,7 @@ download.file(
 ## 3. Running the tutorial
 
 - Work through the `.qmd` file section by section, running each code chunk with the **Run** button (▶) or `Ctrl+Enter`.
-- When you reach Part 5, you will create your own `app.R` file — instructions are in the tutorial.
+- When you reach Part 5, you will create your own `app_transloc.R` file — instructions are in the tutorial.
 
 
 # Tutorial 2: Deleterious Mutation Load in Small Populations
@@ -92,7 +92,7 @@ To pull the latest updates at any point:
 git pull
 ```
 
-Optionally, you can also download the `app.R`file, which contains the Shiny app code used in Part 5 of the tutorial:
+Optionally, you can also download the `app_load.R`file, which contains the Shiny app code used in Part 5 of the tutorial:
 
 ```r
 download.file(
