@@ -87,7 +87,6 @@ library(microbiome)
 library(tidyverse)
 library(phyloseq)
 library(hrbrthemes)
-library(gcookbook)
 
 data(dietswap)
 # There is a conflict between identically named functions called "transform"
@@ -365,7 +364,7 @@ To determine whether the observed differences in Shannon diversity across groups
 
 ```r
 d <- meta(mbiot)
-d$diversity <- microbiome::diversity(mbiot, "shannon")$shannon
+d$diversity <- microbiome::diversity(mbiot, "shannon")$diversity_shannon
 
 # One-way ANOVA: does Shannon diversity differ among dietary groups?
 model <- aov(diversity ~ group, data = d)
@@ -399,6 +398,8 @@ t-SNE is a **non-linear** dimensionality reduction method that prioritises prese
 For a detailed visual explainer of t-SNE, see: [t-SNE clearly explained](https://medium.com/data-science/t-sne-clearly-explained-d84c537f53a)
 
 ```r
+library(Rtsne)
+
 plot_landscape(mbiot, "t-SNE",
                distance       = "euclidean",
                transformation = "hellinger",
