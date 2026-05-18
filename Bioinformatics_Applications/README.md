@@ -27,3 +27,10 @@ Check these out in [this folder](https://github.com/crolllab/teaching/tree/maste
 2. Raquel: [Steenwyk and Rokas (2021, Orthofisher)](journalclub/2021_Steenwyk_and_Rokas_G3.pdf)
 3. Alexis: [Nolen (2025)](journalclub/2025_Nolen_Bioinformatics.pdf)
 4. Tara: [Hackl et al. (2024)](journalclub/2024_Hackl_et_al_xarxiv.pdf)
+
+### Research project
+
+1. Léo:
+2. Raquel: 
+3. Alexis: [github.com/alexisagostini//KPC-204-test](https://github.com/alexisagostini/KPC-204-test)
+4. Tara: [github.com/taralizee/bioinfo_applications_2026](https://github.com/taralizee/bioinfo_applications_2026/tree/main/Project)
