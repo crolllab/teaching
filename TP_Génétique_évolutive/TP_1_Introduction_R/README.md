@@ -1,20 +1,17 @@
-### TP Génétique évolutive 1
-
-
-# Introduction à R
+# TP 1 – Introduction à R
 
 
 ### Buts de ces travaux pratiques  
 
 - Fonctionnement de RStudio
 - Structure des données: variable, vecteur, data.frame
-- Gestion des dossier, lecture et sauvegarde de fichiers
+- Gestion des dossiers, lecture et sauvegarde de fichiers
 - Remanier des données avec `dplyr`
 - Visualiser des données avec `ggplot2`
 
 ### Accès à RStudio
 
-**NB: pour ces TPs, nous recommendaons fortement [RStudio en ligne](http://legcompute2.unine.ch:8787) au lieu d'une installation propre sur votre ordinateur!**
+**NB: pour ces TPs, nous recommandons fortement [RStudio en ligne](http://legcompute2.unine.ch:8787) au lieu d'une installation locale sur votre ordinateur!**
 
 L'accès se fait uniquement par le Wifi `unine`.
 
@@ -26,13 +23,13 @@ L'accès se fait uniquement par le Wifi `unine`.
 
 - Utilisez la touche `tab` pour auto-compléter du code, des liens, des options, etc.
 
-- En bas du script, vous verrez la console pour interagir avec R. Mais vous pouvez exécuter du code directement dans le script. Pour ceci, sélectionnez la/les lignes de code et appuyer sur les touches `cmd` + `enter` (sur Mac).  
+- Sous le script, vous verrez la console pour interagir avec R. Vous pouvez aussi exécuter du code directement depuis le script : sélectionnez la/les lignes de code et appuyez sur `cmd` + `enter` (Mac) ou `ctrl` + `enter` (Windows/Linux).  
 
 
 ## Suggestion pour le troubleshooting: une liste à compléter!
 
 - Décortiquez une commande complexe en ses éléments les plus simples
-- Lisez toujours tous les messages d'erreur et apprenez petit à petit de reconnaître le type de problème. (e.g. "File not found" => faux nom ou emplacement?)
+- Lisez toujours tous les messages d'erreur et apprenez petit à petit à reconnaître le type de problème. (e.g. "File not found" => faux nom ou emplacement?)
 
 [Suggérez vos propres astuces aux autres svp]
 
@@ -104,7 +101,7 @@ working.hours
 working.hours["mardi"]
 ```
 
-Echantillonnage des éléments d'un vecteur
+Échantillonnage des éléments d'un vecteur
 
 ```
 weekdays <- c("lundi", "mardi", "mercredi")
@@ -135,7 +132,7 @@ df[df$hours > 7,]
 
 ## Les boucles `for`
 
-R vous permet d'exécuter des tâches en série ou boucle
+R permet de répéter des tâches à l'aide de boucles
 
 ```
 ## une boucle avec i prenant les valeurs de 1 à 5
@@ -148,7 +145,7 @@ for (i in 1:5) {
 ## une boucle suivant un data.frame ligne par ligne
 
 
-# la boucle fait autant de tour que lignes dans df
+# la boucle fait autant de tours qu'il y a de lignes dans df
 for (i in 1:nrow(df)) {
 
 	# exemples d'opérations
@@ -173,7 +170,7 @@ df
 Consultez aussi le [cheatsheet](./cheatsheets/dplyr-cheatsheet.pdf).
 
 `dplyr` permet de manipuler et résumer des tableaux (data.frame) complexes y compris:
-- de sélectionner une partie des données
+- sélectionner une partie des données
 - résumer selon différents critères
 - rajouter des nouvelles colonnes ou variables
 - regrouper les données selon un facteur (e.g. population, etc.)
@@ -207,7 +204,7 @@ iris.summary.df <- iris %>% group_by(Species) %>%
 Consultez aussi le [cheatsheet](./cheatsheets/ggplot2-cheatsheet.pdf).
 
 ```
-install.packages("ggplot2")
+# install.packages("ggplot2")
 
 library(ggplot2)
 
@@ -215,20 +212,20 @@ library(ggplot2)
 head(mpg)
 ```
 
-### Etape 1: définir le jeu de données
+### Étape 1: définir le jeu de données
 
-- définir le jeu de données mpg and specify the aesthetics aes()
+- définir le jeu de données mpg et les *aesthetics* avec `aes()`
 - définir les axes x et y (choix de colonnes dans mpg)
 - le graphe est vide (encore!)
 
 `ggplot(mpg, aes(x = hwy, y = cty))`
 
-### Etape 2: rajouter une fonction
+### Étape 2: ajouter une géométrie (`geom_...`)
 
 ```
 # geom_point() génère un scatter plot
 ggplot(mpg, aes(x = hwy, y = cty)) + geom_point()
-# shape, color et size peut être modifié
+# shape, color et size peuvent être modifiés
 ggplot(mpg, aes(x = hwy, y = cty)) + geom_point(shape = 20, size = 5, color = "red")
 
 # échanger les données à visualiser
@@ -247,19 +244,19 @@ ggplot(mpg, aes(x = hwy)) + geom_histogram(binwidth = 2)
 
 ```
 ggplot(mpg, aes(x = hwy, y = cty)) + geom_point(shape = 20, size = 5, color = "red", alpha = 0.2)
-# the geom_point() parameters can  be used to represent data. Define it under aesthetics instead.
+# les paramètres de geom_point() peuvent aussi représenter des données : définissez-les alors dans aes()
 ggplot(mpg, aes(x = hwy, y = cty)) + geom_point(aes(size = cyl), alpha = 0.5)
 ggplot(mpg, aes(x = hwy, y = cty)) + geom_point(aes(size = cyl, color = manufacturer), alpha = 0.5)
 
 
-### changer la représentations des axes (e.g. limits, breaks, etc.)
+### changer la représentation des axes (e.g. limits, breaks, etc.)
 ggplot(mpg, aes(x = hwy, y = cty)) + geom_point(aes(size = cyl, color = manufacturer), alpha = 0.5) +
   scale_x_continuous(limits = c(5,50), breaks = seq(5,50,5)) +
   scale_y_continuous(limits = c(5,100))
 
 ### changer les labels
 ggplot(mpg, aes(x = hwy, y = cty)) + geom_point(aes(size = cyl, color = class), alpha = 0.5) + labs(x = "highway mileage", y = "city mileage")
-# google how to adjust legend labels!
+# cherchez sur Google comment ajuster les labels de la légende !
 
 
 ### ajuster le theme(), faites une recherche google pour plus d'options
@@ -290,25 +287,44 @@ ggsave("Plot.pdf", height = 6, width = 11)
 
 ## Lecture et enregistrement de fichiers  
 
-La plupart des analyses `R` demandent l'importation de données. La source des données est soit
-- vous même (et vous décidez du format)
-- un collaborateur
-- téléchargement d'une banque de données en ligne
+La plupart des analyses `R` demandent l'importation de données. Les données proviennent :
+- de vous-même (et vous décidez du format)
+- d'un·e collaborateur·rice
+- d'une banque de données en ligne
 
-Les petits jeux de données sont souvent stockés sous format text (.txt) ou Excel (.xlsx).
+Les petits jeux de données sont souvent stockés sous format texte (.txt) ou Excel (.xlsx).
 
 Les problèmes les plus fréquents lors du chargement d'un fichier sont:
 - on ne comprend pas la structure des données
 - on ne comprend pas le format (e.g. JSON, VCF, GFF, POPGEN, FASTA, etc.)
 
+### Le dossier de travail (working directory)
+
+R lit et enregistre les fichiers dans le dossier de travail, sauf si vous indiquez un chemin complet.
+
+```
+# afficher le dossier de travail actuel
+getwd()
+
+# définir un nouveau dossier de travail
+setwd("/chemin/vers/votre/dossier")
+
+# lister les fichiers du dossier de travail
+list.files()
+```
+
+Dans RStudio, vous pouvez aussi passer par `Session` > `Set Working Directory` > `Choose Directory...`. Le dossier de travail par défaut se règle dans `Tools` > `Global Options` > `General`:
+
+![](./images/workingdir.png)
+
 ### Quelques termes techniques pour mieux gérer les erreurs lors de l'importation:  
 - "Field delimiters" séparent les colonnes dans un fichier. Ceci peut être sous forme de tabulation, espace, virgule, etc.  
 - "Special characters" (`\`, `"`, etc.)  
 - "Text encoding" (UTF-8, etc.)  
-- `class` et `colClasses`: la classe caractérise un type de données (e.g. `numeric`, `character`, `factor`). Une `colClass` définie le type de données dans une colonne.  
+- `class` et `colClasses`: la classe caractérise un type de données (e.g. `numeric`, `character`, `factor`). Une `colClass` définit le type de données dans une colonne.  
 - `header`: la première ligne d'un fichier qui peut optionnellement spécifier le nom de la colonne ("weight", "number of observations", etc.)  
 
-Si tout fonctionne correctement, vous ne receverez aucun message d'erreur:
+Si tout fonctionne correctement, vous ne recevrez aucun message d'erreur:
 
 `data <- read.table("textfile.txt", header = T)`
 
@@ -323,13 +339,13 @@ Là, le problème est que le fichier ne contient pas un tableau "parfait" où ch
 
 Ajustez `header=T` ou `header=F`. Voir ci-dessus.
 
-On peut faire sauter la lecture des premières lignes avec `skip = 2` (deux lignes)
+On peut sauter les premières lignes avec `skip = 2` (deux lignes)
 
-Alternativement, on peut ignorer certaines colonnes: `colClasses = c(”integer”, ”NULL”, ”character”)` (après une colonne de chiffres, la deuxième colonne est ignorée, puis la troisième est lue comme des caractères)
+Alternativement, on peut ignorer certaines colonnes: `colClasses = c("integer", "NULL", "character")` (après une colonne de chiffres, la deuxième colonne est ignorée, puis la troisième est lue comme des caractères)
 
 ### La lecture de fichiers Excel ou csv
 
-**Attention**: faites bien attention à correctement définir `setwd("/...")` (voir ci-dessus) ou de spécifier l'emplacement de manière explicite e.g. `"/Users/dcroll/.../.../fichier.xlsx")`
+**Attention**: définissez correctement le dossier de travail avec `setwd("/...")` (voir ci-dessus) ou spécifiez l'emplacement complet du fichier, e.g. `"/Users/dcroll/.../.../fichier.xlsx"`
 
 ```
 # install.packages("openxlsx")
@@ -374,16 +390,19 @@ Faites extrêmement attention quand vous essayez de convertir une colonne sous f
 
 ### Quelques exemples pour s'exercer
 
-Vous trouvez dans le dossier [datasets](./datasets) une série d'exemples. La difficulté de réussir la lecture est bien variable. Essayez soit d'importer directement ou de manipuler le fichier à l'avance
+Vous trouverez dans le dossier [datasets](./datasets) une série d'exemples. Leur difficulté varie. Essayez de les importer directement ou de les modifier au préalable.
 
 
 ## Traiter des séquences d'ADN
 
-Nous allons analyser des fichiers VCF représentant des génotypes de grandes populations plus tard. Ici, nous regardons l'exemple de traitement de séquences d'ADN du format `fasta`.
+Nous allons analyser des fichiers VCF représentant des génotypes de grandes populations plus tard. Ici, nous regardons l'exemple de traitement de séquences d'ADN au format `fasta`.
 
-On utilisera le fichier [fasta de FOXP2](./fasta/FOXP2_nucl.aligned.fasta) (cf. cours 2 Génétique évolutive). Utilisez impérativement le fichier lié ci-dessus et pas le fichier fourni lors du cours. Ce fichier là ne contient pas encore des séquences alignées.
+On utilisera le fichier [fasta de FOXP2](./fasta/FOXP2_nucl.aligned.fasta) (cf. cours 2 Génétique évolutive), qui se trouve dans le dossier `fasta` (le code ci-dessous le télécharge avec `wget`). Utilisez impérativement ce fichier et pas le fichier fourni lors du cours, car ce dernier ne contient pas de séquences alignées.
 
 ```
+# obtenir le fichier
+system("wget https://raw.githubusercontent.com/crolllab/teaching/master/TP_Génétique_évolutive/TP_1_Introduction_R/fasta/FOXP2_nucl.aligned.fasta")
+
 # install.packages(c("pegas", "seqinr"))
 
 # les packages les plus utiles
@@ -391,13 +410,13 @@ library(ape)
 library(pegas)
 library(seqinr)
 
-# create a DNAbin object containing the fasta sequence
+# créer un objet DNAbin contenant les séquences fasta
 FOXP2.DNAbin <- read.dna("FOXP2_nucl.aligned.fasta", format = "fasta")
 
-# visualisation de l'alignment
+# visualisation de l'alignement
 image.DNAbin(FOXP2.DNAbin)
 
-# évaluation de l'alignment, visualisation du polymorphisme
+# évaluation de l'alignement, visualisation du polymorphisme
 checkAlignment(FOXP2.DNAbin)
 
 # faire un arbre phylogénétique simple

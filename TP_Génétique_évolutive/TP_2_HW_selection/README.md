@@ -1,14 +1,11 @@
-### TP Génétique évolutive 2
-
-
-# Loi de Hardy-Weinberg et l'effet de la sélection
+# TP 2 – Loi de Hardy-Weinberg et l'effet de la sélection
 
 
 ### Buts de ces travaux pratiques  
 - Pouvoir visualiser la relation entre fréquences alléliques et génotypiques
 - En ajoutant la sélection, calculer le changement en fréquences alléliques d'une génération à l'autre
 - Intégrer ces changements en fréquences alléliques dans un modèle à plusieurs générations
-- Comprendre l'impact de la coefficient de sélection s et le coefficient de dominance h
+- Comprendre l'impact du coefficient de sélection *s* et du coefficient de dominance *h*
 
 ![](./images/cycle.png)
 
@@ -17,7 +14,7 @@
 
 L'application de la loi pour relier fréquences alléliques et génotypiques
 
-On définit une fréquence de l'allèle A comme (p.ex. `0.2`):
+On définit la fréquence de l'allèle A (p. ex. `0.2`):
 
 `p <- 0.2`
 
@@ -25,7 +22,7 @@ Et puis pour l'allèle alternatif a:
 
 `q <- 1 - p`
 
-Q1: Ecrivez le code pour calculer les fréquences génotypiques AA, Aa et aa.
+Q1: Écrivez le code pour calculer les fréquences génotypiques AA, Aa et aa.
 
 ```
 pAA = ...
@@ -36,7 +33,7 @@ paa = ...
 On peut visualiser la relation entre fréquences alléliques et génotypiques dans une population dans un graphe:
 
 ```
-# on pourra utiliser ici x pour représenter p, "from" et "to" définissent l'interval des valeurs x
+# on pourra utiliser ici x pour représenter p, "from" et "to" définissent l'intervalle des valeurs x
 curve(x^2, from=0, to=1, ylab = "genotype frequency", xlab = "allele frequency A", col = "black")
 
 text(0.5, 1, labels = "pAA", col = "black")
@@ -46,7 +43,7 @@ Q2 (optionnelle): Créez un graphe représentant à la fois pAA, pAa et paa. Ast
 
 ![](./images/H-W.plot.png)
 
-La Loi de Hardy-Weinberg préconise que les fréquences alléliques dans une population restent constantes (en absence de sélection, dérive, mutation et migration). Nous voulons tester si cette prédiction est bien vérifiée en construisant un petit modèle.
+La Loi de Hardy-Weinberg prédit que les fréquences alléliques dans une population restent constantes (en absence de sélection, dérive, mutation et migration). Nous voulons tester si cette prédiction est bien vérifiée en construisant un petit modèle.
 
 Pour simplifier la programmation nous allons écrire des fonctions `function()` pour différents éléments.
 
@@ -70,14 +67,14 @@ multiply.numbers <- function(x,y) {
 multiply.numbers(4,8)
 ```
 
-Q3 (optionnelle): Expliquez le principe d'une fonction en `R`? Quels sont les éléments à définir?
+Q3 (optionnelle): Expliquez le principe d'une fonction en `R`. Quels sont les éléments à définir?
 
 
-Définissons les variables de bases:
+Définissons les variables de base:
 
 ```
 # Nous allons introduire le nombre de génotypes pour AA, Aa et aa dans un vecteur
-genotypes.count <- c(3, 9, 50) # alors 3 génotypes d'AA, 9 Aa et 50 aa
+genotypes.count <- c(3, 9, 50) # soit 3 individus AA, 9 Aa et 50 aa
 
 # Normalisons les fréquences génotypiques à une somme de 1
 genotypes <- genotypes.count / sum(genotypes.count)
@@ -85,7 +82,7 @@ genotypes <- genotypes.count / sum(genotypes.count)
 
 ### Fonction 1: Calcul des fréquences alléliques
 
-Cette fonction prend comme variable le vecteur des fréquences génotypiques et retourne les fréquences alléliques (p: A; q: a). Dans le contexte d'une population, nous pouvons estimer la fréquence des gamètes (haploïdes) A et a produits par la génération des parents ayant les génotypes spécifiés.
+Cette fonction prend comme argument le vecteur des fréquences génotypiques et retourne les fréquences alléliques (p: A; q: a). Dans le contexte d'une population, nous pouvons estimer la fréquence des gamètes (haploïdes) A et a produits par la génération des parents ayant les génotypes spécifiés.
 
 ```
 get.Allele.Freq <- function(genotypes) {
@@ -98,16 +95,16 @@ get.Allele.Freq <- function(genotypes) {
   }
 ```
 
-NB: Votre fonction ci-dessus ne prend pas en compte le nombre de génotypes AA, Aa et aa mais des fréquences génotypiques! Donc une conversion en fréquences sera toujours nécessaire (c.f. `genotypes.count / sum(genotypes.count)`).
+NB: La fonction ci-dessus attend des fréquences génotypiques, pas des effectifs de génotypes AA, Aa et aa! Une conversion en fréquences sera donc toujours nécessaire (cf. `genotypes.count / sum(genotypes.count)`).
 
 Q4: Testez la fonction ci-dessus et calculez les fréquences alléliques p et q pour les génotypes suivants AA: 39, Aa: 10, aa: 3. 
 
-### Fonction 2: Calculez les fréquences génotypiques produites à partir d'un pool de gamètes
+### Fonction 2: Calcul des fréquences génotypiques produites à partir d'un pool de gamètes
 
 Nous supposons que les gamètes vont produire des zygotes selon un appariement aléatoire (pour respecter une condition de la Loi H-W).
 
 ```
-# Nous allons introduire les fréquence alléliques dans un vecteur
+# Nous allons introduire les fréquences alléliques dans un vecteur
 alleles <- c(0.1, 0.9) #  (fréquence p(A) de 0.1 et fréquence q(a) de 0.9)
 
 get.Progeny.GenoFreq <- function(alleles) {
@@ -124,9 +121,9 @@ get.Progeny.GenoFreq <- function(alleles) {
 get.Progeny.GenoFreq(alleles)
 ```
 
-Nous allons maintenant utiliser ces deux fonctions pour simuler l'évolution des fréquences alléliques dans une population. Notamment, le passage des parents aux gamètes et puis à la formation de zygotes.
+Nous allons maintenant utiliser ces deux fonctions pour simuler l'évolution des fréquences alléliques dans une population, c'est-à-dire le passage des parents aux gamètes, puis la formation des zygotes.
 
-Q5: Utilisez une boucle (voir TP 1) pour enchaîner les deux fonctions ci-dessus. Notamment, assurez que vous passez les valeurs produites par une fonction à l'autre. Choisissez des fréquences génotypiques pour démarrer la boucle et faites tourner la boucle une série de fois (e.g. 10x). Comparez les fréquences alléliques/génotypiques initiales et finales pour valider votre code.
+Q5: Utilisez une boucle (voir TP 1) pour enchaîner les deux fonctions ci-dessus. Assurez-vous de transmettre les valeurs produites par une fonction à l'autre. Choisissez des fréquences génotypiques pour démarrer la boucle et faites tourner la boucle une série de fois (e.g. 10x). Comparez les fréquences alléliques/génotypiques initiales et finales pour valider votre code.
 
 Rappel du principe de la boucle:
 
@@ -136,7 +133,7 @@ for (i in 1:10) {
 }
 ```
 
-Les deux fonctions à enchainer dans la boucle:
+Les deux fonctions à enchaîner dans la boucle:
 
 ```
 alleles <- get.Allele.Freq(genotypes)
@@ -167,7 +164,7 @@ for (i in 1:n.generations) {
 
 Ci-dessus, nous avons créé un petit modèle qui nous re-calcule les fréquences génotypiques et alléliques à chaque génération. La sélection peut être intégrée au niveau des génotypes produits à partir des fréquences alléliques. Le but est alors de modifier chaque fréquence génotypique en fonction de sa valeur sélective w (ou fitness).
 
-Q6 (optionnelle): Cherchez dans le cours de génétique évolutive les définitions du coéfficient de sélection s et le coefficient de dominance h.
+Q6 (optionnelle): Cherchez dans le cours de génétique évolutive les définitions du coefficient de sélection s et du coefficient de dominance h.
 
 Reprenons la fonction suivante:
 
@@ -184,15 +181,15 @@ get.Progeny.GenoFreq <- function(alleles) {
 }
 ```
 
-Le but est d'ajuster la fréquence génotypique par la valeur sélective du génotype. Donc, assumons que le génotype `AA` a le fitness maximum:
+Le but est d'ajuster la fréquence génotypique par la valeur sélective du génotype. Supposons donc que le génotype `AA` a la fitness maximale:
 
 ```
-# coéfficient de sélection
+# coefficient de sélection
 s <- 0.05
-# coéfficient de dominance
+# coefficient de dominance
 h <- 0.5 # donc, co-dominance
 
-# Donc, nous pouvons définir le fitness de chaque génotype de manière suivante:
+# Donc, nous pouvons définir la fitness de chaque génotype de la manière suivante:
 wAA <- 1
 wAa <- 1 - h*s
 waa <- 1 - s
@@ -206,13 +203,13 @@ Nous avons alors la possibilité de modifier les fréquences génotypiques en ap
 
 Vérifiez que le résultat correspond bien à vos attentes.
 
-La procédure ci-dessus produit des fréquences génotypiques qui ne correspondent pas à une somme de 1. Comment allez-vous remédier ceci? Voilà une proposition de code:
+La procédure ci-dessus produit des fréquences génotypiques qui ne correspondent pas à une somme de 1. Comment allez-vous remédier à cela? Voilà une proposition de code:
 
 ```
 genotypes <- genotypes * geno.fitness / sum(genotypes * geno.fitness)
 ```
 
-Q7: Modifiez votre boucle établie pour tester la validité de la Loi Hardy-Weinberg ci-dessus en intégrant une épisode de sélection sur les génotypes à chaque génération. La sélection sera alors l'étape finale de la boucle.
+Q7: Modifiez la boucle de Q5 en intégrant un épisode de sélection sur les génotypes à chaque génération. La sélection sera alors l'étape finale de la boucle.
 
 Proposition de code pour la boucle:
 
@@ -224,7 +221,7 @@ genotypes <- genotypes.count / sum(genotypes.count)
 # définir le nombre de générations
 n.generations <- 50
 
-# valeur sélective et coéfficient de dominance
+# coefficient de sélection et coefficient de dominance
 s <- 0.1
 h <- 0.5
 
@@ -249,7 +246,7 @@ for (i in 1:n.generations) {
 
 ```
 
-Q8: Evaluez si des `s` et `h` différents ont un impact notable sur la vitesse des changements en fréquences alléliques.
+Q8: Évaluez si des `s` et `h` différents ont un impact notable sur la vitesse des changements en fréquences alléliques.
 
 ## Visualisations graphiques
 
@@ -285,7 +282,7 @@ results.df[i, c("genotype.AA", "genotype.Aa", "genotype.aa")] <- genotypes
 ```
 
 
-Q9: Voici une intégration de la boucle avec une collection des données dans `results.df` simulant l'impact de la sélection. Explorez l'impact du `s`, `h` et des fréquences génotypiques au départ sur l'évolution de la populations. Notez vos observations.
+Q9: Voici une intégration de la boucle avec une collection des données dans `results.df` simulant l'impact de la sélection. Explorez l'impact du `s`, `h` et des fréquences génotypiques au départ sur l'évolution de la population. Notez vos observations.
 
 ```
 # définir les génotypes de la génération t
@@ -295,7 +292,7 @@ genotypes <- genotypes.count / sum(genotypes.count)
 # définir le nombre de générations
 n.generations <- 500
 
-# valeur sélective et coéfficient de dominance
+# coefficient de sélection et coefficient de dominance
 s <- 0.05
 h <- 0.5
 
@@ -334,7 +331,7 @@ for (i in 1:n.generations) {
   }
 ```
 
-### Visualisation de l'impact de sélection
+### Visualisation de l'impact de la sélection
 
 Commencez par lancer la boucle enregistrant les résultats dans `results.df`.
 

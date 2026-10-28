@@ -1,7 +1,4 @@
-### TP Génétique évolutive 5
-
-
-# Analyses des goulots d'étranglements subis par les bouquetins
+# TP 5 – Analyses des goulots d'étranglements subis par les bouquetins
 
 ![](./images/ibex.png)
 
@@ -15,7 +12,7 @@
 Référez-vous aux slides du cours "Génétique évolutive" si besoin.
 
 - Techniques de séquençage, SNP
-- Principal component analyses (PCA), F<sub>ST</sub> et F<sub>IS</sub>
+- Analyse en composantes principales (PCA), F<sub>ST</sub> et F<sub>IS</sub>
 - Effets des goulots d'étranglement
 
 ### Les données: Grossen et al. 2018
@@ -32,7 +29,7 @@ Q1: Est-ce que les bouquetins ibériques ont aussi souffert d'une quasi-extincti
 
 ## La structuration des populations réintroduites de bouquetins
 
-Nous allons suivre une procédure très similaire qu'aux TP4. Référez-vous au code des TP4 si les explications ci-dessous vous paraissent incomplètes ou s'il vous faut plus d'explications.
+Nous allons suivre une procédure très similaire à celle du TP 4. Référez-vous au code du TP 4 si les explications ci-dessous vous paraissent incomplètes.
 
 ```
 
@@ -58,7 +55,7 @@ vcf <- read.vcfR("Alpine_Ibex_1361SNPs_RADseq.vcf")
 allchr.snps.genind <- vcfR2genind(vcf)
 allchr.snps <- vcfR2genlight(vcf)
 
-# en utilisant ces pièces d'information, créez un dataframe
+# à partir de ces informations, créez un data.frame
 allchr.df <- data.frame(position = allchr.snps@position, chromosome = allchr.snps@chromosome, SNPid = allchr.snps@loc.names)
 # générez l'ordre correct des chromosomes
 allchr.df$chromosome <- factor(allchr.df$chromosome, levels = c(paste0("chr", seq(1:29))))
@@ -74,10 +71,10 @@ pop(allchr.snps) <- info.df$Population[match(indNames(allchr.snps.genind), info.
 # et puis pour l'objet genind
 pop(allchr.snps.genind) <- info.df$Population[match(indNames(allchr.snps.genind), info.df$Individual)]
 
-# notez que vous pouvez aussi assigner les individus selon la colonne "Reintroduction_History") ou selon la colonne "Reintroduction_Genealogy". Ceci sera important pour colorer la PCA.
+# notez que vous pouvez aussi assigner les individus selon la colonne "Reintroduction_History" ou selon la colonne "Reintroduction_Genealogy". Ceci sera important pour colorer la PCA.
 ```
 
-Q2: Quelle est la significance des colonnes "Reintroduction_History" et "Reintroduction_Genealogy" dans le data.frame info.df?
+Q2: Quelle est la signification des colonnes "Reintroduction_History" et "Reintroduction_Genealogy" dans le data.frame info.df?
 
 Q3: Générez une PCA de l'ensemble du jeu de données. Utilisez d'abord la catégorie "Population" pour colorer les individus, puis faites une deuxième PCA avec la coloration en fonction de la "Reintroduction_History" et une troisième avec "Reintroduction_Genealogy".
 
@@ -114,7 +111,7 @@ Q5: Expliquez le pattern observé sur la PCA colorée en fonction de la généal
 
 ### Analyses de la différenciation entre populations par F<sub>ST</sub>
 
-Ci-dessous, nous adoptons le même code qu'au TP 4.
+Ci-dessous, nous reprenons le même code qu'au TP 4.
 
 ```
 library(hierfstat)
@@ -132,12 +129,12 @@ info.df <- read.table("AlpineIbex.info.txt", header=T, sep="\t")
 head(info.df)
 
 
-### Ci-dessous nous optons de catégoriser les individus par "Population"
+### Ci-dessous nous choisissons de catégoriser les individus par "Population"
 pop(allchr.snps.genind) <- info.df$Population[match(indNames(allchr.snps.genind), info.df$Individual)]
 
 allchr.snps.hs <- genind2hierfstat(allchr.snps.genind)
 
-# estimation des FST (étape lente: 2-3')
+# estimation des FST (étape lente: 2-3 min)
 fst <- pairwise.neifst(allchr.snps.hs)
 
 rownames(fst) <- dimnames(fst)[[1]]
@@ -148,7 +145,7 @@ colnames(fst) <- dimnames(fst)[[2]]
 pop.order <- c("Gran Paradiso", "Pleureur", "Weisshorn", "Brienzer Rothorn", "Cape Moine", "Albris", "Graue Hoerner", "Rheinwaldhorn", "Aletsch Bietschhorn", "Schwarz Moench")
 fst <- fst[pop.order, pop.order]
 
-# Visualisez les Fst et sauvez le graphique
+# Visualisez les Fst et enregistrez le graphique
 pdf(paper = "a4", "AlpineIbex.pairwiseFST.pdf")
 heatmap.2(fst, revC = F, Rowv = F, Colv = F, margins = c(10, 10), dendrogram = "none", scale="none", trace="none", density.info="none", col = rev(brewer.pal(11, "Spectral")), key.xlab="Fst")
 dev.off()
@@ -156,9 +153,9 @@ dev.off()
 
 Q6: Faites l'analyse et la visualisation des F<sub>ST</sub> par paires. Interprétez pourquoi la population du Weisshorn forme à la fois la paire la plus proche avec la population du Pleureur et la paire la plus distante avec la population du Rheinwaldhorn.
 
-## Evolution de l'hétérozygotie au cours des réintroductions
+## Évolution de l'hétérozygotie au cours des réintroductions
 
-Q7: Quelle est l'impact d'un goulot d'étranglement sur le niveau de l'hétérozygotie (en général)?
+Q7: Quel est l'impact d'un goulot d'étranglement sur le niveau de l'hétérozygotie (en général)?
 
 Génération d'un graphique résumant l'hétérozygotie par population.
 ```
@@ -188,7 +185,7 @@ Q8: Visualisez l'évolution de l'hétérozygotie au cours des réintroductions �
 
 ## L'effet des goulots d'étranglement sur le F<sub>IS</sub>
 
-Ci-dessous, nous allons utiliser le package `hierfstat` pour calculer une série de paramètres de génétique de populations (y inclut le F<sub>IS</sub> et F<sub>ST</sub>).
+Ci-dessous, nous allons utiliser le package `hierfstat` pour calculer une série de paramètres de génétique de populations (y compris le F<sub>IS</sub> et F<sub>ST</sub>).
 
 ```
 # Calculs d'un grand nombre de statistiques par population et locus
@@ -209,14 +206,14 @@ head(pop.stats$Ho)
 head(pop.stats$Fis)
 ```
 
-Génération d'un résumé des données dans un seul data.frame et visualisez les F<sub>IS</sub>
+Résumez les données dans un seul data.frame et visualisez les F<sub>IS</sub>
 
 ```
 # création d'un data.frame résumant Fis et Hs, puis l'information sur les populations et leur histoire
 pop.stats.df <- data.frame(Fis = colMeans(pop.stats$Fis, na.rm = T), Hs = colMeans(pop.stats$Hs, na.rm = T), Population = names(colMeans(pop.stats$Fis, na.rm = T)))
 head(pop.stats.df)
 
-# création d'une colonne résumant les régions
+# ajout de l'historique de réintroduction
 pop.stats.df$Reintroduction_History <- info.df$Reintroduction_History[match(pop.stats.df$Population, info.df$Population)]
 head(pop.stats.df)
 
@@ -241,7 +238,7 @@ pop.stats <- basic.stats(allchr.snps.genind)
 
 pop.stats$pop.freq$chr4_21289899
 
-# création d'un data.frame avec les fréquence REF et ALT
+# création d'un data.frame avec les fréquences REF et ALT
 SNP.freq.table <- as.data.frame(pop.stats$pop.freq$chr4_21289899)
 names(SNP.freq.table) <- unique(pop(allchr.snps.genind))
 
@@ -269,7 +266,7 @@ ggsave("RefAlleleFreq-chr4_21289899.pdf", width = 5, height = 3.5)
 Une analyse plus complète est nécessaire pour identifier des patterns. Voilà une option de code pour visualiser les fréquences alléliques à 10 loci choisis aléatoirement
 
 ```
-# sortant un data.frame avec les fréquences pour REF par locus et population
+# extraire un data.frame avec les fréquences pour REF par locus et population
 REF.freq.df <- as.data.frame(t(sapply(pop.stats$pop.freq, head, 1)))
 
 # sélection des fréquences REF uniquement (allèle de référence, identifié par 0)
@@ -294,13 +291,13 @@ REF.freq.m.full_data.df$Population <- factor(REF.freq.m.full_data.df$Population,
 ten.random.loci <- sample(unique(REF.freq.m.full_data.df$locus), 10)
 
 ggplot(REF.freq.m.full_data.df[REF.freq.m.full_data.df$locus %in% ten.random.loci,], aes(x = Population, y = Allele.freq, group = locus, color = locus)) +
-  geom_line(size = 1.5) + labs(y = "Allele frequency") +
+  geom_line(linewidth = 1.5) + labs(y = "Allele frequency") +
   geom_point(aes(y = -0.05, x = Population, shape = Reintroduction_Genealogy), color = "black", size = 3) +
   theme(axis.text = element_text(colour = "black"), axis.text.x = element_text(angle = 45, hjust = 1))
 
 ggsave("Allele_Freq.Ten_random_loci.pdf", width = 7, height = 4.5)
 ```
 
-Q10: Essayez une série de loci aléatoirement choisis (relancer la sélection de 10 loci ci-dessus). Sélectionnez un graphique qui vous paraît explicative et puis interprétez l'évolution des fréquences alléliques en fonction de l'histoire évolutive des  populations (introductions primaires, secondaires, admixture, etc.)
+Q10: Essayez une série de loci aléatoirement choisis (relancer la sélection de 10 loci ci-dessus). Sélectionnez un graphique qui vous paraît explicatif et puis interprétez l'évolution des fréquences alléliques en fonction de l'histoire évolutive des populations (introductions primaires, secondaires, admixture, etc.)
 
-Q11: Après avoir fait toutes ces analyses: Est-ce qu'il vous semble que les bouquetins des Alpes sont en danger? Et puis, si vous étiez en charge de planifier des translocations d'invidus, vous les feriez entre quelles populations? Argumentez en s'appuyant sur les résultats que vous avez obtenus.
+Q11: Après avoir fait toutes ces analyses: Est-ce qu'il vous semble que les bouquetins des Alpes sont en danger? Et puis, si vous étiez en charge de planifier des translocations d'individus, vous les feriez entre quelles populations? Argumentez en vous appuyant sur les résultats que vous avez obtenus.
