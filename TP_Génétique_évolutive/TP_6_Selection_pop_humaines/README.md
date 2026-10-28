@@ -218,11 +218,11 @@ Référez-vous au cours de génétique évolutive pour plus d'information sur l'
 Le jeu de SNP utilisé jusque là (`Human1000G.2000xSubsampled.MAF0.05.recode.vcf`) ne comprenait pas les loci avec allèles rares (fréquence d'allèle mineur < 5%). Vu que l'analyse du Tajima's *D* est basée sur le spectre des fréquences alléliques, y compris les variants rares, ce jeu de SNP n'est donc pas approprié.
 
 Nous allons donc utiliser le jeu de données suivant:
-- Fichier VCF `Human1000G.MCM6.vcf` comprenant uniquement la région suivante: chromosome 2 et positions 135'839'660-135'876'378 bp codant pour le gène *MCM6*.
+- Fichier VCF `Human1000G.MCM6.vcf` comprenant uniquement la région du gène *MCM6*: chromosome 2, positions 136'597'196-136'633'996 bp. Ces positions se réfèrent au génome de référence GRCh37 (hg19), utilisé par le 1000 Genomes Project.
 
-Visualisation sur [Ensembl](http://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=ENSG00000076003;r=2:135839626-135876426).
+Visualisation sur [Ensembl GRCh37](https://grch37.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=ENSG00000076003;r=2:136597196-136633996). NB: le site principal d'Ensembl utilise la version plus récente du génome de référence (GRCh38), où les positions sont différentes (*MCM6*: 135'839'626-135'876'426 bp).
 
-La région du gène *MCM6* comprend les mutations qui régulent l'expression du gène *LCT* (lactase). Pour identifier une signature de sélection sur l'expression du gène LCT, il faut donc analyser la région du gène *MCM6* plutôt que *LCT* lui-même.
+La région du gène *MCM6* comprend les mutations qui régulent l'expression du gène *LCT* (lactase). Pour identifier une signature de sélection sur l'expression du gène LCT, il faut donc analyser la région du gène *MCM6* plutôt que *LCT* lui-même. La mutation la plus connue associée à la persistance de la lactase en Europe (-13910 C>T, rs4988235) se trouve à la position 136'608'646 bp (GRCh37).
 
 Q9 (optionnelle): Quelle est grossièrement la distance physique entre les exons les plus proches de *LCT* et *MCM6*?
 
@@ -293,12 +293,80 @@ for (pop in unique(info.df$Population.name)) {
 
 taj.df <- taj.df[!is.na(taj.df$tajima),]
 
+# les valeurs sont affichées au bout de chaque barre
 ggplot(taj.df, aes(x=reorder(pop, tajima), y=tajima, fill=region)) +
   geom_bar(stat = "identity") +
-  labs(x="Populations", y="Tajima's D", legend = "NA") +
+  geom_hline(yintercept = 0) +
+  geom_text(aes(label = sprintf("%.2f", tajima), hjust = ifelse(tajima >= 0, -0.15, 1.15)), angle = 90, size = 2.5) +
+  scale_y_continuous(expand = expansion(mult = 0.15)) +
+  labs(x="Populations", y="Tajima's D") +
   theme(axis.text.x = element_text(angle = 60, hjust = 1), axis.text = element_text(color = "black"))
 
 ggsave("TajimaD.lactase.pdf", width = 6, height = 4)
 ```
 
 Q11: Faites l'analyse des Tajima's *D*. Discutez les indices d'une sélection pour la capacité à digérer le lactose à travers le monde. Est-ce que les régions avec un fort signal de sélection correspondent avec l'émergence de l'agriculture laitière?
+
+
+## Les variants causaux de la persistance de la lactase
+
+La persistance de la lactase n'est pas due à une seule mutation. Au moins cinq variants dans la région régulatrice située ~14 kb en amont du gène *LCT* (dans un intron de *MCM6*) sont associés à la persistance de la lactase et augmentent l'activité du promoteur de *LCT* en expériences fonctionnelles ([Liebert et al. 2017](https://doi.org/10.1007/s00439-017-1847-y)). Ces variants sont apparus indépendamment dans différentes populations, un exemple d'évolution convergente:
+
+| Variant | Population d'origine | Référence |
+|---|---|---|
+| -13910\*T (rs4988235) | Europe | [Enattah et al. 2002](https://doi.org/10.1038/ng826), [Olds & Sibley 2003](https://doi.org/10.1093/hmg/ddg244) |
+| -13915\*G (rs41380347) | Péninsule arabique | [Imtiaz et al. 2007](https://doi.org/10.1136/jmg.2007.051631), [Enattah et al. 2008](https://doi.org/10.1016/j.ajhg.2007.09.012) |
+| -14010\*C (rs145946881) | Afrique de l'Est | [Tishkoff et al. 2007](https://doi.org/10.1038/ng1946), [Jensen et al. 2011](https://doi.org/10.1007/s00439-011-0966-0) |
+| -13907\*G (rs41525747) | Afrique de l'Est | [Tishkoff et al. 2007](https://doi.org/10.1038/ng1946) |
+| -14009\*G (rs869051967) | Afrique de l'Est (Éthiopie) | [Jones et al. 2013](https://doi.org/10.1016/j.ajhg.2013.07.008) |
+
+Seuls les trois premiers variants sont présents dans `Human1000G.MCM6.vcf`. Les positions des variants (-13910, etc.) sont comptées à partir du début du gène *LCT*, qui se trouve sur le brin négatif. Dans le fichier VCF (brin positif), les allèles apparaissent donc sous forme complémentaire: -13910 C>T est noté G>A.
+
+Le code ci-dessous calcule la fréquence de l'allèle causal de chaque variant dans chaque population. Nous réutilisons les objets `vcf` et `info.df` de la préparation des données de la région *MCM6* (voir ci-dessus).
+
+```
+# variants causaux de la persistance de la lactase présents dans Human1000G.MCM6.vcf (positions GRCh37)
+causal.df <- data.frame(variant = c("-13910*T (rs4988235)", "-13915*G (rs41380347)", "-14010*C (rs145946881)"),
+                        origin = c("Europe", "Péninsule arabique", "Afrique de l'Est"),
+                        POS = c(136608646, 136608651, 136608746))
+
+# vérifiez les allèles REF et ALT: l'allèle causal est toujours l'allèle ALT
+getFIX(vcf)[getPOS(vcf) %in% causal.df$POS, c("POS", "REF", "ALT")]
+
+# génotypes des trois variants (format "0|1"), une ligne par variant et une colonne par individu
+causal.gt <- extract.gt(vcf, element = "GT")[match(causal.df$POS, getPOS(vcf)), ]
+
+# nombre de copies de l'allèle causal (codé par 1) par individu: 0, 1 ou 2
+causal.count <- matrix(nchar(gsub("[^1]", "", causal.gt)), nrow = nrow(causal.gt), dimnames = dimnames(causal.gt))
+
+# population de chaque individu
+sample.pop <- info.df$Population.name[match(colnames(causal.count), info.df$Sample.name)]
+
+# fréquence de l'allèle causal par population (2 allèles par individu)
+freq.df <- data.frame()
+for (i in 1:nrow(causal.df)) {
+  freq <- tapply(causal.count[i,], sample.pop, sum) / (2 * table(sample.pop))
+  freq.df <- rbind(freq.df, data.frame(variant = causal.df$variant[i], pop = names(freq), freq = as.numeric(freq)))
+}
+freq.df$region <- info.df$Superpopulation.name[match(freq.df$pop, info.df$Population.name)]
+
+# regrouper les populations par région
+pop.order <- unique(info.df$Population.name[order(info.df$Superpopulation.name, info.df$Population.name)])
+freq.df$pop <- factor(freq.df$pop, levels = pop.order)
+freq.df$variant <- factor(freq.df$variant, levels = causal.df$variant)
+
+# attention: chaque variant a sa propre échelle (scales = "free_y")
+ggplot(freq.df, aes(x = pop, y = freq, fill = region)) +
+  geom_col() +
+  geom_text(aes(label = ifelse(freq > 0, sprintf("%.3f", freq), "")), angle = 90, hjust = -0.15, size = 2.5) +
+  facet_wrap(~ variant, ncol = 1, scales = "free_y") +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.35))) +
+  labs(x = "Populations", y = "Frequency of the causal allele") +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1), axis.text = element_text(color = "black"))
+
+ggsave("LP_causal_alleles.pdf", width = 9, height = 7)
+```
+
+Q12: Décrivez la distribution de chaque allèle causal à travers les populations. Est-ce que la fréquence de -13910\*T en Europe et en Asie du Sud correspond à vos attentes? Comment expliquez-vous la présence de -13910\*T dans les populations américaines et afro-américaines, et celle de -13915\*G à Porto Rico?
+
+Q13: Qu'est-ce que la spécificité des allèles causaux par population nous apprend sur l'origine de la persistance de la lactase? Pourquoi le 1000 Genomes Project sous-estime-t-il probablement l'importance des allèles -13915\*G, -14010\*C, -13907\*G et -14009\*G? Astuce: regardez quelles populations sont échantillonnées.
