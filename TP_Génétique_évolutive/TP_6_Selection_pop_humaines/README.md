@@ -222,7 +222,7 @@ Nous allons donc utiliser le jeu de données suivant:
 
 Visualisation sur [Ensembl GRCh37](https://grch37.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=ENSG00000076003;r=2:136597196-136633996). NB: le site principal d'Ensembl utilise la version plus récente du génome de référence (GRCh38), où les positions sont différentes (*MCM6*: 135'839'626-135'876'426 bp).
 
-La région du gène *MCM6* comprend les mutations qui régulent l'expression du gène *LCT* (lactase). Pour identifier une signature de sélection sur l'expression du gène LCT, il faut donc analyser la région du gène *MCM6* plutôt que *LCT* lui-même. La mutation la plus connue associée à la persistance de la lactase en Europe (-13910 C>T, rs4988235) se trouve à la position 136'608'646 bp (GRCh37).
+La région du gène *MCM6* comprend les mutations qui régulent l'expression du gène *LCT* (lactase). Pour identifier une signature de sélection sur l'expression du gène LCT, il faut donc analyser la région du gène *MCM6* plutôt que *LCT* lui-même. La mutation régulatrice la plus connue qui maintient l'expression de *LCT* à l'âge adulte en Europe (-13910 C>T, rs4988235) se trouve à la position 136'608'646 bp (GRCh37).
 
 Q9 (optionnelle): Quelle est grossièrement la distance physique entre les exons les plus proches de *LCT* et *MCM6*?
 
@@ -308,9 +308,9 @@ ggsave("TajimaD.lactase.pdf", width = 6, height = 4)
 Q11: Faites l'analyse des Tajima's *D*. Discutez les indices d'une sélection pour la capacité à digérer le lactose à travers le monde. Est-ce que les régions avec un fort signal de sélection correspondent avec l'émergence de l'agriculture laitière?
 
 
-## Les variants causaux de la persistance de la lactase
+## Les mutations régulatrices qui maintiennent l'expression de la lactase
 
-La persistance de la lactase n'est pas due à une seule mutation. Au moins cinq variants dans la région régulatrice située ~14 kb en amont du gène *LCT* (dans un intron de *MCM6*) sont associés à la persistance de la lactase et augmentent l'activité du promoteur de *LCT* en expériences fonctionnelles ([Liebert et al. 2017](https://doi.org/10.1007/s00439-017-1847-y)). Ces variants sont apparus indépendamment dans différentes populations, un exemple d'évolution convergente:
+Chez la plupart des humains, l'expression du gène *LCT* diminue après le sevrage. Son maintien à l'âge adulte n'est pas dû à une seule mutation. Au moins cinq mutations dans un enhancer situé ~14 kb en amont du gène *LCT* (dans un intron de *MCM6*) maintiennent cette expression. Il ne s'agit pas de mutations perte de fonction: ces mutations régulatrices augmentent l'activité du promoteur de *LCT* en expériences fonctionnelles ([Liebert et al. 2017](https://doi.org/10.1007/s00439-017-1847-y)). Ces variants sont apparus indépendamment dans différentes populations, un exemple d'évolution convergente:
 
 | Variant | Population d'origine | Référence |
 |---|---|---|
@@ -325,7 +325,7 @@ Seuls les trois premiers variants sont présents dans `Human1000G.MCM6.vcf`. Les
 Le code ci-dessous calcule la fréquence de l'allèle causal de chaque variant dans chaque population. Nous réutilisons les objets `vcf` et `info.df` de la préparation des données de la région *MCM6* (voir ci-dessus).
 
 ```
-# variants causaux de la persistance de la lactase présents dans Human1000G.MCM6.vcf (positions GRCh37)
+# mutations régulatrices causales présentes dans Human1000G.MCM6.vcf (positions GRCh37)
 causal.df <- data.frame(variant = c("-13910*T (rs4988235)", "-13915*G (rs41380347)", "-14010*C (rs145946881)"),
                         origin = c("Europe", "Péninsule arabique", "Afrique de l'Est"),
                         POS = c(136608646, 136608651, 136608746))
@@ -368,5 +368,3 @@ ggsave("LP_causal_alleles.pdf", width = 9, height = 7)
 ```
 
 Q12: Décrivez la distribution de chaque allèle causal à travers les populations. Est-ce que la fréquence de -13910\*T en Europe et en Asie du Sud correspond à vos attentes? Comment expliquez-vous la présence de -13910\*T dans les populations américaines et afro-américaines, et celle de -13915\*G à Porto Rico?
-
-Q13: Qu'est-ce que la spécificité des allèles causaux par population nous apprend sur l'origine de la persistance de la lactase? Pourquoi le 1000 Genomes Project sous-estime-t-il probablement l'importance des allèles -13915\*G, -14010\*C, -13907\*G et -14009\*G? Astuce: regardez quelles populations sont échantillonnées.
